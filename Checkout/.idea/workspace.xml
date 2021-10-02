@@ -23,12 +23,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="995ed564-64a5-410c-a21c-6d3f9d06083f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../my_Branch_Text_File.txt" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Currency.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Goods.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Money.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/ProductGroup.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Vat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Vat12.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Vat25.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/se/su/dsv/checkout/mutualTest/CurrencyTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/se/su/dsv/checkout/mutualTest/GoodsTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/se/su/dsv/checkout/mutualTest/MoneyTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/se/su/dsv/checkout/mutualTest/ProductGroupTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="JUnit4 Test Class" />
+        <option value="Interface" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -41,13 +62,41 @@
     </option>
   </component>
   <component name="ProjectId" id="1yteNW2UU20Y6I9NhnZZfsJApK4" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="se.su.dsv.checkout.mutualTest" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -57,8 +106,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1633075275327</updated>
+      <workItem from="1633192174629" duration="3646000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -70,5 +123,24 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="765" y="236" key="#com.intellij.ide.util.MemberChooser" timestamp="1633194365077">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="765" y="236" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1633194365077" />
+    <state x="588" y="209" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog" timestamp="1633192579268">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="588" y="209" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1633192579268" />
+    <state x="731" y="349" width="458" height="354" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1633193472052">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="731" y="349" width="458" height="354" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1633193472052" />
+    <state x="755" y="267" key="refactoring.ChangeSignatureDialog" timestamp="1633194577621">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="755" y="267" key="refactoring.ChangeSignatureDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1633194577621" />
   </component>
 </project>
