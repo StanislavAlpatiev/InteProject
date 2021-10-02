@@ -1,22 +1,20 @@
 package se.su.dsv.checkout.mutual;
 
-import java.util.Date;
-
 public abstract class Goods {
     private final String name;
     private final int price;
-    //private final Date expirationDate;
 
-    protected Goods(String name, int price/*, Date expirationDate*/) {
+    protected Goods(String name, int price) {
         this.name = name;
         this.price = price;
-        //this.expirationDate = expirationDate;
     }
 
+    // Returns name of goods item
     public String getName() {
         return name;
     }
 
+    // Returns price of goods item
     public int getPrice() {
         return price;
     }
@@ -34,6 +32,4 @@ public abstract class Goods {
     c.getTime(); // Returns Date Object
 
     c.set(int year, int month, int date) // Sets the values for the calendar fields YEAR, MONTH, and DAY_OF_MONTH*/
-
-
 }

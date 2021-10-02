@@ -22,7 +22,15 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="995ed564-64a5-410c-a21c-6d3f9d06083f" name="Default Changelist" comment="" />
+    <list default="true" id="995ed564-64a5-410c-a21c-6d3f9d06083f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Vat6.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Currency.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Currency.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Goods.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Goods.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Money.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Money.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Vat12.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Vat12.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Vat25.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Vat25.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -72,13 +80,15 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -92,7 +102,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1633075275327</updated>
-      <workItem from="1633192174629" duration="4056000" />
+      <workItem from="1633192174629" duration="4116000" />
+      <workItem from="1633196505295" duration="1658000" />
     </task>
     <servers />
   </component>
@@ -120,6 +131,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="588" y="209" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1633192579268" />
+    <state x="581" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1633197739931">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="581" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1633197739931" />
     <state x="731" y="349" width="458" height="354" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1633193472052">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
