@@ -22,21 +22,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="995ed564-64a5-410c-a21c-6d3f9d06083f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Currency.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Goods.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Money.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/ProductGroup.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Vat.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Vat12.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Vat25.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/se/su/dsv/checkout/mutualTest/CurrencyTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/se/su/dsv/checkout/mutualTest/GoodsTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/se/su/dsv/checkout/mutualTest/MoneyTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/se/su/dsv/checkout/mutualTest/ProductGroupTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-    </list>
+    <list default="true" id="995ed564-64a5-410c-a21c-6d3f9d06083f" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -106,7 +92,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1633075275327</updated>
-      <workItem from="1633192174629" duration="3646000" />
+      <workItem from="1633192174629" duration="4056000" />
     </task>
     <servers />
   </component>
