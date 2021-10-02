@@ -21,11 +21,11 @@ public class Money implements Comparable<Money> {
         this(currency, amountOfMajorUnit * MAJOR_UNIT + amountOfMinorUnit);
     }
 
-    public long getAmmountOfMajorUnit() {
+    public long getAmountOfMajorUnit() {
         return amount / MAJOR_UNIT;
     }
 
-    public long getAmmountOfMinorUnit() {
+    public long getAmountOfMinorUnit() {
         return amount % MAJOR_UNIT;
     }
 
@@ -82,7 +82,7 @@ public class Money implements Comparable<Money> {
     }
 
     public String toString() {
-        return String.format("%d:%d %s", getAmmountOfMajorUnit(),
-                getAmmountOfMinorUnit(), getCurrency().symbol);
+        return String.format("%d:%d %s", getAmountOfMajorUnit(),
+                getAmountOfMinorUnit(), getCurrency().symbol);
     }
 }
