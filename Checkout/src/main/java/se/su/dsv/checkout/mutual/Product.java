@@ -1,10 +1,10 @@
 package se.su.dsv.checkout.mutual;
 
-public abstract class Goods {
-    private final String name;
-    private final int price;
+public abstract class Product implements Vat{
+    protected final String name;
+    protected final double price;
 
-    protected Goods(String name, int price) {
+    protected Product(String name, double price) {
         this.name = name;
         this.price = price;
     }
@@ -15,8 +15,13 @@ public abstract class Goods {
     }
 
     // Returns price of goods item
-    public int getPrice() {
-        return price;
+    public abstract double getPrice();
+
+    public final double getPricePlusVAT(){
+        double price = getPrice();
+        double vat = getVAT();
+
+        return price + (price * vat);
     }
 
     /*public Date getExpirationDate() {

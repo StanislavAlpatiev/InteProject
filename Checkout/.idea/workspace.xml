@@ -23,9 +23,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="995ed564-64a5-410c-a21c-6d3f9d06083f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Food.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Pant.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Receipt.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/se/su/dsv/checkout/mutualTest/PantTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/se/su/dsv/checkout/mutualTest/ReceiptTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Money.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Money.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/se/su/dsv/checkout/mutualTest/GoodsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/se/su/dsv/checkout/mutualTest/GoodsTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Goods.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/se/su/dsv/checkout/mutualTest/GoodsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/se/su/dsv/checkout/mutualTest/ProductTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,9 +41,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="JUnit4 Test Class" />
         <option value="Interface" />
+        <option value="Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
@@ -61,30 +68,32 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../granskning" />
+    <property name="settings.editor.selected.configurable" value="preferences.general" />
   </component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.RecentsKey">
       <recent name="se.su.dsv.checkout.mutualTest" />
+      <recent name="se.su.dsv.checkout.mutual" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -99,7 +108,9 @@
       <option name="presentableId" value="Default" />
       <updated>1633075275327</updated>
       <workItem from="1633192174629" duration="4116000" />
-      <workItem from="1633196505295" duration="2260000" />
+      <workItem from="1633196505295" duration="4478000" />
+      <workItem from="1633201348843" duration="155000" />
+      <workItem from="1633249586958" duration="4315000" />
     </task>
     <servers />
   </component>
@@ -131,10 +142,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="581" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1633197739931" />
-    <state x="731" y="349" width="458" height="354" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1633193472052">
+    <state x="739" y="261" key="FileChooserDialogImpl" timestamp="1633201496249">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="731" y="349" width="458" height="354" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1633193472052" />
+    <state x="739" y="261" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1633201496249" />
+    <state x="461" y="165" key="SettingsEditor" timestamp="1633201481450">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="461" y="165" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1633201481450" />
+    <state x="731" y="349" width="458" height="354" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1633250732440">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="731" y="349" width="458" height="354" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1633250732440" />
+    <state x="342" y="140" key="new project wizard" timestamp="1633200385808">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="342" y="140" key="new project wizard/0.0.1920.1040@0.0.1920.1040" timestamp="1633200385808" />
     <state x="755" y="267" key="refactoring.ChangeSignatureDialog" timestamp="1633194577621">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
