@@ -22,17 +22,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="995ed564-64a5-410c-a21c-6d3f9d06083f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Food.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Pant.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Receipt.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/se/su/dsv/checkout/mutualTest/PantTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/se/su/dsv/checkout/mutualTest/ReceiptTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Goods.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/se/su/dsv/checkout/mutual/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/se/su/dsv/checkout/mutualTest/GoodsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/se/su/dsv/checkout/mutualTest/ProductTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="995ed564-64a5-410c-a21c-6d3f9d06083f" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -110,7 +100,7 @@
       <workItem from="1633192174629" duration="4116000" />
       <workItem from="1633196505295" duration="4478000" />
       <workItem from="1633201348843" duration="155000" />
-      <workItem from="1633249586958" duration="4315000" />
+      <workItem from="1633249586958" duration="4363000" />
     </task>
     <servers />
   </component>
