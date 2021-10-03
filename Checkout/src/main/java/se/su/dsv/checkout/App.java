@@ -1,4 +1,4 @@
-package se.su.dsv.test;
+package se.su.dsv.checkout;
 
 /**
  * Hello world!
