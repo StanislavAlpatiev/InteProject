@@ -1,4 +1,4 @@
-package se.su.dsv.checkout;
+package se.su.dsv.RegisterSystem;
 
 import static org.junit.Assert.assertTrue;
 
