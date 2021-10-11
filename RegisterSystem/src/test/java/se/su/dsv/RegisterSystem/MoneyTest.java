@@ -129,13 +129,13 @@ class MoneyTest {
 
     @Test
     void equalsNullIsFalseTest() {
-        assertEquals(null, new Money(DEFAULT_AMOUNT, Currency.USD));
+        assertNotEquals(null, new Money(DEFAULT_AMOUNT, Currency.USD));
     }
 
     @Test
     void equalsNotSameAmountTest() {
         Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
         Money money2 = new Money(ZERO_AMOUNT, Currency.USD);
-        assertEquals(money2, money);
+        assertNotEquals(money2, money);
     }
 }
