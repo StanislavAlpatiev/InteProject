@@ -13,7 +13,8 @@ public class Money{
         if(currency == null){
             throw new IllegalArgumentException("currency is null");
         }
-        if(amount.doubleValue() < new BigDecimal(0).doubleValue()){
+        
+        if(amount.compareTo(BigDecimal.ZERO) < 0){
             throw new IllegalArgumentException("amount is negative");
         }
 
@@ -29,4 +30,15 @@ public class Money{
         return currency;
     }
 
+    public Money add(Money money){
+
+        BigDecimal newAmount = amount.add(money.getAmount());
+        return new Money(newAmount, this.currency);
+    }
+
+    public Money subtract(Money money){
+        
+        BigDecimal newAmount = amount.subtract(money.getAmount());
+        return new Money(newAmount, this.currency);
+    }
 }
