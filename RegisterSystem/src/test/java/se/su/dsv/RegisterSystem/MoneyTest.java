@@ -18,7 +18,7 @@ class MoneyTest {
     void constructorValidParameterTest() {
         Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
         assertEquals(DEFAULT_AMOUNT, money.getAmount());
-        assertEquals(money.getCurrency(), Currency.USD);
+        assertEquals(Currency.USD, money.getCurrency());
     }
 
     @Test
@@ -114,4 +114,28 @@ class MoneyTest {
         });
     }
 
+    @Test
+    void isNotEqualTest() {
+        Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
+        assertNotEquals(Currency.class, money);
+    }
+
+    @Test
+    void isEqualTest() {
+        Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
+        Money money2 = new Money(DEFAULT_AMOUNT, Currency.USD);
+        assertEquals(money2, money);
+    }
+
+    @Test
+    void equalsNullIsFalseTest() {
+        assertEquals(null, new Money(DEFAULT_AMOUNT, Currency.USD));
+    }
+
+    @Test
+    void equalsNotSameAmountTest() {
+        Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
+        Money money2 = new Money(ZERO_AMOUNT, Currency.USD);
+        assertEquals(money2, money);
+    }
 }
