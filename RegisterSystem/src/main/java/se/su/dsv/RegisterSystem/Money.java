@@ -51,7 +51,7 @@ public class Money{
 
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o) { //bör vi implementera hashcode också?
         if (o == this)
             return true;
         if (!(o instanceof Money)) {

@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 class MoneyTest {
 
-    private static final String FAKE_CURRENCY = "NOK";
+    //private static final String FAKE_CURRENCY = "NOK";
     private static final BigDecimal DEFAULT_AMOUNT = new BigDecimal(10);
     private static final BigDecimal NEGATIVE_AMOUNT = new BigDecimal(-1);
     private static final BigDecimal ZERO_AMOUNT = new BigDecimal(0);
