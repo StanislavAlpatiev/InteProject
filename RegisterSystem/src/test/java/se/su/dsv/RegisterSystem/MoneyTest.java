@@ -70,14 +70,15 @@ public class MoneyTest {
     public void addValidParameterTest() {
         Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
         Money money2 = money.add(new Money(DEFAULT_AMOUNT, Currency.USD));
-        assertSame(money2.getAmount(), money.getAmount().add(DEFAULT_AMOUNT));
+        assertEquals(money.getAmount().add(DEFAULT_AMOUNT), money2.getAmount());
     }
 
     @Test
     public void addOtherCurrencyTest() {
         Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
+        Money money2 = new Money(DEFAULT_AMOUNT, Currency.SEK);
         assertThrows(IllegalArgumentException.class, () -> {
-            money.add(new Money(DEFAULT_AMOUNT, Currency.SEK));
+            money.add(money2);
         });
     }
 
