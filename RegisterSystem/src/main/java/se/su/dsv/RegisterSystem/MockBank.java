@@ -38,4 +38,8 @@ public class MockBank {
         double rate = getRate(Currency.USD, Currency.SEK);;
         System.out.println(rate);
     }
+
+    public static Money exchange(Money money, Currency sek) {
+        return null;
+    }
 }
