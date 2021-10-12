@@ -54,7 +54,7 @@ class MoneyTest {
         assertEquals(currency, money.getCurrency()); 
     }
 
-    //Test adding valid paremeter
+    //Test adding valid parameter
     @Test
     void addValidParameterTest() {
         Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
@@ -176,4 +176,5 @@ class MoneyTest {
         Money otherMoney = new Money(DEFAULT_AMOUNT, Currency.EUR);
         assertTrue(money.compareTo(otherMoney) < 0);
     }
+
 }
