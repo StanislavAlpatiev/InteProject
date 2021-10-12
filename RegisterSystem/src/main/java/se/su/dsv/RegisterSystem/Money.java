@@ -51,14 +51,14 @@ public class Money{
 
 
     @Override
-    public boolean equals(Object o) { //bör vi implementera hashcode också?
+    public boolean equals(Object o) {
         if (o == this)
             return true;
         if (!(o instanceof Money)) {
             return false;
         }
         Money money = (Money) o;
-        return Objects.equals(amount, money.amount) && Objects.equals(currency, money.currency); //hur kan den här komma åt amount eller currency utan get-metoderna?!
+        return Objects.equals(amount, money.amount) && Objects.equals(currency, money.currency); 
     }
 
 }

@@ -62,8 +62,8 @@ class MoneyTest {
     @EnumSource(Currency.class)
     void constructorValidCurrenciesTest(Currency currency) {
         Money money = new Money(DEFAULT_AMOUNT, currency);
-        assertSame(DEFAULT_AMOUNT, money.getAmount());
-        assertSame(currency, money.getCurrency());
+        //assertSame(DEFAULT_AMOUNT, money.getAmount());
+        assertEquals(currency, money.getCurrency()); 
     }
 
     @Test
