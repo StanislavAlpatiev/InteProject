@@ -3,7 +3,7 @@ package se.su.dsv.RegisterSystem;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class Money{
+public class Money implements Comparable<Money>{
 
     private BigDecimal amount;
     private Currency currency;
@@ -59,6 +59,14 @@ public class Money{
         }
         Money money = (Money) o;
         return Objects.equals(amount, money.amount) && Objects.equals(currency, money.currency); 
+    }
+
+    @Override
+    public int compareTo(Money other) {
+        if(currency != other.currency) {
+            return currency.compareTo(other.currency);
+        }
+        return amount.compareTo(other.amount);
     }
 
 }

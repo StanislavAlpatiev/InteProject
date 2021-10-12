@@ -138,4 +138,44 @@ class MoneyTest {
         Money money2 = new Money(ZERO_AMOUNT, Currency.USD);
         assertNotEquals(money2, money);
     }
+
+    //Test that compareTo() return 0 when compared to Object with same attribute values
+    @Test
+    void compareToObjectWithSameAttributeValuesTest() {
+        Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
+        Money otherMoney = new Money(DEFAULT_AMOUNT, Currency.USD);
+        assertEquals(0, money.compareTo(otherMoney));
+    }
+
+    //Test that compareTo() return 1 when this.amount is greater then other.amount
+    @Test
+    void compareToReturnsPositiveTest() {
+        Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
+        Money otherMoney = new Money(BigDecimal.ZERO, Currency.USD);
+        assertEquals(1, money.compareTo(otherMoney));
+    }
+
+    //Test that compareTo() return -1 when this.amount is less then other.amount
+    @Test
+    void compareToReturnsNegativeTest() {
+        Money money = new Money(BigDecimal.ZERO, Currency.USD);
+        Money otherMoney = new Money(BigDecimal.TEN, Currency.USD);
+        assertEquals(-1, money.compareTo(otherMoney));
+    }
+
+    //Test that compareTo() return 1 when this.currency is greater then other.currency
+    @Test
+    void compareToThisCurrencyGreaterThenOtherCurrencyTest() {
+        Money money = new Money(DEFAULT_AMOUNT, Currency.EUR);
+        Money otherMoney = new Money(DEFAULT_AMOUNT, Currency.USD);
+        assertTrue((money.compareTo(otherMoney) > 0));
+    }
+
+    //Test that compareTo() return -1 when this.currency is less then other.currency
+    @Test
+    void compareToThisCurrencyLessThenOtherCurrencyTest() {
+        Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
+        Money otherMoney = new Money(DEFAULT_AMOUNT, Currency.EUR);
+        assertTrue(money.compareTo(otherMoney) < 0);
+    }
 }
