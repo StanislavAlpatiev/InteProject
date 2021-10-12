@@ -176,4 +176,6 @@ class MoneyTest {
         Money otherMoney = new Money(DEFAULT_AMOUNT, Currency.EUR);
         assertTrue(money.compareTo(otherMoney) < 0);
     }
+
+
 }
