@@ -160,20 +160,4 @@ class MoneyTest {
         Money otherMoney = new Money(BigDecimal.TEN, Currency.USD);
         assertEquals(-1, money.compareTo(otherMoney));
     }
-
-    //Test that compareTo() return 1 when this.currency is greater then other.currency
-    @Test
-    void compareToThisCurrencyGreaterThenOtherCurrencyTest() {
-        Money money = new Money(DEFAULT_AMOUNT, Currency.EUR);
-        Money otherMoney = new Money(DEFAULT_AMOUNT, Currency.USD);
-        assertTrue((money.compareTo(otherMoney) > 0));
-    }
-
-    //Test that compareTo() return -1 when this.currency is less then other.currency
-    @Test
-    void compareToThisCurrencyLessThenOtherCurrencyTest() {
-        Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
-        Money otherMoney = new Money(DEFAULT_AMOUNT, Currency.EUR);
-        assertTrue(money.compareTo(otherMoney) < 0);
-    }
 }
