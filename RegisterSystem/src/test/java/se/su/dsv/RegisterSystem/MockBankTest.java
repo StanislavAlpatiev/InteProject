@@ -25,12 +25,11 @@ class MockBankTest {
         assertEquals(Currency.SEK, money.getCurrency());
     }
 
-    @ParameterizedTest
-    @EnumSource(Currency.class)
-    void exchangeNewAmountCorrect(Currency currency) throws IOException {
+    @Test
+    void exchangeNewAmountCorrect() throws IOException {
         Money money = new Money(DEFAULT_VALUE, Currency.USD);
-        money = MockBank.exchange(money, currency);
-        BigDecimal rate = MockBank.getRate(Currency.USD, currency);
+        money = MockBank.exchange(money, Currency.SEK);
+        BigDecimal rate = MockBank.getRate(Currency.USD, Currency.SEK);
         
         BigDecimal newAmount = DEFAULT_VALUE.multiply(rate);
 
