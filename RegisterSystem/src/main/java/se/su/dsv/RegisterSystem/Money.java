@@ -69,6 +69,5 @@ public class Money implements Comparable<Money>{
         return amount.compareTo(other.amount);
     }
 
-    //test test test//
 
 }
