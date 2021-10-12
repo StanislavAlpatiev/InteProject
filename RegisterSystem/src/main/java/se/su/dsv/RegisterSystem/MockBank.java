@@ -8,34 +8,42 @@ import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MockBank {
-    public static double getRate(Currency from, Currency to) throws IOException {
+    public static BigDecimal getRate(Currency from, Currency to) throws IOException {
         // Setting URL
         String url_str = ("https://v6.exchangerate-api.com/v6/3f192049848a3da4ed3985ce/pair/" + from + "/" + to);
 
-        // Making Request
-        URL url = new URL(url_str);
-        HttpURLConnection request = (HttpURLConnection) url.openConnection();
-        request.connect();
+        try {
+            // Making Request
+            URL url = new URL(url_str);
 
-        // Convert to JSON
-        JsonElement root = JsonParser.parseReader(new InputStreamReader((InputStream) request.getContent()));
-        JsonObject jsonobj = root.getAsJsonObject();
+            HttpURLConnection request = (HttpURLConnection) url.openConnection();
+            request.connect();
 
-        // Accessing object
-        String req_result = jsonobj.get("result").getAsString();
-        if(req_result.equals("error")) {
-            throw new IllegalStateException();
+            // Convert to JSON
+            JsonElement root = JsonParser.parseReader(new InputStreamReader((InputStream) request.getContent()));
+            JsonObject jsonobj = root.getAsJsonObject();
+            // Accessing object
+            String req_result = jsonobj.get("result").getAsString();
+            if (req_result.equals("error")) {
+                throw new IllegalStateException();
+            }
+
+            return jsonobj.get("conversion_rate").getAsBigDecimal();
+
+        } catch (IOException e) {
+            throw new IOException();
         }
-
-        return jsonobj.get("conversion_rate").getAsDouble();
     }
 
-    public static void main(String[] args) throws IOException {
-        double rate = getRate(Currency.USD, Currency.SEK);;
-        System.out.println(rate);
+    public static Money exchange(Money money, Currency currency) throws IOException {
+        BigDecimal rate = getRate(money.getCurrency(), currency);
+        BigDecimal newAmount = money.getAmount().multiply(rate);
+        return new Money(newAmount, currency);
     }
 }
