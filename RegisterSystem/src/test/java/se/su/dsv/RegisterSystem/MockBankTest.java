@@ -1,12 +1,16 @@
 package se.su.dsv.RegisterSystem;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 class MockBankTest {
+    static final BigDecimal DEFAULT_VALUE = new BigDecimal(10);
 
 
     @Test
@@ -15,10 +19,22 @@ class MockBankTest {
     }
      
     @Test
-    void exchangeIsCorrectTest() {
+    void exchangeGivesNewCurrencyTest() throws IOException {
         Money money = new Money(new BigDecimal(10), Currency.USD);
         money = MockBank.exchange(money, Currency.SEK);
         assertEquals(Currency.SEK, money.getCurrency());
+    }
+
+    @ParameterizedTest
+    @EnumSource(Currency.class)
+    void exchangeNewAmountCorrect(Currency currency) throws IOException {
+        Money money = new Money(DEFAULT_VALUE, Currency.USD);
+        money = MockBank.exchange(money, currency);
+        BigDecimal rate = MockBank.getRate(Currency.USD, currency);
+        
+        BigDecimal newAmount = DEFAULT_VALUE.multiply(rate);
+
+        assertEquals(newAmount, money.getAmount());
     }
 
     
