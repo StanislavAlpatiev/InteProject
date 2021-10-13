@@ -1,9 +1,11 @@
 package se.su.dsv.RegisterSystem;
 
-public class Item implements Vat {
+public abstract class Item implements Vat {
 
-    @Override
-    public double getVAT() {
-        return 0;
-    }
+    private Money price;
+    private String name;
+    private String productNo;
+    private String producer;
+    private boolean ageRestricted;
+
 }
