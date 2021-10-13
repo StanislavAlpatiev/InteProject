@@ -1,20 +1,19 @@
 package se.su.dsv.RegisterSystem;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
-public class Payment {
+public class Order {
 
     private Date date;
     private TreeMap<Item, Integer> items = new TreeMap<>();
 
-    public Payment(Date date) {
+    public Order(Date date) {
         if (date == null)
             throw new IllegalArgumentException("Null date");
         this.date = date;
     }
 
-    public Payment(Date date, Item... items) {
+    public Order(Date date, Item... items) {
         this(date);
         if (items == null)
             throw new IllegalArgumentException("Null item");
@@ -39,4 +38,9 @@ public class Payment {
             items.remove(item);
         return true;
     }
+
+    public Date getDate() {
+        return date;
+    }
+
 }
