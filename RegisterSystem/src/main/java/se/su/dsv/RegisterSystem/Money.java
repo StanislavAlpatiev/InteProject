@@ -6,7 +6,7 @@ import java.util.Objects;
 public class Money implements Comparable<Money>{
 
     private BigDecimal amount;
-    private Currency currency;
+    private final Currency currency;
 
 
     public Money(BigDecimal amount, Currency currency){
@@ -59,6 +59,11 @@ public class Money implements Comparable<Money>{
         }
         Money money = (Money) o;
         return Objects.equals(amount, money.amount) && Objects.equals(currency, money.currency); 
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(currency, amount);
     }
 
     @Override
