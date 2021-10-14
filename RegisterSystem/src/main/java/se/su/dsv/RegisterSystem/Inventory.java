@@ -33,7 +33,7 @@ public class Inventory {
         return;
     }
 
-    public Map getItems(){
+    public HashMap<Item, Integer> getItems(){
         return new HashMap<Item, Integer>(items);
     }
 
@@ -41,19 +41,19 @@ public class Inventory {
         return items.containsKey(item);
     }
 
-    public void import(){
+    public void importInventory(){
 
     }
 
-    public void import(String location){
+    public void importInventory(String location){
 
     }
 
-    public void export(){
+    public void exportInventory(){
 
     }
 
-    public void export(String location){
+    public void exportInventory(String location){
         
     }
 

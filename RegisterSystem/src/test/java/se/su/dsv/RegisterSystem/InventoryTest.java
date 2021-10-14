@@ -1,20 +1,34 @@
 package se.su.dsv.RegisterSystem;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 class InventoryTest {
-    
+
     static final int DEFAULT_VALUE = 5;
+    static Item DEFAULT_ITEM;
+
+
+    @BeforeAll
+    void setUp(){
+        DEFAULT_ITEM = new Item() {
+            @Override 
+            public String getName(){
+                return "Test";
+            }
+        };
+    }
     //Tests whether constructor without parameters works
     @Test
     void validConstructorEmptyParamTest(){
         Inventory inventory = new Inventory();
-        Map<Item, Integer> items = inventory.getItems();
+        HashMap<Item, Integer> items = inventory.getItems();
         assertTrue(items.isEmpty());
     }
 
@@ -23,13 +37,13 @@ class InventoryTest {
     void validConstructorWithParamTest(){
         Item[] items = new Item[DEFAULT_VALUE];
         for(int i = 0; i < DEFAULT_VALUE; i++){
-            items[i] = new Item(); //ADD PARAMS/SUBCLASS
+            item[i] = DEFAULT_ITEM;
         }
 
         Inventory inventory = new Inventory(items);
-        HashSet<Item> items2 = inventory.getItems().keySet();
+        Set<Item> items2 = inventory.getItems().keySet();
         assertFalse(items2.add(items[0]));
-        assertEquals(DEFAULT_VALUE, inventory.getItems().get(new Item()));
+        assertEquals(DEFAULT_VALUE, inventory.getItems().get(DEFAULT_ITEM));
     }
 
     //Tests whether constructor throws if fed with null or empty list of items
@@ -43,49 +57,54 @@ class InventoryTest {
     @Test
     void importTest(){
         Inventory inventory = new Inventory();
-        inventory.import(""); //String for location?
+        inventory.importInventory(""); //String for location?
     }
 
     //Tests whether importing broken saved inventory throws
     @Test 
     void brokenImportThrowsTest(){
         Inventory inventory = new Inventory();
-        assertThrows(IllegalArgumentException.class, () -> {inventory.import("");}); //String for bad location, or bad import?
+        assertThrows(IllegalArgumentException.class, () -> {inventory.importInventory("");}); //String for bad location, or bad importInventory?
     }
 
-    //Tests whether export works as intended
+    //Tests whether exportInventory works as intended
     @Test
     void exportTest(){
         Inventory inventory = new Inventory();
-        inventory.export(""); //string for location?
+        inventory.exportInventory(""); //string for location?
     }
 
     @Test
     void addAddsNewMapEntryTest(){
-        Item item = new Item(); //ADD SUBCLASS
         Inventory inventory = new Inventory();
-        inventory.add(item);
-        assertTrue(inventory.getItems().keySet().contains(item));
-        assertEquals(1, inventory.getItems().get(item));
+        inventory.add(DEFAULT_ITEM);
+        assertTrue(inventory.getItems().keySet().contains(DEFAULT_ITEM));
+        assertEquals(1, inventory.getItems().get(DEFAULT_ITEM));
     }
 
     @Test
     void addIncrementsIntegerTest(){
         Inventory inventory = new Inventory();
-        Item item = new Item();
-        inventory.add(item);
-        inventory.add(item);
-        assertEquals(2, inventory.getItems().get(item));
+        inventory.add(DEFAULT_ITEM);
+        inventory.add(DEFAULT_ITEM);
+        assertEquals(2, inventory.getItems().get(DEFAULT_ITEM));
     }
 
     @Test
     void removeDecrementsIntegerTest(){
-
+        Inventory inventory = new Inventory();
+        inventory.add(DEFAULT_ITEM);
+        inventory.add(DEFAULT_ITEM);
+        inventory.remove(DEFAULT_ITEM);
+        assertEquals(1, inventory.getItems().get(DEFAULT_ITEM));
     }
 
     @Test
-    void removeDoesNotDecrementIntegerPastZeroTest(){
-
+    void removeRemovesIfDecrementIntegerBelowOneTest(){
+        Inventory inventory = new Inventory();
+        inventory.add(DEFAULT_ITEM);
+        inventory.remove(DEFAULT_ITEM);
+        assertFalse(inventory.getItems().containsKey(DEFAULT_ITEM));
     }
 
     //Tests whether requested list of items can edit inventories list of items. 
@@ -93,7 +112,7 @@ class InventoryTest {
     @Test
     void getItemsIsInmutableTest(){
         Inventory inventory = new Inventory();
-        inventory.import(""); //location!
+        inventory.add(DEFAULT_ITEM);
         Map<Item, Integer> items = inventory.getItems();
         items.clear();
         items = inventory.getItems();
@@ -103,24 +122,22 @@ class InventoryTest {
     //Tests whether item is flagged as available when it is
     @Test
     void itemIsAvailableTest(){
-        Item item = new Item(); //MAKE INTO SUBCLASS IN INVENTORY
         Inventory inventory = new Inventory();
-        inventory.import(""); //location
-        Item item = inventory.getItems().keySet();
-        assertTrue(inventory.isAvailable(item));
+        inventory.add(DEFAULT_ITEM);
+        assertTrue(inventory.isAvailable(DEFAULT_ITEM));
     }
 
     //Tests whether item is flagged as unavailable when it is
     @Test
     void itemIsNotAvailableTest(){
-        Item item = new Item(){
-
-        }; //MAKE INTO SUBCLASS NOT IN INVENTORY
         Inventory inventory = new Inventory();
-        inventory.import(""); //location
+        inventory.add(DEFAULT_ITEM);
+        Item item = new Item() {
+            @Override
+            public String getName() {
+                return "Test2";
+            }
+        };
         assertTrue(inventory.isAvailable(item));
     }
-
-
-
 }
