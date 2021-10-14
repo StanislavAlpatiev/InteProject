@@ -4,21 +4,44 @@ import java.util.*;
 
 public class Order {
 
-    private Date date;
-    private TreeMap<Item, Integer> items = new TreeMap<>();
+    private final TreeMap<Item, Integer> items = new TreeMap<>();
+    private final String number;
 
-    public Order(Date date) {
-        if (date == null)
-            throw new IllegalArgumentException("Null date");
-        this.date = date;
+
+    public Order() {
+        number = generateOrderNumber();
     }
 
-    public Order(Date date, Item... items) {
-        this(date);
+    public Order(Item... items) {
+        this();
         if (items == null)
             throw new IllegalArgumentException("Null item");
         for (Item item : items)
             addItem(item);
+    }
+
+    /**
+     * TODO: should check if order number already exists in database?
+     */
+    private String generateOrderNumber() {
+        if (number != null)
+            throw new IllegalStateException("Order number already generated");
+
+        StringBuilder number = new StringBuilder();
+
+        Date d = new Date();
+        Calendar c = new GregorianCalendar();
+        c.setTime(d);
+
+        number.append(c.get(Calendar.YEAR));
+        number.append((c.get(Calendar.MONTH) + 1));
+        number.append(c.get(Calendar.DAY_OF_MONTH));
+
+        Random r = new Random();
+        for (int i = 0; i < 4; i++)
+            number.append((char) (r.nextInt(26) + 'A'));
+
+        return number.toString();
     }
 
     public void addItem(Item item) {
@@ -39,8 +62,12 @@ public class Order {
         return true;
     }
 
-    public Date getDate() {
-        return date;
+    public TreeMap<Item, Integer> getItems() {
+        return new TreeMap<>(items);
+    }
+
+    public String getNumber(){
+        return number;
     }
 
 }

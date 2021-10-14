@@ -8,4 +8,12 @@ public abstract class Item implements Vat {
     private String producer;
     private boolean ageRestricted;
 
+    public String getName(){
+        return name;
+    }
+
+    public Money getPrice(){
+        return price;
+    }
+
 }
