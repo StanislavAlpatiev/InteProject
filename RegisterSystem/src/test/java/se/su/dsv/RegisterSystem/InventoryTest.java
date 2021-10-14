@@ -29,7 +29,7 @@ class InventoryTest {
         Inventory inventory = new Inventory(items);
         HashSet<Item> items2 = inventory.getItems().keySet();
         assertFalse(items2.add(items[0]));
-        assertEquals(DEFAULT_VALUE, inventory.getItems().get());
+        assertEquals(DEFAULT_VALUE, inventory.getItems().get(new Item()));
     }
 
     //Tests whether constructor throws if fed with null or empty list of items
@@ -41,23 +41,23 @@ class InventoryTest {
 
     //Tests whether importing saved inventory works
     @Test
-    void importItemsTest(){
+    void importTest(){
         Inventory inventory = new Inventory();
-        inventory.importItems(""); //String for location?
+        inventory.import(""); //String for location?
     }
 
     //Tests whether importing broken saved inventory throws
     @Test 
     void brokenImportThrowsTest(){
         Inventory inventory = new Inventory();
-        assertThrows(IllegalArgumentException.class, () -> {inventory.importItems("");}); //String for bad location, or bad import?
+        assertThrows(IllegalArgumentException.class, () -> {inventory.import("");}); //String for bad location, or bad import?
     }
 
     //Tests whether export works as intended
     @Test
     void exportTest(){
         Inventory inventory = new Inventory();
-        inventory.exportItems(""); //string for location?
+        inventory.export(""); //string for location?
     }
 
     @Test
@@ -73,8 +73,8 @@ class InventoryTest {
     void addIncrementsIntegerTest(){
         Inventory inventory = new Inventory();
         Item item = new Item();
-        inventory.addItem(item);
-        inventory.addItem(item);
+        inventory.add(item);
+        inventory.add(item);
         assertEquals(2, inventory.getItems().get(item));
     }
 
@@ -93,7 +93,7 @@ class InventoryTest {
     @Test
     void getItemsIsInmutableTest(){
         Inventory inventory = new Inventory();
-        inventory.importItems(""); //location!
+        inventory.import(""); //location!
         Map<Item, Integer> items = inventory.getItems();
         items.clear();
         items = inventory.getItems();
@@ -105,7 +105,7 @@ class InventoryTest {
     void itemIsAvailableTest(){
         Item item = new Item(); //MAKE INTO SUBCLASS IN INVENTORY
         Inventory inventory = new Inventory();
-        inventory.importItems(""); //location
+        inventory.import(""); //location
         Item item = inventory.getItems().keySet();
         assertTrue(inventory.isAvailable(item));
     }
@@ -117,7 +117,7 @@ class InventoryTest {
 
         }; //MAKE INTO SUBCLASS NOT IN INVENTORY
         Inventory inventory = new Inventory();
-        inventory.importItems(""); //location
+        inventory.import(""); //location
         assertTrue(inventory.isAvailable(item));
     }
 
