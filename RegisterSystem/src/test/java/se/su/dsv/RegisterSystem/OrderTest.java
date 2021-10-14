@@ -1,8 +1,8 @@
 package se.su.dsv.RegisterSystem;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -11,8 +11,27 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class OrderTest {
 
-    private static final Order DEFAULT_ORDER = new Order();
 
+    static Order DEFAULT_ORDER;
+    static Item DEFAULT_ITEM_1;
+    static Item DEFAULT_ITEM_2;
+
+    @BeforeAll
+    static void setUp() {
+        DEFAULT_ITEM_1 = new Item("Test1") {
+            @Override
+            public double getVAT() {
+                return 0;
+            }
+        };
+        DEFAULT_ITEM_2 = new Item("Test2") {
+            @Override
+            public double getVAT() {
+                return 0;
+            }
+        };
+        DEFAULT_ORDER = new Order();
+    }
 
 
     @Test
@@ -26,29 +45,10 @@ public class OrderTest {
 
     @Test
     void constructorAddsItemsToOrder() {
-        Item item1 = new Item("1", new Money(new BigDecimal("1"), Currency.SEK)) {
-            @Override
-            public double getVAT() {
-                return 0;
-            }
-        };
-        Item item2 = new Item("2", new Money(new BigDecimal("2"), Currency.SEK)) {
-            @Override
-            public double getVAT() {
-                return 0;
-            }
-        };
-        Item item3 = new Item("2", new Money(new BigDecimal("2"), Currency.SEK)) {
-            @Override
-            public double getVAT() {
-                return 0;
-            }
-        };
-        Order order = new Order(item1, item2);
-        assertTrue(order.getItems().containsKey(item1));
-        assertTrue(order.getItems().containsKey(item2));
+        Order order = new Order(DEFAULT_ITEM_1, DEFAULT_ITEM_2);
+        assertTrue(order.getItems().containsKey(DEFAULT_ITEM_1));
+        assertTrue(order.getItems().containsKey(DEFAULT_ITEM_2));
     }
-
 
 
     @Test
@@ -80,34 +80,55 @@ public class OrderTest {
     @Test
     void addItemsThrowsExceptionWhenParameterIsNull() {
         {
-            assertThrows(IllegalArgumentException.class, () -> { DEFAULT_ORDER.addItem(null);
+            assertThrows(IllegalArgumentException.class, () -> {
+                DEFAULT_ORDER.addItem(null);
             });
         }
     }
 
     @Test
     void addItemsAddsItemToOrder() {
-        Item item = new Item("3", new Money(new BigDecimal("3"), Currency.SEK)) {
-            @Override
-            public double getVAT() {
-                return 0;
-            }
-        };
-        DEFAULT_ORDER.addItem(item);
-        assertTrue(DEFAULT_ORDER.getItems().containsKey(item));
+
+        DEFAULT_ORDER.addItem(DEFAULT_ITEM_1);
+        assertTrue(DEFAULT_ORDER.getItems().containsKey(DEFAULT_ITEM_1));
+    }
+
+    @Test
+    void addItemsIncreasesAmountOfSameItem() {
+        Order order = new Order(DEFAULT_ITEM_1);
+        order.addItem(DEFAULT_ITEM_1);
+        assertEquals((int) order.getItems().get(DEFAULT_ITEM_1), 2);
+    }
+
+    @Test
+    void removeThrowsExceptionWhenParameterIsNull() {
+        {
+            assertThrows(IllegalArgumentException.class, () -> {
+                DEFAULT_ORDER.removeItem(null);
+            });
+        }
     }
 
     @Test
     void removeItemsRemovesItemFromOrder() {
-        Item item = new Item("3", new Money(new BigDecimal("3"), Currency.SEK)) {
-            @Override
-            public double getVAT() {
-                return 0;
-            }
-        };
-        DEFAULT_ORDER.addItem(item);
-        assertTrue(DEFAULT_ORDER.getItems().containsKey(item));
+        Order order = new Order(DEFAULT_ITEM_1);
+        order.removeItem(DEFAULT_ITEM_1);
+        assertFalse(order.getItems().containsKey(DEFAULT_ITEM_1));
     }
+
+    @Test
+    void removeItemsReturnsTrueWhenRemoveSucceed() {
+        Order order = new Order(DEFAULT_ITEM_1);
+        assertTrue(order.removeItem(DEFAULT_ITEM_1));
+    }
+
+    @Test
+    void removeItemsReturnsFalseWhenRemoveFailed() {
+        Order order = new Order(DEFAULT_ITEM_1);
+        assertFalse(order.removeItem(DEFAULT_ITEM_2));
+    }
+
+
 
 
 }

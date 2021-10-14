@@ -10,6 +10,10 @@ public abstract class Item implements Vat, Comparable<Item> {
     private String producer;
     private boolean ageRestricted;
 
+    public Item(String name){
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }
@@ -30,11 +34,7 @@ public abstract class Item implements Vat, Comparable<Item> {
 
     @Override
     public int compareTo(Item o) {
-        int cmp = name.compareTo(o.name);
-        if (cmp != 0) {
-            return cmp;
-        }
-        return price.compareTo(o.price);
+        return name.compareTo(o.name);
     }
 
     @Override
@@ -46,7 +46,7 @@ public abstract class Item implements Vat, Comparable<Item> {
             return false;
         }
         Item other = (Item) o;
-        return name.equals(other.name) && price.equals(other.price);
+        return name.equals(other.name);
 
     }
 

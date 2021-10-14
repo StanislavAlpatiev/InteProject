@@ -17,10 +17,10 @@ class InventoryTest {
 
     @BeforeAll
     static void setUp(){
-        DEFAULT_ITEM = new Item() {
-            @Override 
-            public String getName(){
-                return "Test";
+        DEFAULT_ITEM = new Item("Test") {
+            @Override
+            public double getVAT() {
+                return 0;
             }
         };
     }
@@ -130,10 +130,10 @@ class InventoryTest {
     void itemIsNotAvailableTest(){
         Inventory inventory = new Inventory();
         inventory.add(DEFAULT_ITEM);
-        Item item = new Item() {
+        Item item = new Item("Test2") {
             @Override
-            public String getName() {
-                return "Test2";
+            public double getVAT() {
+                return 0;
             }
         };
         assertFalse(inventory.isAvailable(item));
