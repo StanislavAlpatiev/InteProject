@@ -1,4 +1,4 @@
 package se.su.dsv.RegisterSystem;
 
-public class PaymentTest {
+public class OrderTest {
 }
