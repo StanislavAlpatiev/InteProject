@@ -19,23 +19,70 @@ class WalletTest {
 
     @Test
     void constructorTest() {
-        assertDoesNotThrow(() -> {
-            Wallet wallet = new Wallet(DEFAULT_OWNER, new Money(new BigDecimal(10), Currency.USD),
-                    new Money(new BigDecimal(35), Currency.SEK), new Money(new BigDecimal(5), Currency.GBP),
-                    new Money(new BigDecimal(20), Currency.EUR));
-        });
+        assertEquals(DEFAULT_WALLET, new Wallet(DEFAULT_OWNER, new Money(new BigDecimal(10), Currency.USD),
+                new Money(new BigDecimal(10), Currency.SEK), new Money(new BigDecimal(10), Currency.GBP),
+                new Money(new BigDecimal(10), Currency.EUR)));
     }
 
-    void walletContentTest() {
+    //Test that the wallet is empty when no money is added in constructor
+    @Test
+    void walletContentEmptyWhenConstructorTakesNoMoneyTest() {
+        assertEquals(0, new Wallet(DEFAULT_OWNER).getWalletContent().size());
+    }
 
+
+    /*// Test that wallet does equal when content is same when compared to other wallet
+    @Test
+    void walletEqualsReturnsTrueTest() {
+        Wallet otherWallet = new Wallet(DEFAULT_OWNER, new Money(new BigDecimal(10), Currency.USD),
+                new Money(new BigDecimal(10), Currency.SEK), new Money(new BigDecimal(10), Currency.GBP),
+                new Money(new BigDecimal(10), Currency.EUR));
+
+        assertEquals(otherWallet, DEFAULT_WALLET);
+    }
+
+    // Test that walletContent does not equal When content is different when compared to other wallet
+    // ExpectedWalletContent differs from walletContent of DEFAULT_WALLET
+    @Test
+    void WalletCompareToReturnNegativeWhenOwnerDiffersTest() {
         Map<Currency, Money> expectedWalletContent = new HashMap<>();
         expectedWalletContent.put(Currency.USD, DEFAULT_MONEY_USD);
         expectedWalletContent.put(Currency.SEK, DEFAULT_MONEY_SEK);
-        expectedWalletContent.put(Currency.GBP, DEFAULT_MONEY_GBP);
+        expectedWalletContent.put(Currency.GBP, new Money(new BigDecimal(120), Currency.GBP));
         expectedWalletContent.put(Currency.EUR, DEFAULT_MONEY_EUR);
 
         assertEquals(expectedWalletContent, DEFAULT_WALLET.getWalletContent());
+    }*/
 
+
+    //Add should be able to add several money objects
+    //Add should sum money of same currency
+    @Test
+    void addMethodAddsNewMoneyToEmptyWalletTest() {
+        //Adding to wallet
+        Wallet wallet = new Wallet(DEFAULT_OWNER);
+        wallet.add(DEFAULT_MONEY_USD);
+
+        //Mock map with entry
+        Map<Currency, Money> map = new HashMap<>();
+        map.put(Currency.USD, DEFAULT_MONEY_USD);
+
+        //Comparing map to wallets walletContent
+        assertEquals(map, wallet.getWalletContent());
     }
+
+    @Test
+    void addMethodAddingExistingMoneyOfCurrencyTest() {
+        //Adding money of Existing Currency to wallet
+        Wallet wallet = new Wallet(DEFAULT_OWNER, DEFAULT_MONEY_USD, DEFAULT_MONEY_EUR);
+        wallet.add(DEFAULT_MONEY_USD);
+        //Mock map with entry
+        HashMap<Currency, Money> map = new HashMap<>();
+        map.put(Currency.USD, new Money(new BigDecimal(20), Currency.USD));
+        map.put(Currency.EUR, new Money(new BigDecimal(20), Currency.EUR));
+        //Comparing map to wallets walletContent
+        assertEquals(map.get(Currency.USD), wallet.getWalletContent().get(Currency.USD));
+    }
+
 
 }
