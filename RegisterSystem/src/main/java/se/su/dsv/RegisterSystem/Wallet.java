@@ -40,6 +40,18 @@ public class Wallet {
         }
     }
 
+    public void remove(Money money) {
+        if (walletContent.containsKey(money.getCurrency())) {
+            walletContent.replace(money.getCurrency(), walletContent.get(money.getCurrency()).subtract(money));
+        }
+    }
+
+    public void remove(Money... money) {
+        for(Money m : money) {
+            add(m);
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
