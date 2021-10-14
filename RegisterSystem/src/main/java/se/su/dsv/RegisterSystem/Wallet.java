@@ -35,7 +35,7 @@ public class Wallet {
     }
 
     public void add(Money... money) {
-        for(Money m : money) {
+        for (Money m : money) {
             add(m);
         }
     }
@@ -47,15 +47,16 @@ public class Wallet {
     }
 
     public void remove(Money... money) {
-        for(Money m : money) {
+        for (Money m : money) {
             add(m);
         }
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == this)
+        if (o == this) {
             return true;
+        }
         if (!(o instanceof Wallet)) {
             return false;
         }

@@ -14,9 +14,10 @@ class BankTest {
     @Test
     void getRateFromAPIResultSuccessTest() {
         assertDoesNotThrow(() -> {
-            Bank.getRate(Currency.USD, Currency.SEK);});
+            Bank.getRate(Currency.USD, Currency.SEK);
+        });
     }
-     
+
     @Test
     void exchangeGivesNewCurrencyTest() throws IOException {
         Money money = new Money(new BigDecimal(10), Currency.USD);
@@ -29,11 +30,11 @@ class BankTest {
         Money money = new Money(DEFAULT_VALUE, Currency.USD);
         money = Bank.exchange(money, Currency.SEK);
         BigDecimal rate = Bank.getRate(Currency.USD, Currency.SEK);
-        
+
         BigDecimal newAmount = DEFAULT_VALUE.multiply(rate);
 
         assertEquals(newAmount, money.getAmount());
     }
 
-    
+
 }

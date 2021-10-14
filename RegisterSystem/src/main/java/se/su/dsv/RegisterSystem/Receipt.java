@@ -12,10 +12,12 @@ public class Receipt {
     private final Order order;
 
     public Receipt(Order order) {
-        if (order == null)
+        if (order == null) {
             throw new IllegalArgumentException("Payment is null");
-        if (order.getItems().isEmpty())
+        }
+        if (order.getItems().isEmpty()) {
             throw new IllegalArgumentException("Can not create receipt for empty order");
+        }
         this.date = new Date();
         this.order = order;
     }
@@ -43,17 +45,21 @@ public class Receipt {
             if (e.getValue() > 1) {
                 sb.append(e.getValue()).append(" x ").append(currentItemPrice).
                         append("     ").append(currentItemPrice.multiply(new BigDecimal(noOfItems))).append("\n");
-            } else
+            } else {
                 sb.append("       ").append(currentItemPrice).append("\n");
+            }
 
             total = total.add(currentItemPrice.multiply(new BigDecimal(noOfItems)));
 
-            if (e.getKey().getVAT() == 0.06)
+            if (e.getKey().getVAT() == 0.06) {
                 totalVat6 = totalVat6.add(currentItemPrice.multiply(new BigDecimal(noOfItems)));
-            if (e.getKey().getVAT() == 0.12)
+            }
+            if (e.getKey().getVAT() == 0.12) {
                 totalVat12 = totalVat12.add(currentItemPrice.multiply(new BigDecimal(noOfItems)));
-            if (e.getKey().getVAT() == 0.25)
+            }
+            if (e.getKey().getVAT() == 0.25) {
                 totalVat25 = totalVat25.add(currentItemPrice.multiply(new BigDecimal(noOfItems)));
+            }
         }
         sb.append("==============================\n");
         sb.append("TOTAL:            ").append(total.setScale(2, RoundingMode.CEILING).toString()).append("\n");
