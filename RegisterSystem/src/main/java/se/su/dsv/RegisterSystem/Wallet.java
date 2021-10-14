@@ -41,10 +41,10 @@ public class Wallet {
     * */
     //TODO: Add method that adds money to walletContent
     public void add(Money money) {
-        if (walletContent.containsKey(money.getCurrency())) {
-            walletContent.get(money.getCurrency()).add(money);
-        } else {
+        if (!walletContent.containsKey(money.getCurrency())) {
             walletContent.put(money.getCurrency(), money);
+        } else {
+            walletContent.replace(money.getCurrency(), walletContent.get(money.getCurrency()).add(money));
         }
     }
 
