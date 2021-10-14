@@ -16,7 +16,7 @@ class InventoryTest {
 
 
     @BeforeAll
-    void setUp(){
+    static void setUp(){
         DEFAULT_ITEM = new Item() {
             @Override 
             public String getName(){
@@ -37,12 +37,10 @@ class InventoryTest {
     void validConstructorWithParamTest(){
         Item[] items = new Item[DEFAULT_VALUE];
         for(int i = 0; i < DEFAULT_VALUE; i++){
-            item[i] = DEFAULT_ITEM;
+            items[i] = DEFAULT_ITEM;
         }
 
         Inventory inventory = new Inventory(items);
-        Set<Item> items2 = inventory.getItems().keySet();
-        assertFalse(items2.add(items[0]));
         assertEquals(DEFAULT_VALUE, inventory.getItems().get(DEFAULT_ITEM));
     }
 
@@ -138,6 +136,6 @@ class InventoryTest {
                 return "Test2";
             }
         };
-        assertTrue(inventory.isAvailable(item));
+        assertFalse(inventory.isAvailable(item));
     }
 }

@@ -1,7 +1,6 @@
 package se.su.dsv.RegisterSystem;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class Inventory {
 
@@ -12,15 +11,22 @@ public class Inventory {
     }
 
     public Inventory(Item... item){
+        if (item == null || item.length == 0){
+            throw new IllegalArgumentException();
+        } 
         items = new HashMap<>();
+        add(item);
     }
 
-    public void add(Item item){
-        if(isAvailable(item)){
-            items.put(item, items.get(item)+1);
-        } else {
-            items.put(item, 1);
+    public void add(Item... item){
+        for (Item i : item){
+            if(isAvailable(i)){
+                items.put(i, items.get(i)+1);
+            } else {
+                items.put(i, 1);
+            }
         }
+
     }
 
     public void remove(Item item){
