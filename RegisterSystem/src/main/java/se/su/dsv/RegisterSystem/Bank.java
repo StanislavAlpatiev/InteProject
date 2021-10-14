@@ -1,6 +1,5 @@
 package se.su.dsv.RegisterSystem;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -10,10 +9,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
-public class MockBank {
+public class Bank {
     public static BigDecimal getRate(Currency from, Currency to) throws IOException {
         // Setting URL
         String url_str = ("https://v6.exchangerate-api.com/v6/3f192049848a3da4ed3985ce/pair/" + from + "/" + to);
