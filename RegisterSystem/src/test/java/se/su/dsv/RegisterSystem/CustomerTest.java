@@ -14,6 +14,7 @@ class CustomerTest {
     @Test
     void constructorValidParameterTest() {
         Customer customer = new Customer(DEFAULT_NAME, DEFAULT_ADDRESS, DEFAULT_SOCIAL_SECURITY_NUMBER, DEFAULT_PHONE_NUMBER, DEFAULT_MAIL);
+        System.out.println(new Customer(DEFAULT_NAME, DEFAULT_ADDRESS, DEFAULT_SOCIAL_SECURITY_NUMBER, DEFAULT_PHONE_NUMBER, DEFAULT_MAIL).toString());
         assertEquals(DEFAULT_NAME, customer.getName());
         assertEquals(DEFAULT_ADDRESS, customer.getAddress());
         assertEquals(DEFAULT_SOCIAL_SECURITY_NUMBER, customer.getSocialSecurityNumber());
@@ -50,7 +51,8 @@ class CustomerTest {
     @Test
     void constructorThrowsIAEWhenPhoneNumberIsWrongFormat() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Customer( DEFAULT_NAME, DEFAULT_ADDRESS, DEFAULT_SOCIAL_SECURITY_NUMBER, "072345667789", DEFAULT_MAIL);
+            new Customer( DEFAULT_NAME, DEFAULT_ADDRESS, DEFAULT_SOCIAL_SECURITY_NUMBER, "072345667789",
+                    DEFAULT_MAIL);
         });
     }
 
@@ -58,8 +60,20 @@ class CustomerTest {
     @Test
     void constructorThrowsIAEWhenMailIsWrongFormat() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Customer( DEFAULT_NAME, DEFAULT_ADDRESS, DEFAULT_SOCIAL_SECURITY_NUMBER, DEFAULT_PHONE_NUMBER, "erik..andresson@gmail.com");
+            new Customer( DEFAULT_NAME, DEFAULT_ADDRESS, DEFAULT_SOCIAL_SECURITY_NUMBER, DEFAULT_PHONE_NUMBER,
+                    "erik..andresson@gmail.com");
         });
+    }
+
+    //Test toString method of customer Test
+    @Test
+    void toStringTest() {
+        assertEquals("Name: Erik Andersson\n" +
+                "Address: Lingonvägen 17\n" +
+                "Social Security Number: 19990325-5634\n" +
+                "Phone number: 0722371555\n" +
+                "E-mail: erik.andresson@gmail.com\n", new Customer(DEFAULT_NAME, DEFAULT_ADDRESS, DEFAULT_SOCIAL_SECURITY_NUMBER,
+                DEFAULT_PHONE_NUMBER, DEFAULT_MAIL).toString());
     }
 
 }
