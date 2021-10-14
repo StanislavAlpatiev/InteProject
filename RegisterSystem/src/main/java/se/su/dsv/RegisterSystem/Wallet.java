@@ -26,20 +26,6 @@ public class Wallet {
         return walletContent;
     }
 
-
-
-    /*
-    * if (Arrays.stream(money).count() > 0) {
-            Arrays.stream(money).forEach(e -> {
-                if(walletContent.containsKey(e.getCurrency())) {
-                    walletContent.get(e.getCurrency()).add(e);
-                } else {
-                    walletContent.put(e.getCurrency(), e);
-                }
-            });
-        }
-    * */
-    //TODO: Add method that adds money to walletContent
     public void add(Money money) {
         if (!walletContent.containsKey(money.getCurrency())) {
             walletContent.put(money.getCurrency(), money);

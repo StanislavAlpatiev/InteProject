@@ -30,35 +30,10 @@ class WalletTest {
         assertEquals(0, new Wallet(DEFAULT_OWNER).getWalletContent().size());
     }
 
-
-    /*// Test that wallet does equal when content is same when compared to other wallet
-    @Test
-    void walletEqualsReturnsTrueTest() {
-        Wallet otherWallet = new Wallet(DEFAULT_OWNER, new Money(new BigDecimal(10), Currency.USD),
-                new Money(new BigDecimal(10), Currency.SEK), new Money(new BigDecimal(10), Currency.GBP),
-                new Money(new BigDecimal(10), Currency.EUR));
-
-        assertEquals(otherWallet, DEFAULT_WALLET);
-    }
-
-    // Test that walletContent does not equal When content is different when compared to other wallet
-    // ExpectedWalletContent differs from walletContent of DEFAULT_WALLET
-    @Test
-    void WalletCompareToReturnNegativeWhenOwnerDiffersTest() {
-        Map<Currency, Money> expectedWalletContent = new HashMap<>();
-        expectedWalletContent.put(Currency.USD, DEFAULT_MONEY_USD);
-        expectedWalletContent.put(Currency.SEK, DEFAULT_MONEY_SEK);
-        expectedWalletContent.put(Currency.GBP, new Money(new BigDecimal(120), Currency.GBP));
-        expectedWalletContent.put(Currency.EUR, DEFAULT_MONEY_EUR);
-
-        assertEquals(expectedWalletContent, DEFAULT_WALLET.getWalletContent());
-    }*/
-
-
     //Add should be able to add several money objects
     //Add should sum money of same currency
     @Test
-    void addMethodAddsNewMoneyToEmptyWalletTest() {
+    void addingMoneyToEmptyWalletTest() {
         //Adding to wallet
         Wallet wallet = new Wallet(DEFAULT_OWNER);
         wallet.add(DEFAULT_MONEY_USD);
@@ -72,7 +47,7 @@ class WalletTest {
     }
 
     @Test
-    void addMethodAddingExistingMoneyOfCurrencyTest() {
+    void addingMoneyOfSameCurrencyTest() {
         //Adding money of Existing Currency to wallet
         Wallet wallet = new Wallet(DEFAULT_OWNER, DEFAULT_MONEY_USD, DEFAULT_MONEY_EUR);
         wallet.add(DEFAULT_MONEY_USD);
@@ -82,6 +57,16 @@ class WalletTest {
         map.put(Currency.EUR, new Money(new BigDecimal(20), Currency.EUR));
         //Comparing map to wallets walletContent
         assertEquals(map.get(Currency.USD), wallet.getWalletContent().get(Currency.USD));
+    }
+
+    @Test
+    void removingMoneyOfSameCurrencyTest() {
+        // Creating wallet with 10 EUR and 10 USD
+        Wallet wallet = new Wallet(DEFAULT_OWNER, DEFAULT_MONEY_USD, DEFAULT_MONEY_EUR);
+        //Removing 10 USD
+        wallet.getWalletContent().get(Currency.USD).remove(DEFAULT_MONEY_USD);
+        //Comparing map to wallets walletContent
+        assertEquals(new Money(BigDecimal.ZERO, Currency.USD), wallet.getWalletContent().get(Currency.USD));
     }
 
 
