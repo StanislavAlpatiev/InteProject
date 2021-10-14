@@ -86,11 +86,10 @@ class WalletTest {
         mockWalletContent.put(Currency.GBP, new Money(new BigDecimal(70), Currency.GBP));
 
         //Removing 10 USD from 30 USD in Wallet
-        wallet.remove(DEFAULT_MONEY_USD);
         //Removing 50 EUR from 100 EUR in Wallet
-        wallet.remove(new Money(new BigDecimal(50),  Currency.EUR));
         //Removing 20 GBP from 90 GBP in Wallet
-        wallet.remove(new Money(new BigDecimal(20),  Currency.GBP));
+        wallet.remove(DEFAULT_MONEY_USD, new Money(new BigDecimal(50), Currency.EUR),
+                new Money(new BigDecimal(20), Currency.GBP));
 
         //Comparing map to wallets walletContent
         assertEquals(mockWalletContent, wallet.getWalletContent());

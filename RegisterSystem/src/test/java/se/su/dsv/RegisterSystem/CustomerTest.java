@@ -1,5 +1,7 @@
 package se.su.dsv.RegisterSystem;
+
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CustomerTest {
@@ -26,7 +28,7 @@ class CustomerTest {
     @Test
     void constructorThrowsIAEWhenNameIsNullTest() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Customer( null, DEFAULT_ADDRESS, DEFAULT_SOCIAL_SECURITY_NUMBER, DEFAULT_PHONE_NUMBER, DEFAULT_MAIL);
+            new Customer(null, DEFAULT_ADDRESS, DEFAULT_SOCIAL_SECURITY_NUMBER, DEFAULT_PHONE_NUMBER, DEFAULT_MAIL);
         });
     }
 
@@ -34,7 +36,7 @@ class CustomerTest {
     @Test
     void constructorThrowsIAEWhenAddressIsNullTest() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Customer( DEFAULT_NAME, null, DEFAULT_SOCIAL_SECURITY_NUMBER, DEFAULT_PHONE_NUMBER, DEFAULT_MAIL);
+            new Customer(DEFAULT_NAME, null, DEFAULT_SOCIAL_SECURITY_NUMBER, DEFAULT_PHONE_NUMBER, DEFAULT_MAIL);
         });
     }
 
@@ -43,7 +45,7 @@ class CustomerTest {
     @Test
     void constructorThrowsIAEWhenSSNIsWrongFormat() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Customer( DEFAULT_NAME, DEFAULT_ADDRESS, "0asd0asdasd", DEFAULT_PHONE_NUMBER, DEFAULT_MAIL);
+            new Customer(DEFAULT_NAME, DEFAULT_ADDRESS, "0asd0asdasd", DEFAULT_PHONE_NUMBER, DEFAULT_MAIL);
         });
     }
 
@@ -51,7 +53,7 @@ class CustomerTest {
     @Test
     void constructorThrowsIAEWhenPhoneNumberIsWrongFormat() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Customer( DEFAULT_NAME, DEFAULT_ADDRESS, DEFAULT_SOCIAL_SECURITY_NUMBER, "072345667789",
+            new Customer(DEFAULT_NAME, DEFAULT_ADDRESS, DEFAULT_SOCIAL_SECURITY_NUMBER, "072345667789",
                     DEFAULT_MAIL);
         });
     }
@@ -60,7 +62,7 @@ class CustomerTest {
     @Test
     void constructorThrowsIAEWhenMailIsWrongFormat() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Customer( DEFAULT_NAME, DEFAULT_ADDRESS, DEFAULT_SOCIAL_SECURITY_NUMBER, DEFAULT_PHONE_NUMBER,
+            new Customer(DEFAULT_NAME, DEFAULT_ADDRESS, DEFAULT_SOCIAL_SECURITY_NUMBER, DEFAULT_PHONE_NUMBER,
                     "erik..andresson@gmail.com");
         });
     }
