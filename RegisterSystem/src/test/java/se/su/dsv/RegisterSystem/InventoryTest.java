@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 class InventoryTest {
     
@@ -13,7 +14,7 @@ class InventoryTest {
     @Test
     void validConstructorEmptyParamTest(){
         Inventory inventory = new Inventory();
-        HashMap<Item, Integer> items = inventory.getItems();
+        Map<Item, Integer> items = inventory.getItems();
         assertTrue(items.isEmpty());
     }
 
@@ -54,17 +55,46 @@ class InventoryTest {
 
     //Tests whether export works as intended
     @Test
-    void exportItemsTest(){
+    void exportTest(){
         Inventory inventory = new Inventory();
         inventory.exportItems(""); //string for location?
     }
 
-    //Tests whether requested list of items can edit inventories list of items
+    @Test
+    void addAddsNewMapEntryTest(){
+        Item item = new Item(); //ADD SUBCLASS
+        Inventory inventory = new Inventory();
+        inventory.add(item);
+        assertTrue(inventory.getItems().keySet().contains(item));
+        assertEquals(1, inventory.getItems().get(item));
+    }
+
+    @Test
+    void addIncrementsIntegerTest(){
+        Inventory inventory = new Inventory();
+        Item item = new Item();
+        inventory.addItem(item);
+        inventory.addItem(item);
+        assertEquals(2, inventory.getItems().get(item));
+    }
+
+    @Test
+    void removeDecrementsIntegerTest(){
+
+    }
+
+    @Test
+    void removeDoesNotDecrementIntegerPastZeroTest(){
+
+    }
+
+    //Tests whether requested list of items can edit inventories list of items. 
+    //IS CURRENTLY NOT UNMUTABLE, ONLY SHALLOW COPY. WHICH IS PREFERABLE?
     @Test
     void getItemsIsInmutableTest(){
         Inventory inventory = new Inventory();
         inventory.importItems(""); //location!
-        HashMap<Item, Integer> items = inventory.getItems();
+        Map<Item, Integer> items = inventory.getItems();
         items.clear();
         items = inventory.getItems();
         assertFalse(items.isEmpty());
