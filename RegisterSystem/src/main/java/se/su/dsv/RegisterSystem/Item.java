@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public abstract class Item implements Vat, Comparable<Item> {
 
     private Money price;
-    private String name;
+    private final String name;
     private String productNo;
     private String producer;
     private boolean ageRestricted;
