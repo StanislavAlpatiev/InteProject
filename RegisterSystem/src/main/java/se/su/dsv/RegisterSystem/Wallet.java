@@ -48,7 +48,7 @@ public class Wallet {
 
     public void remove(Money... money) {
         for (Money m : money) {
-            add(m);
+            remove(m);
         }
     }
 
