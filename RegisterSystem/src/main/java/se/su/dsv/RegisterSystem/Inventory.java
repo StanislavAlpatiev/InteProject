@@ -4,18 +4,21 @@ import java.util.HashMap;
 
 public class Inventory {
 
-    HashMap<Item, Integer> items;
+    private HashMap<Item, Integer> items;
+    private Currency currency;
 
-    public Inventory(){
+    public Inventory(Currency currency){
         items = new HashMap<>();
+        this.currency = currency;
     }
 
-    public Inventory(Item... item){
+    public Inventory(Currency currency, Item... item){
         if (item == null || item.length == 0){
             throw new IllegalArgumentException();
         } 
         items = new HashMap<>();
         add(item);
+        this.currency = currency;
     }
 
     public void add(Item... item){
@@ -40,6 +43,16 @@ public class Inventory {
 
     public HashMap<Item, Integer> getItems(){
         return new HashMap<Item, Integer>(items);
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        if(this.currency != currency){
+            //iterate over items and change them all. Call upon items internal things to change their amounts from there. 
+        }
     }
 
     public boolean isAvailable(Item item){
