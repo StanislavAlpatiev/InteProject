@@ -35,8 +35,7 @@ public class Inventory {
             if(items.get(item) == 0){
                 items.remove(item);
             }
-        } 
-        return;
+        }
     }
 
     public HashMap<Item, Integer> getItems(){

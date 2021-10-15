@@ -1,11 +1,11 @@
 package se.su.dsv.RegisterSystem;
 
 public class Customer {
-    String name;
-    String address;
-    String socialSecurityNumber;
-    String phoneNumber;
-    String mail;
+    private final String name;
+    private final String address;
+    private final String socialSecurityNumber;
+    private final String phoneNumber;
+    private final String mail;
 
     public Customer(String name, String address, String socialSecurityNumber, String phoneNumber, String mail) {
         if (name == null || name.equals("")) {
