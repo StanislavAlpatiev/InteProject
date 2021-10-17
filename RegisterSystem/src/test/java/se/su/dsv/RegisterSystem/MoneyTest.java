@@ -3,7 +3,9 @@ package se.su.dsv.RegisterSystem;
 import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
@@ -51,7 +53,7 @@ class MoneyTest {
     void constructorValidCurrenciesTest(Currency currency) {
         Money money = new Money(DEFAULT_AMOUNT, currency);
         //assertSame(DEFAULT_AMOUNT, money.getAmount());
-        assertEquals(currency, money.getCurrency()); 
+        assertEquals(currency, money.getCurrency());
     }
 
     //Test adding valid parameter
@@ -176,5 +178,11 @@ class MoneyTest {
         Money otherMoney = new Money(DEFAULT_AMOUNT, Currency.EUR);
         assertTrue(money.compareTo(otherMoney) < 0);
     }
-    
+
+    @Test
+    void moneyToStringFormatTest() {
+        Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
+        assertEquals("10 USD", money.toString());
+    }
+
 }
