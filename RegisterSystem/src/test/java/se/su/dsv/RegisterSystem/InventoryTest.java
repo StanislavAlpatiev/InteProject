@@ -72,7 +72,6 @@ class InventoryTest {
     //Tests whether importing inventory items works
     @Test
     void importImportsItemsTest(){
-<<<<<<< HEAD
         Inventory testOracle = new Inventory(new Register(DEFAULT_CURRENCY));
         Item testItem1 = new Grocey("testName1", 123123, "Arla", false, ItemType.GROCERY, new Money(new BigDecimal(20), Currency.USD));
         Item testItem2 = new Grocey("testName2", 123123, "Arla", false, ItemType.GROCERY, new Money(new BigDecimal(30), Currency.SEK));
@@ -80,10 +79,8 @@ class InventoryTest {
         defaultInventory.importInventory("test"); //String for filename?
         assertEquals(testOracle.getItems(), defaultInventory.getItems());
         //assert something about items. requires subclasses i feel.
-=======
         defaultInventory.importInventory("test"); //String for filename?
-        //assert something about items. requires subclasses i feel. 
->>>>>>> d53d93ada0fae53593ab94415033e8003d53ab12
+        //assert something about items. requires subclasses i feel.
     }
 
     //Tests whether importing broken saved inventory throws
