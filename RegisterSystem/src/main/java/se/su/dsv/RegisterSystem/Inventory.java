@@ -15,7 +15,7 @@ public class Inventory {
         this.currency = currency;
     }
 
-    public Inventory(Currency currency, Item... item){
+    public Inventory(Currency currency, Item... item) throws IOException{
         if (item == null || item.length == 0){
             throw new IllegalArgumentException();
         } 
@@ -24,9 +24,11 @@ public class Inventory {
         this.currency = currency;
     }
 
-    public void add(Item... item){
-        //TODO: kontrollera att nya items har samma currency som inventory, annars, konvertera till den valutan.
+    public void add(Item... item) throws IOException{
         for (Item i : item){
+            if(i.getPrice().getCurrency() != this.currency){
+                i.setPrice(Bank.exchange(i.getPrice(), this.currency));
+            }
             items.put(i, (isAvailable(i)) ? items.get(i) + 1 : 1);
         }
     }

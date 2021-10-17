@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 class InventoryTest {
 
@@ -21,7 +22,7 @@ class InventoryTest {
 
     @BeforeAll
     static void setUp(){
-        DEFAULT_ITEM = new Item("Test", null, null, false, null, null) {
+        DEFAULT_ITEM = new Item("Test", "Test", "Test", false, ItemType.GROCERY, new Money(new BigDecimal(5), Currency.SEK)) {
             @Override
             public double getVAT() {
                 return 0;
@@ -48,7 +49,7 @@ class InventoryTest {
 
     //Tests whether constructor with a list of items as parameter works
     @Test
-    void validConstructorWithRegisterAndItemsParamsTest(){
+    void validConstructorWithRegisterAndItemsParamsTest() throws IOException{
         Item[] items = new Item[DEFAULT_VALUE];
         for(int i = 0; i < DEFAULT_VALUE; i++){
             items[i] = DEFAULT_ITEM;
@@ -108,22 +109,30 @@ class InventoryTest {
         //do an import here of testOutput, and check whether currency is there.
     }
 
+    //Adds item with a SEK money object to Inventory with USD currency, and makes sure the Item is converted into USD as its added.
     @Test
-    void addAddsNewMapEntryTest(){
+    void addedItemHasSameCurrency() throws IOException{
+        defaultInventory.add(DEFAULT_ITEM);
+        Item item = defaultInventory.getItems().keySet().stream().findFirst().orElse(null);
+        assertEquals(DEFAULT_CURRENCY, item.getPrice().getCurrency());
+    }
+
+    @Test
+    void addAddsNewMapEntryTest() throws IOException{
         defaultInventory.add(DEFAULT_ITEM);
         assertTrue(defaultInventory.getItems().keySet().contains(DEFAULT_ITEM));
         assertEquals(1, defaultInventory.getItems().get(DEFAULT_ITEM));
     }
 
     @Test
-    void addIncrementsIntegerTest(){
+    void addIncrementsIntegerTest() throws IOException{
         defaultInventory.add(DEFAULT_ITEM);
         defaultInventory.add(DEFAULT_ITEM);
         assertEquals(2, defaultInventory.getItems().get(DEFAULT_ITEM));
     }
 
     @Test
-    void removeDecrementsIntegerTest(){
+    void removeDecrementsIntegerTest() throws IOException{
         defaultInventory.add(DEFAULT_ITEM);
         defaultInventory.add(DEFAULT_ITEM);
         defaultInventory.remove(DEFAULT_ITEM);
@@ -131,7 +140,7 @@ class InventoryTest {
     }
 
     @Test
-    void removeRemovesIfDecrementIntegerBelowOneTest(){
+    void removeRemovesIfDecrementIntegerBelowOneTest() throws IOException{
         defaultInventory.add(DEFAULT_ITEM);
         defaultInventory.remove(DEFAULT_ITEM);
         assertFalse(defaultInventory.getItems().containsKey(DEFAULT_ITEM));
@@ -155,7 +164,7 @@ class InventoryTest {
     //Tests whether requested list of items can edit inventories list of items. 
     //IS CURRENTLY NOT UNMUTABLE, ONLY SHALLOW COPY. WHICH IS PREFERABLE?
     @Test
-    void getItemsIsInmutableTest(){
+    void getItemsIsInmutableTest() throws IOException{
         defaultInventory.add(DEFAULT_ITEM);
         Map<Item, Integer> items = defaultInventory.getItems();
         items.clear();
@@ -165,14 +174,14 @@ class InventoryTest {
 
     //Tests whether item is flagged as available when it is
     @Test
-    void itemIsAvailableTest(){
+    void itemIsAvailableTest() throws IOException{
         defaultInventory.add(DEFAULT_ITEM);
         assertTrue(defaultInventory.isAvailable(DEFAULT_ITEM));
     }
 
     //Tests whether item is flagged as unavailable when it is
     @Test
-    void itemIsNotAvailableTest(){
+    void itemIsNotAvailableTest() throws IOException{
         defaultInventory.add(DEFAULT_ITEM);
         Item item = new Item("Test2", null, null, false, null, null) {
             @Override
