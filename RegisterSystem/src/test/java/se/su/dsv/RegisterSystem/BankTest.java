@@ -36,5 +36,13 @@ class BankTest {
         assertEquals(newAmount, money.getAmount());
     }
 
+    @Test
+    void exchangeWithRateParameterNewAmountCorrect() {
+        BigDecimal rate = new BigDecimal(2);
+        Money money = new Money(DEFAULT_VALUE, Currency.USD);
+        money = Bank.exchange(money, Currency.SEK, rate);
+        assertEquals(DEFAULT_VALUE.multiply(rate), money.getAmount());
+    }
+
 
 }

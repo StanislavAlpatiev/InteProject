@@ -74,6 +74,12 @@ public class Money implements Comparable<Money> {
         return amount.compareTo(other.amount);
     }
 
+    public String toExport() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(amount + "\n" + currency + "\n");
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
