@@ -4,33 +4,57 @@ import java.math.BigDecimal;
 
 public abstract class Item implements Vat, Comparable<Item> {
 
-    private Money price;
-    private final String name;
-    private String productNo;
-    private String producer;
-    private boolean ageRestricted;
+    protected final String name;
+    protected final String productNo;
+    protected final String producer;
+    protected final boolean ageRestricted;
+    protected final ItemType type;
+    protected Money price;
 
-    public Item(String name){
+    protected Item(String name, String productNo, String producer, boolean ageRestricted, ItemType type, Money price) {
         this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Money getPrice() {
-        return price;
-    }
-
-    public void setPrice(Money price){
+        this.productNo = productNo;
+        this.producer = producer;
+        this.ageRestricted = ageRestricted;
+        this.type = type;
         this.price = price;
     }
 
-    public Money getPricePlusVat() {
+    public abstract Money getSalesPrice();
+
+    public final String getName() {
+        return name;
+    }
+
+    public final String getProductNo() {
+        return productNo;
+    }
+
+    public final String getProducer() {
+        return producer;
+    }
+
+    public final boolean isAgeRestricted() {
+        return ageRestricted;
+    }
+
+    public final ItemType getType() {
+        return type;
+    }
+
+    public final Money getPrice() {
+        return price;
+    }
+
+    public final void setPrice(Money price){
+        this.price = price;
+    }
+
+    public final Money getPricePlusVat() {
         return price.add(getVATAmountOfPrice());
     }
 
-    public Money getVATAmountOfPrice() {
+    public final Money getVATAmountOfPrice() {
         BigDecimal vat = new BigDecimal(String.valueOf(getVAT()));
         return new Money(price.getAmount().multiply(vat), price.getCurrency());
 
@@ -53,5 +77,26 @@ public abstract class Item implements Vat, Comparable<Item> {
         return name.equals(other.name);
 
     }
+
+    public String toExport(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("@\n" + getName() + "\n" + getProductNo() + "\n" + getProducer() + "\n" + isAgeRestricted() + "\n" + getType() + "\n" + getPrice().toExport());
+        return sb.toString();
+    }
+
+    @Override
+    public String toString() {
+        return
+            " name='" + getName() + "'" +
+            ", productNo='" + getProductNo() + "'" +
+            ", producer='" + getProducer() + "'" +
+            ", ageRestricted='" + isAgeRestricted() + "'" +
+            ", type='" + getType() + "'" +
+            ", price='" + getPrice() + "'";
+    }
+
+
+
+
 
 }

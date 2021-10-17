@@ -26,11 +26,9 @@ public class Inventory {
 
     public void add(Item... item){
         for (Item i : item){
-            if(isAvailable(i)){
-                items.put(i, items.get(i)+1);
-            } else {
-                items.put(i, 1);
-            }
+
+            items.put(i, (isAvailable(i)) ? items.get(i) + 1 : 1);
+
         }
 
     }
@@ -76,7 +74,9 @@ public class Inventory {
     }
 
     public void exportInventory(){
+        for (Map.Entry<Item, Integer> entry : items.entrySet()){
 
+        }
     }
 
     public void exportInventory(String fileName){

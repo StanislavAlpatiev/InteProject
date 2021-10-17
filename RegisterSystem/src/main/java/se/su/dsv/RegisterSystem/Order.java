@@ -50,7 +50,7 @@ public class Order {
         if (item == null) {
             throw new IllegalArgumentException("Null item");
         }
-        items.put(item, (items.containsKey(item)) ? items.get(item) + 1 : 1);
+        items.put(item, ((items.containsKey(item)) ? items.get(item) + 1 : 1));
     }
 
     public boolean removeItem(Item item) {
