@@ -15,6 +15,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ReceiptTest {
 
+    // to be able to create receipt without random generated order number
+    static class MockOrder extends Order{
+
+        String mockNumber;
+
+        public MockOrder(String mockOrderNumber) {
+            mockNumber = mockOrderNumber;
+        }
+        @Override
+        public String getNumber(){
+            return mockNumber;
+        }
+    }
+
     static final BigDecimal ZERO = new BigDecimal("0");
     static final Money DEFAULT_MONEY_ZERO = new Money(ZERO, Currency.SEK);
     static final int POSITION_OF_ORDER_NUMBER = 1;
@@ -24,6 +38,22 @@ public class ReceiptTest {
     static final double VAT6 = 0.06;
     static final double VAT12 = 0.12;
     static final double VAT25 = 0.25;
+
+    static final String RECEIPT_AS_STRING = "===================================================================================\n" +
+            "OrderNr:                     20211018XXXX                                          \n" +
+            "Datum:                         2021-10-18                                          \n" +
+            "===================================================================================\n" +
+            "Coca-Cola                         5*22.40                                    112.00\n" +
+            "DN Newspaper                                                                 212.00\n" +
+            "SVD Newspaper                   9*1060.00                                   9540.00\n" +
+            "Watermelon bigpack                7*62.50                                    437.50\n" +
+            "===================================================================================\n" +
+            "TOTAL                                                                      10301.50\n" +
+            "Moms %                               Moms                Netto               Brutto\n" +
+            "6.00                               552.00              9200.00              9752.00\n" +
+            "12.00                               12.00               100.00               112.00\n" +
+            "25.00                               87.50               350.00               437.50\n" +
+            "\n";
 
     static Order DEFAULT_ORDER;
     static Item[] DEFAULT_ITEMS;
@@ -110,6 +140,55 @@ public class ReceiptTest {
 
     @Test
     void receiptHasCorrectTime() {
+    //TODO
+    }
+
+    @Test
+    void generatedReceiptStringMatchesDefaultReceiptToString(){
+        //should have price 200
+        Item item1 = new Item("DN Newspaper") {
+            @Override
+            public double getVAT() {
+                return 0.06;
+            }
+        };
+        //should have price 20
+        Item item2 = new Item("Coca-Cola") {
+            @Override
+            public double getVAT() {
+                return 0.12;
+            }
+        };
+        //should have price 50
+        Item item3 = new Item("Watermelon bigpack") {
+            @Override
+            public double getVAT() {
+                return 0.25;
+            }
+        };
+        //should have price 1000
+        Item item4 = new Item("SVD Newspaper") {
+            @Override
+            public double getVAT() {
+                return 0.25;
+            }
+        };
+        ReceiptTest.MockOrder mockOrder = new ReceiptTest.MockOrder("20211018XXXX");
+
+        mockOrder.addItem(item1);
+
+        for (int i = 0; i<7; i++) {
+            mockOrder.addItem(item3);
+        }
+
+        for (int i = 0; i<5; i++) {
+            mockOrder.addItem(item2);
+        }
+        for (int i = 0; i<9; i++) {
+            mockOrder.addItem(item4);
+        }
+        Receipt receipt = new Receipt(mockOrder, "2021-10-18");
+        assertEquals(RECEIPT_AS_STRING, receipt.getReceipt());
 
     }
 
@@ -121,6 +200,11 @@ public class ReceiptTest {
     @Test
     void getRowMethodThrowsExceptionWhenRowNumberExceeded() {
         assertThrows(IllegalArgumentException.class, () -> {DEFAULT_RECEIPT_THREE.getRow(POSITION_OF_LAST_ROW + 1);});
+    }
+
+    @Test
+    void allRowsAreOfCorrectWidth(){
+        //TODO
     }
 
     @Test
