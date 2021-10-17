@@ -138,10 +138,14 @@ public class ReceiptTest {
     @ValueSource(ints = {2, 3, 50, 99}) //could be any numbers > 1
         //checks if n of same items creates one row of that item with price * n
     void receiptPutsMultipleItemsOnSameRow(int noOfItems) {
-        Item item = new Item("Item") {
+        Item item = new Item("Item", null, null, false, null, null) {
             @Override
             public double getVAT() {
                 return 0.25;
+            }
+            @Override
+            public Money getSalesPrice() {
+                return null;
             }
         };
         Order order = new Order();
@@ -176,10 +180,14 @@ public class ReceiptTest {
     @ParameterizedTest
     @ValueSource(ints = {1, 3, 50, 99}) //could be any numbers > 0
     void receiptHasCorrectVAT6Row(int noOfItems) {
-        receiptHasCorrectVATRow(noOfItems, new Item("Item") {
+        receiptHasCorrectVATRow(noOfItems, new Item("Item", null, null, false, null, null) {
             @Override
             public double getVAT() {
                 return 0.06;
+            }
+            @Override
+            public Money getSalesPrice() {
+                return null;
             }
         }, "6.00");
     }
@@ -187,10 +195,14 @@ public class ReceiptTest {
     @ParameterizedTest
     @ValueSource(ints = {1, 3, 50, 99}) //could be any numbers > 0
     void receiptHasCorrectVAT12Row(int noOfItems) {
-        receiptHasCorrectVATRow(noOfItems, new Item("Item") {
+        receiptHasCorrectVATRow(noOfItems, new Item("Item", null, null, false, null, null) {
             @Override
             public double getVAT() {
                 return 0.12;
+            }
+            @Override
+            public Money getSalesPrice() {
+                return null;
             }
         }, "12.00");
     }
@@ -198,10 +210,14 @@ public class ReceiptTest {
     @ParameterizedTest
     @ValueSource(ints = {1, 3, 50, 99}) //could be any numbers > 0
     void receiptHasCorrectVAT25Row(int noOfItems) {
-        receiptHasCorrectVATRow(noOfItems, new Item("Item") {
+        receiptHasCorrectVATRow(noOfItems, new Item("Item", null, null, false, null, null) {
             @Override
             public double getVAT() {
                 return 0.25;
+            }
+            @Override
+            public Money getSalesPrice() {
+                return null;
             }
         }, "25.00");
     }
@@ -211,10 +227,14 @@ public class ReceiptTest {
         //Receipt with only one item is expected to contain only one type of vat and have exactly 9 rows
     void receiptDoesNotHaveIrrelevantVATRows(double vats) {
         Order order = new Order();
-        order.addItem(new Item("Item") {
+        order.addItem(new Item("Item", null, null, false, null, null) {
             @Override
             public double getVAT() {
                 return vats;
+            }
+            @Override
+            public Money getSalesPrice() {
+                return null;
             }
         });
         Receipt receipt = new Receipt(order);

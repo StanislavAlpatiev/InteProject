@@ -10,18 +10,18 @@ public class Inventory {
     private HashMap<Item, Integer> items;
     private Currency currency;
 
-    public Inventory(Register register){
+    public Inventory(Currency currency){
         items = new HashMap<>();
-        currency = register.getCurrency();
+        this.currency = currency;
     }
 
-    public Inventory(Register register, Item... item){
+    public Inventory(Currency currency, Item... item){
         if (item == null || item.length == 0){
             throw new IllegalArgumentException();
         } 
         items = new HashMap<>();
         add(item);
-        currency = register.getCurrency();
+        this.currency = currency;
     }
 
     public void add(Item... item){
