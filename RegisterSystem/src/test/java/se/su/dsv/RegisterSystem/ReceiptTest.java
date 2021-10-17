@@ -182,28 +182,45 @@ public class ReceiptTest {
     @Test
     void generatedReceiptStringMatchesDefaultReceiptToString(){
         //should have price 200
-        Item item1 = new Item("DN Newspaper") {
+        Item item1 = new Item("DN Newspaper", null, null, false, null, null) {
+            @Override
+            public Money getSalesPrice() {
+                return null;
+            }
+
             @Override
             public double getVAT() {
                 return 0.06;
             }
         };
         //should have price 20
-        Item item2 = new Item("Coca-Cola") {
+        Item item2 = new Item("Coca-Cola", null, null, false, null, null) {
+            @Override
+            public Money getSalesPrice() {
+                return null;
+            }
             @Override
             public double getVAT() {
                 return 0.12;
             }
         };
         //should have price 50
-        Item item3 = new Item("Watermelon bigpack") {
+        Item item3 = new Item("Watermelon bigpack", null, null, false, null, null) {
+            @Override
+            public Money getSalesPrice() {
+                return null;
+            }
             @Override
             public double getVAT() {
                 return 0.25;
             }
         };
         //should have price 1000
-        Item item4 = new Item("SVD Newspaper") {
+        Item item4 = new Item("SVD Newspaper", null, null, false, null, null) {
+            @Override
+            public Money getSalesPrice() {
+                return null;
+            }
             @Override
             public double getVAT() {
                 return 0.25;
