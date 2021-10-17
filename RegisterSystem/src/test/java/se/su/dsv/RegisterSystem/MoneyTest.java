@@ -179,4 +179,10 @@ class MoneyTest {
         assertTrue(money.compareTo(otherMoney) < 0);
     }
 
+    @Test
+    void moneyToStringFormatTest() {
+        Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
+        assertEquals("10 USD", money.toString());
+    }
+
 }

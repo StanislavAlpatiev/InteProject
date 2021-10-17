@@ -8,7 +8,6 @@ public class Money implements Comparable<Money> {
     private BigDecimal amount;
     private final Currency currency;
 
-
     public Money(BigDecimal amount, Currency currency) {
 
         if (currency == null) {
@@ -75,5 +74,13 @@ public class Money implements Comparable<Money> {
         return amount.compareTo(other.amount);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getAmount());
+        sb.append(" ");
+        sb.append(this.getCurrency());
+        return sb.toString();
+    }
 
 }
