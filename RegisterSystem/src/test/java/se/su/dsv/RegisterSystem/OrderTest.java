@@ -18,16 +18,26 @@ public class OrderTest {
 
     @BeforeAll
     static void setUp() {
-        DEFAULT_ITEM_1 = new Item("Test1") {
+        DEFAULT_ITEM_1 = new Item("Test1", null, null, false, null, null) {
             @Override
             public double getVAT() {
                 return 0;
             }
+
+            @Override
+            public Money getSalesPrice() {
+                return null;
+            }
         };
-        DEFAULT_ITEM_2 = new Item("Test2") {
+        DEFAULT_ITEM_2 = new Item("Test2", null, null, false, null, null) {
             @Override
             public double getVAT() {
                 return 0;
+            }
+
+            @Override
+            public Money getSalesPrice() {
+                return null;
             }
         };
         DEFAULT_ORDER = new Order();

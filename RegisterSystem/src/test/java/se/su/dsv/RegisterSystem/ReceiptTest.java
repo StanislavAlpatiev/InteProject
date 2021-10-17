@@ -34,40 +34,76 @@ public class ReceiptTest {
 
     @BeforeAll
     static void setUp() {
-        Item item1 = new Item("Item1") {
+        Item item1 = new Item("Item1", null, null, false, null, null) {
             @Override
             public double getVAT() {
                 return 0.06;
             }
+
+            @Override
+            public Money getSalesPrice() {
+                // TODO Auto-generated method stub
+                return null;
+            }
         }; //20, 0.06
-        Item item2 = new Item("Item2") {
+        Item item2 = new Item("Item2", null, null, false, null, null) {
             @Override
             public double getVAT() {
                 return 0.12;
             }
+
+            @Override
+            public Money getSalesPrice() {
+                // TODO Auto-generated method stub
+                return null;
+            }
         }; //40, 0.12
-        Item item3 = new Item("Item3") {
+        Item item3 = new Item("Item3", null, null, false, null, null) {
             @Override
             public double getVAT() {
                 return 0.25;
+            }
+
+            @Override
+            public Money getSalesPrice() {
+                // TODO Auto-generated method stub
+                return null;
             }
         }; //50, 0.25
-        Item item4 = new Item("Item4") {
+        Item item4 = new Item("Item4", null, null, false, null, null) {
             @Override
             public double getVAT() {
                 return 0.06;
             }
+
+            @Override
+            public Money getSalesPrice() {
+                // TODO Auto-generated method stub
+                return null;
+            }
         }; //20, 0.06
-        Item item5 = new Item("Item5") {
+        Item item5 = new Item("Item5", null, null, false, null, null) {
             @Override
             public double getVAT() {
                 return 0.12;
             }
+
+            @Override
+            public Money getSalesPrice() {
+                // TODO Auto-generated method stub
+                return null;
+            }
         }; //40, 0.12
-        Item item6 = new Item("Item6") {
+        Item item6 = new Item("Item6", null, null, false, null, null) {
             @Override
             public double getVAT() {
                 return 0.25;
+            }
+
+            @Override
+            public Money getSalesPrice() {
+                // TODO Auto-generated method stub
+                return null;
             }
         }; //50, 0.25
         DEFAULT_ITEMS = new Item[]{item1, item2, item3, item4, item5, item6};
