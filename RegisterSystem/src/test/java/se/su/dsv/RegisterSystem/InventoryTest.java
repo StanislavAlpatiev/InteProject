@@ -21,17 +21,21 @@ class InventoryTest {
 
     @BeforeAll
     static void setUp(){
-        DEFAULT_ITEM = new Item("Test") {
+        DEFAULT_ITEM = new Item("Test", null, null, false, null, null) {
             @Override
             public double getVAT() {
                 return 0;
+            }
+            @Override
+            public Money getSalesPrice() {
+                return null;
             }
         };
     }
 
     @BeforeEach
     void initialize(){
-        defaultInventory = new Inventory(new Register(DEFAULT_CURRENCY));
+        defaultInventory = new Inventory(DEFAULT_CURRENCY);
     }
 
     //Tests whether constructor without parameters works
@@ -50,7 +54,7 @@ class InventoryTest {
             items[i] = DEFAULT_ITEM;
         }
 
-        Inventory inventory = new Inventory(new Register(DEFAULT_CURRENCY), items);
+        Inventory inventory = new Inventory(DEFAULT_CURRENCY, items);
         assertEquals(DEFAULT_VALUE, inventory.getItems().get(DEFAULT_ITEM));
         //assertEquals(register.getCurrency(), inventory.getCurrency());
     }
@@ -58,8 +62,8 @@ class InventoryTest {
     //Tests whether constructor throws if fed with null or empty list of items
     @Test
     void constructorNullOrEmptyListParamThrowsTest(){
-        assertThrows(IllegalArgumentException.class, () -> {new Inventory(new Register(DEFAULT_CURRENCY), null);});
-        assertThrows(IllegalArgumentException.class, () -> {new Inventory(new Register(DEFAULT_CURRENCY), new Item[0]);});
+        assertThrows(IllegalArgumentException.class, () -> {new Inventory(DEFAULT_CURRENCY, null);});
+        assertThrows(IllegalArgumentException.class, () -> {new Inventory(DEFAULT_CURRENCY, new Item[0]);});
     }
 
     //Tests whether importing inventory currency works
@@ -72,18 +76,13 @@ class InventoryTest {
     //Tests whether importing inventory items works
     @Test
     void importImportsItemsTest(){
-<<<<<<< HEAD
-        Inventory testOracle = new Inventory(new Register(DEFAULT_CURRENCY));
-        Item testItem1 = new Grocey("testName1", 123123, "Arla", false, ItemType.GROCERY, new Money(new BigDecimal(20), Currency.USD));
-        Item testItem2 = new Grocey("testName2", 123123, "Arla", false, ItemType.GROCERY, new Money(new BigDecimal(30), Currency.SEK));
+        Inventory testOracle = new Inventory(DEFAULT_CURRENCY);
+        Item testItem1 = new Grocery("testName1", 123123, "Arla", false, ItemType.GROCERY, new Money(new BigDecimal(20), Currency.USD));
+        Item testItem2 = new Grocery("testName2", 123123, "Arla", false, ItemType.GROCERY, new Money(new BigDecimal(30), Currency.SEK));
         testOracle.add(testItem1, testItem2);
         defaultInventory.importInventory("test"); //String for filename?
         assertEquals(testOracle.getItems(), defaultInventory.getItems());
         //assert something about items. requires subclasses i feel.
-=======
-        defaultInventory.importInventory("test"); //String for filename?
-        //assert something about items. requires subclasses i feel. 
->>>>>>> d53d93ada0fae53593ab94415033e8003d53ab12
     }
 
     //Tests whether importing broken saved inventory throws
@@ -103,7 +102,7 @@ class InventoryTest {
     void exportTest(){
         defaultInventory.importInventory("test");
         defaultInventory.exportInventory("testOutput"); //string for name
-        defaultInventory = new Inventory(new Register(DEFAULT_CURRENCY));
+        defaultInventory = new Inventory(DEFAULT_CURRENCY);
         defaultInventory.importInventory("testOutput");
 
         //do an import here of testOutput, and check whether currency is there.
@@ -175,10 +174,14 @@ class InventoryTest {
     @Test
     void itemIsNotAvailableTest(){
         defaultInventory.add(DEFAULT_ITEM);
-        Item item = new Item("Test2") {
+        Item item = new Item("Test2", null, null, false, null, null) {
             @Override
             public double getVAT() {
                 return 0;
+            }
+            @Override
+            public Money getSalesPrice() {
+                return null;
             }
         };
         assertFalse(defaultInventory.isAvailable(item));
