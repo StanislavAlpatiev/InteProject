@@ -25,12 +25,9 @@ public class Inventory {
     }
 
     public void add(Item... item){
+        //TODO: kontrollera att nya items har samma currency som inventory, annars, konvertera till den valutan.
         for (Item i : item){
-            if(isAvailable(i)){
-                items.put(i, items.get(i)+1);
-            } else {
-                items.put(i, 1);
-            }
+            items.put(i, (isAvailable(i)) ? items.get(i) + 1 : 1);
         }
     }
 
@@ -67,19 +64,21 @@ public class Inventory {
     }
 
     public void importInventory(){
-
+        importInventory("default");
     }
 
     public void importInventory(String fileName){
-
+        HashMap<Item, Integer> newItems = new HashMap<>();
     }
 
     public void exportInventory(){
-
+        exportInventory("default");
     }
 
     public void exportInventory(String fileName){
-        
+        for (Map.Entry<Item, Integer> entry : items.entrySet()){
+
+        }
     }
 
 }
