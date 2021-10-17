@@ -32,7 +32,6 @@ public class Inventory {
                 items.put(i, 1);
             }
         }
-
     }
 
     public void remove(Item item){

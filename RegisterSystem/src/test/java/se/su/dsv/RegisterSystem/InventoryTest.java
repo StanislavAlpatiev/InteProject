@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ class InventoryTest {
     static Item DEFAULT_ITEM;
     static final Currency DEFAULT_CURRENCY = Currency.USD;
     Inventory defaultInventory;
+
 
 
     @BeforeAll
@@ -67,12 +69,17 @@ class InventoryTest {
         //assertEquals(DEFAULT_CURRENCY, inventory.getCurrency() eller .getRegister.getCurrency());
     }
 
-        //Tests whether importing inventory items works
-        @Test
-        void importImportsItemsTest(){
-            defaultInventory.importInventory("test"); //String for filename?
-            //assert something about items. requires subclasses i feel. 
-        }
+    //Tests whether importing inventory items works
+    @Test
+    void importImportsItemsTest(){
+        Inventory testOracle = new Inventory(new Register(DEFAULT_CURRENCY));
+        Item testItem1 = new Grocey("testName1", 123123, "Arla", false, ItemType.GROCERY, new Money(new BigDecimal(20), Currency.USD));
+        Item testItem2 = new Grocey("testName2", 123123, "Arla", false, ItemType.GROCERY, new Money(new BigDecimal(30), Currency.SEK));
+        testOracle.add(testItem1, testItem2);
+        defaultInventory.importInventory("test"); //String for filename?
+        assertEquals(testOracle.getItems(), defaultInventory.getItems());
+        //assert something about items. requires subclasses i feel.
+    }
 
     //Tests whether importing broken saved inventory throws
     @Test 
