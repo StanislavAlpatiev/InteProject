@@ -64,21 +64,21 @@ public class Inventory {
     }
 
     public void importInventory(){
-
+        importInventory("default");
     }
 
     public void importInventory(String fileName){
-
+        HashMap<Item, Integer> newItems = new HashMap<>();
     }
 
     public void exportInventory(){
-        for (Map.Entry<Item, Integer> entry : items.entrySet()){
-
-        }
+        exportInventory("default");
     }
 
     public void exportInventory(String fileName){
-        
+        for (Map.Entry<Item, Integer> entry : items.entrySet()){
+
+        }
     }
 
 }
