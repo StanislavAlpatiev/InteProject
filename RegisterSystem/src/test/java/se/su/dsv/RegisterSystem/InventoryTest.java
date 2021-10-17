@@ -79,8 +79,6 @@ class InventoryTest {
         defaultInventory.importInventory("test"); //String for filename?
         assertEquals(testOracle.getItems(), defaultInventory.getItems());
         //assert something about items. requires subclasses i feel.
-        defaultInventory.importInventory("test"); //String for filename?
-        //assert something about items. requires subclasses i feel.
     }
 
     //Tests whether importing broken saved inventory throws
