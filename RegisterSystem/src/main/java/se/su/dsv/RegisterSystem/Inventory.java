@@ -25,12 +25,10 @@ public class Inventory {
     }
 
     public void add(Item... item){
+        //TODO: kontrollera att nya items har samma currency som inventory, annars, konvertera till den valutan.
         for (Item i : item){
-
             items.put(i, (isAvailable(i)) ? items.get(i) + 1 : 1);
-
         }
-
     }
 
     public void remove(Item item){

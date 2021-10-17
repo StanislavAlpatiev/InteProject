@@ -94,9 +94,4 @@ public abstract class Item implements Vat, Comparable<Item> {
             ", type='" + getType() + "'" +
             ", price='" + getPrice() + "'";
     }
-
-
-
-
-
 }

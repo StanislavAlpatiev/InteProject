@@ -67,12 +67,12 @@ class InventoryTest {
         //assertEquals(DEFAULT_CURRENCY, inventory.getCurrency() eller .getRegister.getCurrency());
     }
 
-        //Tests whether importing inventory items works
-        @Test
-        void importImportsItemsTest(){
-            defaultInventory.importInventory("test"); //String for filename?
-            //assert something about items. requires subclasses i feel. 
-        }
+    //Tests whether importing inventory items works
+    @Test
+    void importImportsItemsTest(){
+        defaultInventory.importInventory("test"); //String for filename?
+        //assert something about items. requires subclasses i feel. 
+    }
 
     //Tests whether importing broken saved inventory throws
     @Test 
@@ -89,6 +89,7 @@ class InventoryTest {
     //Tests whether exportInventory exports currency as intended
     @Test
     void exportTest(){
+        defaultInventory.importInventory("test");
         defaultInventory.exportInventory("testOutput"); //string for name
         defaultInventory = new Inventory(new Register(DEFAULT_CURRENCY));
         defaultInventory.importInventory("testOutput");
