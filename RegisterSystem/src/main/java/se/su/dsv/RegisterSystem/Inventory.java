@@ -1,24 +1,28 @@
 package se.su.dsv.RegisterSystem;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Inventory {
 
     private HashMap<Item, Integer> items;
+    private Register register;
     private Currency currency;
 
-    public Inventory(Currency currency){
+    public Inventory(Register register){
         items = new HashMap<>();
-        this.currency = currency;
+        this.register = register;
+        currency = register.getCurrency();
     }
 
-    public Inventory(Currency currency, Item... item){
+    public Inventory(Register register, Item... item){
         if (item == null || item.length == 0){
             throw new IllegalArgumentException();
         } 
         items = new HashMap<>();
         add(item);
-        this.currency = currency;
+        this.register = register;
+        currency = register.getCurrency();
     }
 
     public void add(Item... item){
@@ -52,6 +56,10 @@ public class Inventory {
     public void setCurrency(Currency currency) {
         if(this.currency != currency){
             //iterate over items and change them all. Call upon items internal things to change their amounts from there. 
+            for (Map.Entry<Item, Integer> entry : this.items.entrySet()){
+                Money price = register.getBank().exchange(entry.getKey().getPrice());
+                entry.getKey().setPrice(price);
+            }
         }
     }
 
