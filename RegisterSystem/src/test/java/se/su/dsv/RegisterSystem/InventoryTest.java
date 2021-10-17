@@ -15,6 +15,7 @@ class InventoryTest {
 
     static final int DEFAULT_VALUE = 5;
     static Item DEFAULT_ITEM;
+    static Item ITEM_WITH_SEK_CURRENCY;
     static final Currency DEFAULT_CURRENCY = Currency.USD;
     Inventory defaultInventory;
 
@@ -22,7 +23,18 @@ class InventoryTest {
 
     @BeforeAll
     static void setUp(){
-        DEFAULT_ITEM = new Item("Test", "Test", "Test", false, ItemType.GROCERY, new Money(new BigDecimal(5), Currency.SEK)) {
+        DEFAULT_ITEM = new Item("Test", "Test", "Test", false, ItemType.GROCERY, new Money(new BigDecimal(5), Currency.USD)) {
+            @Override
+            public double getVAT() {
+                return 0;
+            }
+            @Override
+            public Money getSalesPrice() {
+                return null;
+            }
+        };
+
+        ITEM_WITH_SEK_CURRENCY = new Item("Test", "Test", "Test", false, ItemType.GROCERY, new Money(new BigDecimal(5), Currency.SEK)) {
             @Override
             public double getVAT() {
                 return 0;
@@ -100,19 +112,19 @@ class InventoryTest {
 
     //Tests whether exportInventory exports currency as intended
     @Test
-    void exportTest(){
-        defaultInventory.importInventory("test");
+    void exportTest() throws IOException{
+        //TODO: UPDATE WITH SUBCLASSES?
+        defaultInventory.add(DEFAULT_ITEM);
         defaultInventory.exportInventory("testOutput"); //string for name
         defaultInventory = new Inventory(DEFAULT_CURRENCY);
         defaultInventory.importInventory("testOutput");
-
-        //do an import here of testOutput, and check whether currency is there.
+        assertEquals(DEFAULT_ITEM, defaultInventory.getItems().keySet().stream().findFirst().orElse(null));
     }
 
     //Adds item with a SEK money object to Inventory with USD currency, and makes sure the Item is converted into USD as its added.
     @Test
     void addedItemHasSameCurrency() throws IOException{
-        defaultInventory.add(DEFAULT_ITEM);
+        defaultInventory.add(ITEM_WITH_SEK_CURRENCY);
         Item item = defaultInventory.getItems().keySet().stream().findFirst().orElse(null);
         assertEquals(DEFAULT_CURRENCY, item.getPrice().getCurrency());
     }
