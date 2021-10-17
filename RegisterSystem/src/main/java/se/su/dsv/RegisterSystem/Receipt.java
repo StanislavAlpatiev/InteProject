@@ -1,10 +1,7 @@
 package se.su.dsv.RegisterSystem;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.Map;
+
 
 public class Receipt {
 
@@ -20,6 +17,16 @@ public class Receipt {
         }
         this.date = new Date();
         this.order = order;
+    }
+
+    public String getRow(int pos){
+        //should return requested row of receipt
+        return "";
+    }
+
+    public String getReceipt(){
+        //should return receipt
+        return "";
     }
 
 
