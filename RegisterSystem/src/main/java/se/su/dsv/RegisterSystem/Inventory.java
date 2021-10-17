@@ -1,17 +1,17 @@
 package se.su.dsv.RegisterSystem;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Inventory {
 
     private HashMap<Item, Integer> items;
-    private Register register;
     private Currency currency;
 
     public Inventory(Register register){
         items = new HashMap<>();
-        this.register = register;
         currency = register.getCurrency();
     }
 
@@ -21,7 +21,6 @@ public class Inventory {
         } 
         items = new HashMap<>();
         add(item);
-        this.register = register;
         currency = register.getCurrency();
     }
 
@@ -46,20 +45,21 @@ public class Inventory {
     }
 
     public HashMap<Item, Integer> getItems(){
-        return new HashMap<Item, Integer>(items);
+        return new HashMap<>(items);
     }
 
     public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
+    public void setCurrency(Currency currency) throws IOException {
         if(this.currency != currency){
-            //iterate over items and change them all. Call upon items internal things to change their amounts from there. 
+            BigDecimal rate = Bank.getRate(this.currency, currency);
             for (Map.Entry<Item, Integer> entry : this.items.entrySet()){
-                Money price = register.getBank().exchange(entry.getKey().getPrice());
+                Money price = Bank.exchange(entry.getKey().getPrice(), currency, rate);
                 entry.getKey().setPrice(price);
             }
+            this.currency = currency;
         }
     }
 
@@ -71,7 +71,7 @@ public class Inventory {
 
     }
 
-    public void importInventory(String location){
+    public void importInventory(String fileName){
 
     }
 
@@ -79,7 +79,7 @@ public class Inventory {
 
     }
 
-    public void exportInventory(String location){
+    public void exportInventory(String fileName){
         
     }
 

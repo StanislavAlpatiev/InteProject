@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -125,7 +126,7 @@ class InventoryTest {
     }
 
     @Test
-    void setCurrencyChangesCurrency(){
+    void setCurrencyChangesCurrency() throws IOException{
         defaultInventory.importInventory("test");
         defaultInventory.setCurrency(Currency.SEK);
         assertEquals(Currency.SEK, defaultInventory.getCurrency());
@@ -133,7 +134,7 @@ class InventoryTest {
     }
 
     @Test
-    void setCurrencyChangesCurrencyOfItems(){
+    void setCurrencyChangesCurrencyOfItems() throws IOException{
         defaultInventory.importInventory("test");
         defaultInventory.setCurrency(Currency.SEK);
         //test here whether items within have Currency.SEK!

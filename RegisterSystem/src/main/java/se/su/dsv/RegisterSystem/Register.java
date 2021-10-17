@@ -3,6 +3,7 @@ package se.su.dsv.RegisterSystem;
 public class Register {
 
     private Currency currency;
+    private static final Bank bank = new Bank();
 
 
     public Register(Currency currency){
@@ -11,5 +12,9 @@ public class Register {
 
     public Currency getCurrency(){
         return currency;
+    }
+
+    public Bank getBank(){
+        return bank;
     }
 }

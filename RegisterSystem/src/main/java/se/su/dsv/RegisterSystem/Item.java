@@ -22,6 +22,10 @@ public abstract class Item implements Vat, Comparable<Item> {
         return price;
     }
 
+    public void setPrice(Money price){
+        this.price = price;
+    }
+
     public Money getPricePlusVat() {
         return price.add(getVATAmountOfPrice());
     }

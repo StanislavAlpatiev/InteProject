@@ -41,6 +41,10 @@ public class Bank {
 
     public static Money exchange(Money money, Currency currency) throws IOException {
         BigDecimal rate = getRate(money.getCurrency(), currency);
+        return exchange(money, currency, rate);
+    }
+
+    public static Money exchange(Money money, Currency currency, BigDecimal rate) {
         BigDecimal newAmount = money.getAmount().multiply(rate);
         return new Money(newAmount, currency);
     }
