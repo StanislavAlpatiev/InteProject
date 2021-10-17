@@ -1,13 +1,15 @@
 package se.su.dsv.RegisterSystem;
 
+import java.time.LocalDate;
+
 public class Customer {
     private final String name;
     private final String address;
-    private final String socialSecurityNumber;
+    private final LocalDate birthday;
     private final String phoneNumber;
     private final String mail;
 
-    public Customer(String name, String address, String socialSecurityNumber, String phoneNumber, String mail) {
+    public Customer(String name, String address, LocalDate birthday, String phoneNumber, String mail) {
         if (name == null || name.equals("")) {
             throw new IllegalArgumentException("name is null");
         }
@@ -15,8 +17,8 @@ public class Customer {
             throw new IllegalArgumentException("address is null");
         }
         //TODO: Add date check so that a customer that is bord ahead of calendar Date will be rejected
-        if (!socialSecurityNumber.matches("\\d{8}-\\d{4}")) {
-            throw new IllegalArgumentException("social security number is in the wrong format");
+        if (!birthday.isBefore(LocalDate.now().plusDays(1))) {
+            throw new IllegalArgumentException("Birthday is ahead of calender");
         }
         if (!phoneNumber.matches("\\d{10}")) {
             throw new IllegalArgumentException("phone number is in the wrong format");
@@ -26,7 +28,7 @@ public class Customer {
         }
         this.name = name;
         this.address = address;
-        this.socialSecurityNumber = socialSecurityNumber;
+        this.birthday = birthday;
         this.phoneNumber = phoneNumber;
         this.mail = mail;
     }
@@ -39,8 +41,8 @@ public class Customer {
         return address;
     }
 
-    public String getSocialSecurityNumber() {
-        return socialSecurityNumber;
+    public LocalDate getBirthday() {
+        return birthday;
     }
 
     public String getPhoneNumber() {
@@ -56,7 +58,7 @@ public class Customer {
         StringBuilder sb = new StringBuilder();
         sb.append("Name: " + name + "\n");
         sb.append("Address: " + address + "\n");
-        sb.append("Social Security Number: " + socialSecurityNumber + "\n");
+        sb.append("Birthday: " + birthday + "\n");
         sb.append("Phone number: " + phoneNumber + "\n");
         sb.append("E-mail: " + mail + "\n");
         return sb.toString();

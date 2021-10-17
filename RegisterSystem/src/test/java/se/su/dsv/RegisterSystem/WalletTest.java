@@ -3,6 +3,7 @@ package se.su.dsv.RegisterSystem;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WalletTest {
     static final Customer DEFAULT_OWNER = new Customer("Erik Andersson", "Lingonvägen 17",
-            "19990325-5634", "0722371555", "erik.andresson@gmail.com");
+             LocalDate.of(2000, 10, 17), "0722371555", "erik.andresson@gmail.com");
     static final Money DEFAULT_MONEY_USD = new Money(new BigDecimal(10), Currency.USD);
     static final Money DEFAULT_MONEY_SEK = new Money(new BigDecimal(10), Currency.SEK);
     static final Money DEFAULT_MONEY_GBP = new Money(new BigDecimal(10), Currency.GBP);
