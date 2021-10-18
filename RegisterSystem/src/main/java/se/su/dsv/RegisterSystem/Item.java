@@ -1,6 +1,7 @@
 package se.su.dsv.RegisterSystem;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Item implements Comparable<Item> {
 
@@ -11,11 +12,16 @@ public class Item implements Comparable<Item> {
     private final ItemType type;
     private Money price;
     private BigDecimal volumeCl;
-    private BigDecimal vat;
+    private final BigDecimal vat;
     private BigDecimal pant = BigDecimal.ZERO;
 
 
     public Item(String name, String productNo, String producer, ItemType type, Money price) {
+
+        if(name == null || productNo == null || producer == null || price == null){
+            throw new NullPointerException();
+        }
+
         this.name = name;
         this.productNo = productNo;
         this.producer = producer;
@@ -38,6 +44,10 @@ public class Item implements Comparable<Item> {
 
     public Item(String name, String productNo, String producer, Money price, BigDecimal volumeCl) {
         this(name, productNo, producer, ItemType.BEVERAGE, price);
+
+        if(volumeCl == null){
+            throw new NullPointerException();
+        }
 
         if(volumeCl.doubleValue() <= 0){
             throw new IllegalArgumentException();
@@ -69,6 +79,10 @@ public class Item implements Comparable<Item> {
 
     public ItemType getType() {
         return type;
+    }
+
+    public BigDecimal getVolumeCl() {
+        return volumeCl;
     }
 
     public Money getPrice() {
@@ -103,17 +117,38 @@ public class Item implements Comparable<Item> {
         return name.compareTo(o.name);
     }
 
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) {
+//            return true;
+//        }
+//        if (!(o instanceof Item)) {
+//            return false;
+//        }
+//        Item other = (Item) o;
+//        return name.equals(other.name);
+//
+//    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Item)) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Item other = (Item) o;
-        return name.equals(other.name);
+        Item item = (Item) o;
+        return getName().equals(item.getName()) &&
+                getProductNo().equals(item.getProductNo()) &&
+                getProducer().equals(item.getProducer()) &&
+                getType() == item.getType() &&
+                getPrice().equals(item.getPrice());
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, productNo, producer, type, price);
     }
 
     public String toExport(){

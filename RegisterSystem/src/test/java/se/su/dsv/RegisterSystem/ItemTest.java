@@ -19,6 +19,58 @@ class ItemTest {
     private static final Item DEFAULT_TOBACCO = new Item("snus", "0204040", "Knox", ItemType.TOBACCO, new Money(new BigDecimal("10"), Currency.SEK));
     private static final Item DEFAULT_NEWSPAPER = new Item("Aftonbladet", "0304040", "Aftonbladet", ItemType.NEWSPAPER, new Money(new BigDecimal("10"), Currency.SEK));
 
+    private static final Money DEFAULT_PRICE_PLUS_VAT = new Money(new BigDecimal("11.20"), Currency.SEK);
+    private static final Money DEFAULT_VAT_OF_ITEM = new Money(new BigDecimal("1.20"), Currency.SEK);
+    private static final Money DEFAULT_MONEY = new Money(new BigDecimal("10"), Currency.SEK);
+
+
+    @Test
+    void constructorValidParameterTest(){
+        assertEquals("mjöl", DEFAULT_GROCERY.getName());
+        assertEquals("0104040", DEFAULT_GROCERY.getProductNo());
+        assertEquals("ICA", DEFAULT_GROCERY.getProducer());
+        assertEquals(ItemType.GROCERY, DEFAULT_GROCERY.getType());
+        assertEquals(new Money(new BigDecimal("10"), Currency.SEK), DEFAULT_GROCERY.getPrice());
+    }
+
+    @Test
+    void constructorNullParametersTest(){
+        assertThrows(NullPointerException.class, () -> {
+            new Item(null, "0202020", "coca-cola", ItemType.BEVERAGE, DEFAULT_MONEY);
+        });
+        assertThrows(NullPointerException.class, () -> {
+            new Item("coca-cola", null, "coca-cola", ItemType.BEVERAGE, DEFAULT_MONEY);
+        });
+        assertThrows(NullPointerException.class, () -> {
+            new Item("coca-cola", "0202020", null, ItemType.BEVERAGE, DEFAULT_MONEY);
+        });
+        assertThrows(NullPointerException.class, () -> {
+            new Item("coca-cola", "0202020", "coca-cola", ItemType.BEVERAGE, null);
+        });
+        assertThrows(NullPointerException.class, () -> {
+            new Item("coca-cola", "0202020", "coca-cola", DEFAULT_MONEY, null);
+        });
+    }
+
+    @Test
+    void constructorVatForNewsPaperIsCorrect(){
+        assertEquals(new BigDecimal("0.06"), DEFAULT_NEWSPAPER.getVat());
+    }
+
+    @Test
+    void constructorVatForTobaccoIsCorrect(){
+        assertEquals(new BigDecimal("0.25"), DEFAULT_TOBACCO.getVat());
+    }
+
+    @Test
+    void constructorVatForGroceryIsCorrect(){
+        assertEquals(new BigDecimal("0.12"), DEFAULT_GROCERY.getVat());
+    }
+
+    @Test
+    void constructorSetsTobaccoAsAgeRestricted(){
+        assertEquals(true, DEFAULT_TOBACCO.isAgeRestricted());
+    }
 
     @Test
     void constructorSetsPantCorrectFor33Cl() {
@@ -37,16 +89,33 @@ class ItemTest {
 
     @Test
     void constructorThrowsIAEForNegativeCl(){
-        assertThrows(IllegalArgumentException.class, () -> {new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("10"), Currency.SEK), new BigDecimal("-1"));});
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("10"), Currency.SEK), new BigDecimal("-1"));
+        });
     }
 
     @Test
-    void tobaccoAgeRestrictedTest(){
-        assertEquals(true, DEFAULT_TOBACCO.isAgeRestricted());
+    void setPriceChangesPriceCorrectlyTest(){
+        Item item = new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, new Money(new BigDecimal("10"), Currency.SEK));
+        Money money = new Money(new BigDecimal("20"), Currency.SEK);
+        item.setPrice(money);
+        assertEquals(new Money(new BigDecimal("20"), Currency.SEK), item.getPrice());
     }
 
-    
+    @Test
+    void PricePlusVatCorrectTest(){
+        assertEquals(DEFAULT_PRICE_PLUS_VAT, DEFAULT_GROCERY.getPricePlusVat());
+    }
 
+    @Test
+    void VatPriceOfItemTest(){
+        assertEquals(DEFAULT_VAT_OF_ITEM, DEFAULT_GROCERY.getVATAmountOfPrice());
+    }
+
+    @Test
+    void toStringTest(){
+        assertEquals("name='mjöl', productNo='0104040', producer='ICA', ageRestricted='false', type='GROCERY', price='10 SEK'", DEFAULT_GROCERY.toString());
+    }
 
 }
 
