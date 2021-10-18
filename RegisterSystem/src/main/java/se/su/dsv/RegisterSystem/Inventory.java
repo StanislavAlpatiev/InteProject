@@ -1,9 +1,18 @@
 package se.su.dsv.RegisterSystem;
 
-import java.io.IOException;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+
+import java.io.*;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
+
+import java.util.List;
 import java.util.Map;
+
 
 public class Inventory {
 
@@ -68,12 +77,34 @@ public class Inventory {
         return items.containsKey(item);
     }
 
-    public void importInventory(){
+    public void importInventory() throws FileNotFoundException {
         importInventory("default");
     }
 
-    public void importInventory(String fileName){
+    public void importInventory(String fileName) throws FileNotFoundException {
         HashMap<Item, Integer> newItems = new HashMap<>();
+        try {
+            // create Gson instance
+            Gson gson = new Gson();
+
+            // create a reader
+            Reader reader = Files.newBufferedReader(Paths.get(fileName));
+
+            HashMap<Item, Integer> map = new Gson().fromJson(new FileReader(fileName), HashMap.class);
+
+            // convert JSON array to list of users
+            //List<Item> items = new Gson().fromJson(reader, new TypeToken<List<Item>>() {}.getType());
+
+            // print users
+            //items.forEach(System.out::println);
+            items = map;
+
+            // close reader
+            reader.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void exportInventory(){
@@ -81,8 +112,22 @@ public class Inventory {
     }
 
     public void exportInventory(String fileName){
-        for (Map.Entry<Item, Integer> entry : items.entrySet()){
+//        for (Map.Entry<Item, Integer> entry : items.entrySet()){
+//
+//        }
 
+        try {
+            // create a writer
+            Writer writer = new FileWriter(fileName);
+
+            // convert map to JSON File
+            new Gson().toJson(items, writer);
+
+            // close the writer
+            writer.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
