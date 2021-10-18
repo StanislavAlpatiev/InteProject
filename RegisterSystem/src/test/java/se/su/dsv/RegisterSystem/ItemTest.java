@@ -21,6 +21,35 @@ class ItemTest {
 
 
     @Test
+    void constructorValidParameterTest(){
+        assertEquals("mjöl", DEFAULT_GROCERY.getName());
+        assertEquals("0104040", DEFAULT_GROCERY.getProductNo());
+        assertEquals("ICA", DEFAULT_GROCERY.getProducer());
+        assertEquals(ItemType.GROCERY, DEFAULT_GROCERY.getType());
+        assertEquals(new Money(new BigDecimal("10"), Currency.SEK), DEFAULT_GROCERY.getPrice());
+    }
+
+    @Test
+    void constructorVatForNewsPaperIsCorrect(){
+        assertEquals(new BigDecimal("0.06"), DEFAULT_NEWSPAPER.getVat());
+    }
+
+    @Test
+    void constructorVatForTobaccoIsCorrect(){
+        assertEquals(new BigDecimal("0.25"), DEFAULT_TOBACCO.getVat());
+    }
+
+    @Test
+    void constructorVatForGroceryIsCorrect(){
+        assertEquals(new BigDecimal("0.12"), DEFAULT_GROCERY.getVat());
+    }
+
+    @Test
+    void constructorSetsTobaccoAsAgeRestricted(){
+        assertEquals(true, DEFAULT_TOBACCO.isAgeRestricted());
+    }
+
+    @Test
     void constructorSetsPantCorrectFor33Cl() {
         assertEquals(BigDecimal.ONE, DEFAULT_SMALL_BEVERAGE.getPant());
     }
@@ -41,29 +70,17 @@ class ItemTest {
     }
 
     @Test
-    void tobaccoAgeRestrictedTest(){
-        assertEquals(true, DEFAULT_TOBACCO.isAgeRestricted());
+    void setPriceChangesPriceCorrectlyTest(){
+        Item item = new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, new Money(new BigDecimal("10"), Currency.SEK));
+        Money money = new Money(new BigDecimal("20"), Currency.SEK);
+        item.setPrice(money);
+        assertEquals(new Money(new BigDecimal("20"), Currency.SEK), item.getPrice());
     }
 
-    //test för att kolla att rätt vat sätts i konstruktorn för tidning kolla med hjälp av getVat i Item
-
-    //test för att kolla att rätt vat sätt i konstruktorn för tobak kolla med hjälp av getVat i Item
-
-    //test för att kolla att rätt vat sätt i konstruktorn för livsmedel kolla med hjälp av getVat i Item
-
-    //testa så att namn sätts i konstruktorn
-
-    //testa så att productNo sätts i konstruktorn
-
-    //testa så att producer sätts i konstruktorn
-
-    //testa så att typ sätts i konstruktorn
-
-    //testa så att price sätts i konstruktorn
-
-    //testa så att tobak sätts som age restricted
-
-    //testa så att setPrice ändrar värdet på en produkt
+    @Test
+    void toStringTest(){
+        assertEquals("name='mjöl', productNo='0104040', producer='ICA', ageRestricted='false', type='GROCERY', price='10 SEK'", DEFAULT_GROCERY.toString());
+    }
 
 
 
