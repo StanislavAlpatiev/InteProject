@@ -25,27 +25,27 @@ class InventoryTest {
 
     @BeforeAll
     static void setUp(){
-//        DEFAULT_ITEM = new Item("Test", "Test", "Test", false, ItemType.GROCERY, new Money(new BigDecimal(5), Currency.USD)) {
-//            @Override
-//            public double getVAT() {
-//                return 0;
-//            }
-//            @Override
-//            public Money getSalesPrice() {
-//                return null;
-//            }
-//        };
-//
-//        ITEM_WITH_SEK_CURRENCY = new Item("Test", "Test", "Test", false, ItemType.GROCERY, new Money(new BigDecimal(5), Currency.SEK)) {
-//            @Override
-//            public double getVAT() {
-//                return 0;
-//            }
-//            @Override
-//            public Money getSalesPrice() {
-//                return null;
-//            }
-//        };
+        DEFAULT_ITEM = new Item("Test", "Test", "Test", false, ItemType.GROCERY, new Money(new BigDecimal(5), Currency.USD)) {
+            @Override
+            public double getVAT() {
+                return 0;
+            }
+            @Override
+            public Money getSalesPrice() {
+                return null;
+            }
+        };
+
+        ITEM_WITH_SEK_CURRENCY = new Item("Test", "Test", "Test", false, ItemType.GROCERY, new Money(new BigDecimal(5), Currency.SEK)) {
+            @Override
+            public double getVAT() {
+                return 0;
+            }
+            @Override
+            public Money getSalesPrice() {
+                return null;
+            }
+        };
     }
 
     @BeforeEach
@@ -101,9 +101,9 @@ class InventoryTest {
         Item newspaper = new Item("Aftonbladet", "0304040", "Aftonbladet", ItemType.NEWSPAPER, new Money(new BigDecimal("80"), Currency.SEK));
 
         testOracle.add(newspaper, grocery, tobacco, bigBeverage, oneLiterBeverage, smallBeverage);
-        testOracle.exportInventory("C:\\Users\\46739\\Desktop\\University\\HT21\\INTE\\InteProject\\RegisterSystem\\src\\test\\resources\\TestInventory.json");
-        defaultInventory.importInventory("C:\\Users\\46739\\Desktop\\University\\HT21\\INTE\\InteProject\\RegisterSystem\\src\\test\\resources\\TestInventory.json");
-        testOracle.importInventory("C:\\Users\\46739\\Desktop\\University\\HT21\\INTE\\InteProject\\RegisterSystem\\src\\test\\resources\\TestInventory.json");
+        testOracle.exportInventory("src\\test\\resources\\TestInventory.json");
+        defaultInventory.importInventory("src\\test\\resources\\TestInventory.json");
+        testOracle.importInventory("src\\test\\resources\\TestInventory.json");
         assertEquals(testOracle.getItems(), defaultInventory.getItems());
         //assert something about items. requires subclasses i feel.
     }
@@ -123,11 +123,6 @@ class InventoryTest {
     //Tests whether exportInventory exports currency as intended
     @Test
     void exportTest() throws IOException{
-        //TODO: UPDATE WITH SUBCLASSES?
-//        defaultInventory.add(DEFAULT_ITEM);
-//        defaultInventory.exportInventory("testOutput"); //string for name
-//        defaultInventory = new Inventory(DEFAULT_MOCK_BANK, DEFAULT_CURRENCY);
-//        defaultInventory.importInventory("testOutput");
         Inventory testOracle = new Inventory(DEFAULT_MOCK_BANK, DEFAULT_CURRENCY);
 
         Item smallBeverage = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("10"), Currency.SEK), new BigDecimal("0.33"));
@@ -138,11 +133,10 @@ class InventoryTest {
         Item newspaper = new Item("Aftonbladet", "0304040", "Aftonbladet", ItemType.NEWSPAPER, new Money(new BigDecimal("80"), Currency.SEK));
 
         testOracle.add(smallBeverage, oneLiterBeverage, bigBeverage, grocery, tobacco, newspaper);
-
-        testOracle.exportInventory("C:\\Users\\46739\\Desktop\\University\\HT21\\INTE\\InteProject\\RegisterSystem\\src\\test\\resources\\TestInventory.json");
-//        defaultInventory = new Inventory(DEFAULT_MOCK_BANK, DEFAULT_CURRENCY);
-//        defaultInventory.importInventory("testOutput");
-//        assertEquals(testOracle.getItems(), defaultInventory.getItems());
+        testOracle.exportInventory("src\\test\\resources\\TestInventory.json");
+        testOracle.importInventory("src\\test\\resources\\TestInventory.json");
+        defaultInventory.importInventory("src\\test\\resources\\TestInventory.json");
+        assertEquals(testOracle.getItems(), defaultInventory.getItems());
     }
 
     //Adds item with a SEK money object to Inventory with USD currency, and makes sure the Item is converted into USD as its added.
@@ -215,20 +209,20 @@ class InventoryTest {
         assertTrue(defaultInventory.isAvailable(DEFAULT_ITEM));
     }
 
-    //Tests whether item is flagged as unavailable when it is
+    Tests whether item is flagged as unavailable when it is
     @Test
     void itemIsNotAvailableTest() throws IOException{
         defaultInventory.add(DEFAULT_ITEM);
-//        Item item = new Item("Test2", null, null, false, null, null) {
-//            @Override
-//            public double getVAT() {
-//                return 0;
-//            }
-//            @Override
-//            public Money getSalesPrice() {
-//                return null;
-//            }
-//        };
-        //assertFalse(defaultInventory.isAvailable(item));
+        Item item = new Item("Test2", null, null, false, null, null) {
+            @Override
+            public double getVAT() {
+                return 0;
+            }
+            @Override
+            public Money getSalesPrice() {
+                return null;
+            }
+        };
+        assertFalse(defaultInventory.isAvailable(item));
     }
 }
