@@ -2,62 +2,100 @@ package se.su.dsv.RegisterSystem;
 
 import java.math.BigDecimal;
 
-public abstract class Item implements Vat, Comparable<Item> {
+public class Item implements Comparable<Item> {
 
-    protected final String name;
-    protected final String productNo;
-    protected final String producer;
-    protected final boolean ageRestricted;
-    protected final ItemType type;
-    protected Money price;
+    private final String name;
+    private final String productNo;
+    private final String producer;
+    private boolean ageRestricted = false;
+    private final ItemType type;
+    private Money price;
+    private BigDecimal volumeCl;
+    private BigDecimal vat;
+    private BigDecimal pant = BigDecimal.ZERO;
 
-    protected Item(String name, String productNo, String producer, boolean ageRestricted, ItemType type, Money price) {
+
+    public Item(String name, String productNo, String producer, ItemType type, Money price) {
         this.name = name;
         this.productNo = productNo;
         this.producer = producer;
-        this.ageRestricted = ageRestricted;
         this.type = type;
         this.price = price;
+
+        switch(type){
+            case NEWSPAPER:
+                this.vat = new BigDecimal("0.06");
+                break;
+            case TOBACCO:
+                this.vat = new BigDecimal("0.25");
+                this.ageRestricted = true;
+                break;
+            default:
+                this.vat = new BigDecimal("0.12");
+                break;
+        }
     }
 
-    public abstract Money getSalesPrice();
+    public Item(String name, String productNo, String producer, Money price, BigDecimal volumeCl) {
+        this(name, productNo, producer, ItemType.BEVERAGE, price);
 
-    public final String getName() {
+        if(volumeCl.doubleValue() <= 0){
+            throw new IllegalArgumentException();
+        }
+
+        this.volumeCl = volumeCl;
+        if(volumeCl.doubleValue() >= BigDecimal.ONE.doubleValue()){
+            this.pant = new BigDecimal("2");
+        }else{
+           this.pant = new BigDecimal("1");
+        }
+    }
+
+    public String getName() {
         return name;
     }
 
-    public final String getProductNo() {
+    public String getProductNo() {
         return productNo;
     }
 
-    public final String getProducer() {
+    public String getProducer() {
         return producer;
     }
 
-    public final boolean isAgeRestricted() {
+    public boolean isAgeRestricted() {
         return ageRestricted;
     }
 
-    public final ItemType getType() {
+    public ItemType getType() {
         return type;
     }
 
-    public final Money getPrice() {
+    public Money getPrice() {
         return price;
     }
 
-    public final void setPrice(Money price){
+    public BigDecimal getPant(){
+        return pant;
+    }
+
+    public BigDecimal getVat(){
+        return vat;
+    }
+
+    public void setPrice(Money price){
         this.price = price;
     }
 
-    public final Money getPricePlusVat() {
+    public Money getPricePlusVat() {
+        if (type == ItemType.BEVERAGE) {
+            return price.add(getVATAmountOfPrice()).add(new Money(pant, price.getCurrency()));
+        }
         return price.add(getVATAmountOfPrice());
     }
 
-    public final Money getVATAmountOfPrice() {
-        BigDecimal vat = new BigDecimal(String.valueOf(getVAT()));
+    public Money getVATAmountOfPrice() {
         return new Money(price.getAmount().multiply(vat), price.getCurrency());
-
     }
 
     @Override

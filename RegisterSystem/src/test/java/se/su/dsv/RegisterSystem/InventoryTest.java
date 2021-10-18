@@ -100,7 +100,7 @@ class InventoryTest {
     }
 
     //Tests whether importing broken saved inventory throws
-    @Test 
+    @Test
     void brokenImportThrowsTest(){
         assertThrows(IllegalArgumentException.class, () -> {defaultInventory.importInventory("test2");}); //String for bad importInventory?
     }
@@ -164,7 +164,7 @@ class InventoryTest {
         defaultInventory.importInventory("test");
         defaultInventory.setCurrency(Currency.SEK);
         assertEquals(Currency.SEK, defaultInventory.getCurrency());
-        //test here if items within have new currency. 
+        //test here if items within have new currency.
     }
 
     @Test
@@ -174,7 +174,7 @@ class InventoryTest {
         //test here whether items within have Currency.SEK!
     }
 
-    //Tests whether requested list of items can edit inventories list of items. 
+    //Tests whether requested list of items can edit inventories list of items.
     //IS CURRENTLY NOT UNMUTABLE, ONLY SHALLOW COPY. WHICH IS PREFERABLE?
     @Test
     void getItemsIsInmutableTest() throws IOException{
