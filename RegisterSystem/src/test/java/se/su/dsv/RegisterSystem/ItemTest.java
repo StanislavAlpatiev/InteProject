@@ -40,6 +40,35 @@ class ItemTest {
         assertThrows(IllegalArgumentException.class, () -> {new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("10"), Currency.SEK), new BigDecimal("-1"));});
     }
 
+    @Test
+    void tobaccoAgeRestrictedTest(){
+        assertEquals(true, DEFAULT_TOBACCO.isAgeRestricted());
+    }
+
+    //test för att kolla att rätt vat sätts i konstruktorn för tidning kolla med hjälp av getVat i Item
+
+    //test för att kolla att rätt vat sätt i konstruktorn för tobak kolla med hjälp av getVat i Item
+
+    //test för att kolla att rätt vat sätt i konstruktorn för livsmedel kolla med hjälp av getVat i Item
+
+    //testa så att namn sätts i konstruktorn
+
+    //testa så att productNo sätts i konstruktorn
+
+    //testa så att producer sätts i konstruktorn
+
+    //testa så att typ sätts i konstruktorn
+
+    //testa så att price sätts i konstruktorn
+
+    //testa så att tobak sätts som age restricted
+
+    //testa så att setPrice ändrar värdet på en produkt
+
+
+
+
+
 
 }
 
