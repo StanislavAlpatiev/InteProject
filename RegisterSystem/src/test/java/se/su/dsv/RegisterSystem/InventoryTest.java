@@ -17,6 +17,7 @@ class InventoryTest {
     static Item DEFAULT_ITEM;
     static Item ITEM_WITH_SEK_CURRENCY;
     static final Currency DEFAULT_CURRENCY = Currency.USD;
+    static final MockBank DEFAULT_MOCK_BANK = new MockBank();
     Inventory defaultInventory;
 
 
@@ -48,7 +49,7 @@ class InventoryTest {
 
     @BeforeEach
     void initialize(){
-        defaultInventory = new Inventory(DEFAULT_CURRENCY);
+        defaultInventory = new Inventory(DEFAULT_MOCK_BANK, DEFAULT_CURRENCY);
     }
 
     //Tests whether constructor without parameters works
@@ -67,7 +68,7 @@ class InventoryTest {
             items[i] = DEFAULT_ITEM;
         }
 
-        Inventory inventory = new Inventory(DEFAULT_CURRENCY, items);
+        Inventory inventory = new Inventory(DEFAULT_MOCK_BANK, Currency.USD, items);
         assertEquals(DEFAULT_VALUE, inventory.getItems().get(DEFAULT_ITEM));
         //assertEquals(register.getCurrency(), inventory.getCurrency());
     }
@@ -75,8 +76,8 @@ class InventoryTest {
     //Tests whether constructor throws if fed with null or empty list of items
     @Test
     void constructorNullOrEmptyListParamThrowsTest(){
-        assertThrows(IllegalArgumentException.class, () -> {new Inventory(DEFAULT_CURRENCY, null);});
-        assertThrows(IllegalArgumentException.class, () -> {new Inventory(DEFAULT_CURRENCY, new Item[0]);});
+        assertThrows(IllegalArgumentException.class, () -> {new Inventory(DEFAULT_MOCK_BANK, DEFAULT_CURRENCY, null);});
+        assertThrows(IllegalArgumentException.class, () -> {new Inventory(DEFAULT_MOCK_BANK, DEFAULT_CURRENCY, new Item[0]);});
     }
 
     //Tests whether importing inventory currency works
@@ -89,7 +90,7 @@ class InventoryTest {
     //Tests whether importing inventory items works
     @Test
     void importImportsItemsTest(){
-        Inventory testOracle = new Inventory(DEFAULT_CURRENCY);
+        Inventory testOracle = new Inventory(DEFAULT_MOCK_BANK, DEFAULT_CURRENCY);
         Item testItem1 = new Grocery("testName1", 123123, "Arla", false, ItemType.GROCERY, new Money(new BigDecimal(20), Currency.USD));
         Item testItem2 = new Grocery("testName2", 123123, "Arla", false, ItemType.GROCERY, new Money(new BigDecimal(30), Currency.SEK));
         testOracle.add(testItem1, testItem2);
@@ -116,7 +117,7 @@ class InventoryTest {
         //TODO: UPDATE WITH SUBCLASSES?
         defaultInventory.add(DEFAULT_ITEM);
         defaultInventory.exportInventory("testOutput"); //string for name
-        defaultInventory = new Inventory(DEFAULT_CURRENCY);
+        defaultInventory = new Inventory(DEFAULT_MOCK_BANK, DEFAULT_CURRENCY);
         defaultInventory.importInventory("testOutput");
         assertEquals(DEFAULT_ITEM, defaultInventory.getItems().keySet().stream().findFirst().orElse(null));
     }
