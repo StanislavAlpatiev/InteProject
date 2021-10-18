@@ -79,6 +79,10 @@ public class Item implements Comparable<Item> {
         return pant;
     }
 
+    public BigDecimal getVat(){
+        return vat;
+    }
+
     public void setPrice(Money price){
         this.price = price;
     }
