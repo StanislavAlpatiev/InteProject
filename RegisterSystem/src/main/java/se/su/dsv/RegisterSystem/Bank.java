@@ -11,8 +11,10 @@ import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Bank {
-    public static BigDecimal getRate(Currency from, Currency to) throws IOException {
+public class Bank implements BankService {
+
+    @Override
+    public BigDecimal getRate(Currency from, Currency to) throws IOException {
         // Setting URL
         String url_str = ("https://v6.exchangerate-api.com/v6/3f192049848a3da4ed3985ce/pair/" + from + "/" + to);
 
@@ -39,12 +41,14 @@ public class Bank {
         }
     }
 
-    public static Money exchange(Money money, Currency currency) throws IOException {
+    @Override
+    public Money exchange(Money money, Currency currency) throws IOException {
         BigDecimal rate = getRate(money.getCurrency(), currency);
         return exchange(money, currency, rate);
     }
 
-    public static Money exchange(Money money, Currency currency, BigDecimal rate) {
+    @Override
+    public Money exchange(Money money, Currency currency, BigDecimal rate) {
         BigDecimal newAmount = money.getAmount().multiply(rate);
         return new Money(newAmount, currency);
     }
