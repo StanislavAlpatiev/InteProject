@@ -24,27 +24,27 @@ class InventoryTest {
 
     @BeforeAll
     static void setUp(){
-        DEFAULT_ITEM = new Item("Test", "Test", "Test", false, ItemType.GROCERY, new Money(new BigDecimal(5), Currency.USD)) {
-            @Override
-            public double getVAT() {
-                return 0;
-            }
-            @Override
-            public Money getSalesPrice() {
-                return null;
-            }
-        };
-
-        ITEM_WITH_SEK_CURRENCY = new Item("Test", "Test", "Test", false, ItemType.GROCERY, new Money(new BigDecimal(5), Currency.SEK)) {
-            @Override
-            public double getVAT() {
-                return 0;
-            }
-            @Override
-            public Money getSalesPrice() {
-                return null;
-            }
-        };
+//        DEFAULT_ITEM = new Item("Test", "Test", "Test", false, ItemType.GROCERY, new Money(new BigDecimal(5), Currency.USD)) {
+//            @Override
+//            public double getVAT() {
+//                return 0;
+//            }
+//            @Override
+//            public Money getSalesPrice() {
+//                return null;
+//            }
+//        };
+//
+//        ITEM_WITH_SEK_CURRENCY = new Item("Test", "Test", "Test", false, ItemType.GROCERY, new Money(new BigDecimal(5), Currency.SEK)) {
+//            @Override
+//            public double getVAT() {
+//                return 0;
+//            }
+//            @Override
+//            public Money getSalesPrice() {
+//                return null;
+//            }
+//        };
     }
 
     @BeforeEach
@@ -89,12 +89,19 @@ class InventoryTest {
 
     //Tests whether importing inventory items works
     @Test
-    void importImportsItemsTest(){
+    void importImportsItemsTest() throws IOException {
         Inventory testOracle = new Inventory(DEFAULT_MOCK_BANK, DEFAULT_CURRENCY);
-        Item testItem1 = new Grocery("testName1", 123123, "Arla", false, ItemType.GROCERY, new Money(new BigDecimal(20), Currency.USD));
-        Item testItem2 = new Grocery("testName2", 123123, "Arla", false, ItemType.GROCERY, new Money(new BigDecimal(30), Currency.SEK));
-        testOracle.add(testItem1, testItem2);
+
+        Item smallBeverage = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("10"), Currency.SEK), new BigDecimal("0.33"));
+        Item oneLiterBeverage = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("15"), Currency.SEK), new BigDecimal("1"));
+        Item bigBeverage = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("20"), Currency.SEK), new BigDecimal("2"));
+        Item grocery = new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, new Money(new BigDecimal("7"), Currency.SEK));
+        Item tobacco= new Item("snus", "0204040", "Knox", ItemType.TOBACCO, new Money(new BigDecimal("50"), Currency.SEK));
+        Item newspaper = new Item("Aftonbladet", "0304040", "Aftonbladet", ItemType.NEWSPAPER, new Money(new BigDecimal("80"), Currency.SEK));
+
+        testOracle.add(smallBeverage, oneLiterBeverage, bigBeverage, grocery, tobacco, newspaper);
         defaultInventory.importInventory("test"); //String for filename?
+
         assertEquals(testOracle.getItems(), defaultInventory.getItems());
         //assert something about items. requires subclasses i feel.
     }
