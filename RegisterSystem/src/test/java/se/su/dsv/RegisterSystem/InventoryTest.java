@@ -17,10 +17,16 @@ class InventoryTest {
     static final int DEFAULT_VALUE = 5;
     static Item DEFAULT_ITEM;
     static Item ITEM_WITH_SEK_CURRENCY;
+    static final Item SMALL_BEVERAGE = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("10"), Currency.SEK), new BigDecimal("0.33"));
+    static final Item ONE_LITER_BEVERAGE = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("15"), Currency.SEK), new BigDecimal("1"));
+    static final Item BIG_BEVERAGE = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("20"), Currency.SEK), new BigDecimal("2"));
+    static final Item GROCERY = new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, new Money(new BigDecimal("7"), Currency.SEK));
+    static final Item GROCERY_2 = new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, new Money(new BigDecimal("7"), Currency.SEK));
+    static final Item TOBACCO = new Item("snus", "0204040", "Knox", ItemType.TOBACCO, new Money(new BigDecimal("50"), Currency.SEK));
+    static final Item NEWSPAPER = new Item("Aftonbladet", "0304040", "Aftonbladet", ItemType.NEWSPAPER, new Money(new BigDecimal("80"), Currency.SEK));
     static final Currency DEFAULT_CURRENCY = Currency.USD;
     static final MockBank DEFAULT_MOCK_BANK = new MockBank();
     Inventory defaultInventory;
-
 
 
     @BeforeAll
@@ -73,21 +79,15 @@ class InventoryTest {
     @Test
     void importImportsItemsTest() throws IOException {
         Inventory testOracle = new Inventory(DEFAULT_MOCK_BANK, DEFAULT_CURRENCY);
-
-        Item smallBeverage = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("10"), Currency.SEK), new BigDecimal("0.33"));
-        Item oneLiterBeverage = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("15"), Currency.SEK), new BigDecimal("1"));
-        Item bigBeverage = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("20"), Currency.SEK), new BigDecimal("2"));
-        Item grocery = new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, new Money(new BigDecimal("7"), Currency.SEK));
-        Item grocery2 = new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, new Money(new BigDecimal("7"), Currency.SEK));
-        Item tobacco= new Item("snus", "0204040", "Knox", ItemType.TOBACCO, new Money(new BigDecimal("50"), Currency.SEK));
-        Item newspaper = new Item("Aftonbladet", "0304040", "Aftonbladet", ItemType.NEWSPAPER, new Money(new BigDecimal("80"), Currency.SEK));
-
-        testOracle.add(newspaper, grocery, grocery2, tobacco, bigBeverage, oneLiterBeverage, smallBeverage);
-        testOracle.exportInventory("src\\test\\resources\\TestInventory.json");
-        defaultInventory.importInventory("src\\test\\resources\\TestInventory.json");
+        testOracle.add(NEWSPAPER, GROCERY, GROCERY_2, TOBACCO, BIG_BEVERAGE, ONE_LITER_BEVERAGE, SMALL_BEVERAGE);
+        //Export Inventory to TestInventory.json
+        testOracle.exportInventory("src\\test\\resources\\ImportInventory.json");
+        //Import TestInventory to testOracle
         testOracle.importInventory("src\\test\\resources\\TestInventory.json");
+        //Import Inventory to defaultInventory
+        defaultInventory.importInventory("src\\test\\resources\\ImportInventory.json");
+        //Test that defaultInventory imports inventory correctly
         assertEquals(testOracle.getItems(), defaultInventory.getItems());
-        //assert something about items. requires subclasses i feel.
     }
 
     //Tests whether importing broken saved inventory throws
@@ -106,19 +106,11 @@ class InventoryTest {
     @Test
     void exportTest() throws IOException{
         Inventory testOracle = new Inventory(DEFAULT_MOCK_BANK, DEFAULT_CURRENCY);
-
-        Item smallBeverage = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("10"), Currency.SEK), new BigDecimal("0.33"));
-        Item oneLiterBeverage = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("15"), Currency.SEK), new BigDecimal("1"));
-        Item bigBeverage = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("20"), Currency.SEK), new BigDecimal("2"));
-        Item grocery = new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, new Money(new BigDecimal("7"), Currency.SEK));
-        Item tobacco= new Item("snus", "0204040", "Knox", ItemType.TOBACCO, new Money(new BigDecimal("50"), Currency.SEK));
-        Item newspaper = new Item("Aftonbladet", "0304040", "Aftonbladet", ItemType.NEWSPAPER, new Money(new BigDecimal("80"), Currency.SEK));
-
-        testOracle.add(smallBeverage, oneLiterBeverage, bigBeverage, grocery, tobacco, newspaper);
-        testOracle.exportInventory("src\\test\\resources\\TestInventory.json");
-        testOracle.importInventory("src\\test\\resources\\TestInventory.json");
+        testOracle.add(NEWSPAPER, GROCERY, GROCERY_2, TOBACCO, BIG_BEVERAGE, ONE_LITER_BEVERAGE, SMALL_BEVERAGE);
+        testOracle.exportInventory("src\\test\\resources\\ExportInventory.json");
+        testOracle.importInventory("src\\test\\resources\\ExportInventory.json");
         defaultInventory.importInventory("src\\test\\resources\\TestInventory.json");
-        assertEquals(testOracle.getItems(), defaultInventory.getItems());
+        assertEquals(defaultInventory.getItems(), testOracle.getItems());
     }
 
     //Adds item with a SEK money object to Inventory with USD currency, and makes sure the Item is converted into USD as its added.
