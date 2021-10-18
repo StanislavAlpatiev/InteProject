@@ -25,27 +25,8 @@ class InventoryTest {
 
     @BeforeAll
     static void setUp(){
-        DEFAULT_ITEM = new Item("Test", "Test", "Test", false, ItemType.GROCERY, new Money(new BigDecimal(5), Currency.USD)) {
-            @Override
-            public double getVAT() {
-                return 0;
-            }
-            @Override
-            public Money getSalesPrice() {
-                return null;
-            }
-        };
-
-        ITEM_WITH_SEK_CURRENCY = new Item("Test", "Test", "Test", false, ItemType.GROCERY, new Money(new BigDecimal(5), Currency.SEK)) {
-            @Override
-            public double getVAT() {
-                return 0;
-            }
-            @Override
-            public Money getSalesPrice() {
-                return null;
-            }
-        };
+        DEFAULT_ITEM = new Item("Test", "Test", "Test", ItemType.GROCERY, new Money(new BigDecimal(5), Currency.USD));
+        ITEM_WITH_SEK_CURRENCY = new Item("Test", "Test", "Test", ItemType.GROCERY, new Money(new BigDecimal(5), Currency.SEK));
     }
 
     @BeforeEach
@@ -117,7 +98,7 @@ class InventoryTest {
     //Tests whether attempting to import nonexisting file throws.
     @Test
     void missingImportThrowsTest(){
-        assertThrows(IllegalArgumentException.class, () -> {defaultInventory.importInventory("test99");}); //String for nonexisting file
+        assertThrows(FileNotFoundException.class, () -> {defaultInventory.importInventory("test99");}); //String for nonexisting file
     }
 
     //Tests whether exportInventory exports currency as intended
@@ -209,20 +190,11 @@ class InventoryTest {
         assertTrue(defaultInventory.isAvailable(DEFAULT_ITEM));
     }
 
-    Tests whether item is flagged as unavailable when it is
+    //Tests whether item is flagged as unavailable when it is
     @Test
     void itemIsNotAvailableTest() throws IOException{
         defaultInventory.add(DEFAULT_ITEM);
-        Item item = new Item("Test2", null, null, false, null, null) {
-            @Override
-            public double getVAT() {
-                return 0;
-            }
-            @Override
-            public Money getSalesPrice() {
-                return null;
-            }
-        };
+        Item item = new Item("Test2", "null", "null", ItemType.BEVERAGE, new Money(BigDecimal.TEN, Currency.AED));
         assertFalse(defaultInventory.isAvailable(item));
     }
 }

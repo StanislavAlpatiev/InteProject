@@ -96,15 +96,15 @@ public class Inventory {
             reader.close();
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new FileNotFoundException();
         }
     }
 
-    public void exportInventory(){
+    public void exportInventory() throws FileNotFoundException {
         exportInventory("default");
     }
 
-    public void exportInventory(String fileName){
+    public void exportInventory(String fileName) throws FileNotFoundException {
         try {
             // create a writer
             Writer writer = new FileWriter(fileName);
@@ -117,7 +117,7 @@ public class Inventory {
             writer.close();
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new FileNotFoundException();
         }
     }
 
