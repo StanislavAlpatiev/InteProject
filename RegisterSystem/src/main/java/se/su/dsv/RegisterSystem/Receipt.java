@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Receipt {
 
-    private String date;
+    private Date date;
     private final Order order;
 
     public Receipt(Order order) {
@@ -15,12 +15,12 @@ public class Receipt {
         if (order.getItems().isEmpty()) {
             throw new IllegalArgumentException("Can not create receipt for empty order");
         }
-        this.date = new Date().toString();
+        this.date = new Date();
         this.order = order;
     }
 
     // to allow for test with mock date
-    public Receipt(Order order, String date){
+    public Receipt(Order order, Date date){
         this(order);
         this.date = date;
     }
