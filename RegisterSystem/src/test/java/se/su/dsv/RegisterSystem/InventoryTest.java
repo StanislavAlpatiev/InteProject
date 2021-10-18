@@ -78,10 +78,11 @@ class InventoryTest {
         Item oneLiterBeverage = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("15"), Currency.SEK), new BigDecimal("1"));
         Item bigBeverage = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("20"), Currency.SEK), new BigDecimal("2"));
         Item grocery = new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, new Money(new BigDecimal("7"), Currency.SEK));
+        Item grocery2 = new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, new Money(new BigDecimal("7"), Currency.SEK));
         Item tobacco= new Item("snus", "0204040", "Knox", ItemType.TOBACCO, new Money(new BigDecimal("50"), Currency.SEK));
         Item newspaper = new Item("Aftonbladet", "0304040", "Aftonbladet", ItemType.NEWSPAPER, new Money(new BigDecimal("80"), Currency.SEK));
 
-        testOracle.add(newspaper, grocery, tobacco, bigBeverage, oneLiterBeverage, smallBeverage);
+        testOracle.add(newspaper, grocery, grocery2, tobacco, bigBeverage, oneLiterBeverage, smallBeverage);
         testOracle.exportInventory("src\\test\\resources\\TestInventory.json");
         defaultInventory.importInventory("src\\test\\resources\\TestInventory.json");
         testOracle.importInventory("src\\test\\resources\\TestInventory.json");
@@ -92,7 +93,7 @@ class InventoryTest {
     //Tests whether importing broken saved inventory throws
     @Test
     void brokenImportThrowsTest(){
-        assertThrows(IllegalArgumentException.class, () -> {defaultInventory.importInventory("test2");}); //String for bad importInventory?
+        assertThrows(FileNotFoundException.class, () -> {defaultInventory.importInventory("test2");}); //String for bad importInventory?
     }
 
     //Tests whether attempting to import nonexisting file throws.

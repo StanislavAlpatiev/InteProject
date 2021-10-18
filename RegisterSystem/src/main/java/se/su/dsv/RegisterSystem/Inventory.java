@@ -92,6 +92,8 @@ public class Inventory {
 
             items = new Gson().fromJson(new FileReader(fileName), HashMap.class);
 
+            //System.out.println(items.toString());
+
             // close reader
             reader.close();
 
