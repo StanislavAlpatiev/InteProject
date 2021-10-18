@@ -125,7 +125,7 @@ public class Item implements Comparable<Item> {
     @Override
     public String toString() {
         return
-            " name='" + getName() + "'" +
+            "name='" + getName() + "'" +
             ", productNo='" + getProductNo() + "'" +
             ", producer='" + getProducer() + "'" +
             ", ageRestricted='" + isAgeRestricted() + "'" +
