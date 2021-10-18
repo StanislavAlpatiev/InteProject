@@ -90,14 +90,7 @@ public class Inventory {
             // create a reader
             Reader reader = Files.newBufferedReader(Paths.get(fileName));
 
-            HashMap<Item, Integer> map = new Gson().fromJson(new FileReader(fileName), HashMap.class);
-
-            // convert JSON array to list of users
-            //List<Item> items = new Gson().fromJson(reader, new TypeToken<List<Item>>() {}.getType());
-
-            // print users
-            //items.forEach(System.out::println);
-            items = map;
+            items = new Gson().fromJson(new FileReader(fileName), HashMap.class);
 
             // close reader
             reader.close();
@@ -112,13 +105,10 @@ public class Inventory {
     }
 
     public void exportInventory(String fileName){
-//        for (Map.Entry<Item, Integer> entry : items.entrySet()){
-//
-//        }
-
         try {
             // create a writer
             Writer writer = new FileWriter(fileName);
+            writer.flush();
 
             // convert map to JSON File
             new Gson().toJson(items, writer);

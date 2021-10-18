@@ -100,9 +100,10 @@ class InventoryTest {
         Item tobacco= new Item("snus", "0204040", "Knox", ItemType.TOBACCO, new Money(new BigDecimal("50"), Currency.SEK));
         Item newspaper = new Item("Aftonbladet", "0304040", "Aftonbladet", ItemType.NEWSPAPER, new Money(new BigDecimal("80"), Currency.SEK));
 
-        testOracle.add(smallBeverage, oneLiterBeverage, bigBeverage, grocery, tobacco, newspaper);
-        defaultInventory.importInventory("C:\\Users\\46739\\Desktop\\University\\HT21\\INTE\\InteProject\\RegisterSystem\\src\\test\\resources\\TestInventory.json"); //String for filename?
-
+        testOracle.add(newspaper, grocery, tobacco, bigBeverage, oneLiterBeverage, smallBeverage);
+        testOracle.exportInventory("C:\\Users\\46739\\Desktop\\University\\HT21\\INTE\\InteProject\\RegisterSystem\\src\\test\\resources\\TestInventory.json");
+        defaultInventory.importInventory("C:\\Users\\46739\\Desktop\\University\\HT21\\INTE\\InteProject\\RegisterSystem\\src\\test\\resources\\TestInventory.json");
+        testOracle.importInventory("C:\\Users\\46739\\Desktop\\University\\HT21\\INTE\\InteProject\\RegisterSystem\\src\\test\\resources\\TestInventory.json");
         assertEquals(testOracle.getItems(), defaultInventory.getItems());
         //assert something about items. requires subclasses i feel.
     }
