@@ -17,6 +17,11 @@ public class Item implements Comparable<Item> {
 
 
     public Item(String name, String productNo, String producer, ItemType type, Money price) {
+
+        if(name == null || productNo == null || producer == null || price == null){
+            throw new NullPointerException();
+        }
+
         this.name = name;
         this.productNo = productNo;
         this.producer = producer;
@@ -39,6 +44,10 @@ public class Item implements Comparable<Item> {
 
     public Item(String name, String productNo, String producer, Money price, BigDecimal volumeCl) {
         this(name, productNo, producer, ItemType.BEVERAGE, price);
+
+        if(volumeCl == null){
+            throw new NullPointerException();
+        }
 
         if(volumeCl.doubleValue() <= 0){
             throw new IllegalArgumentException();
