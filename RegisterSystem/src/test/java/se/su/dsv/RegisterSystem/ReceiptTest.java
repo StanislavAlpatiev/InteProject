@@ -159,7 +159,7 @@ public class ReceiptTest {
             BufferedReader in = new BufferedReader(reader);
             String line;
             while ((line = in.readLine()) != null) {
-                readFile.append(line);
+                readFile.append(line).append("\n");
             }
             in.close();
             reader.close();
