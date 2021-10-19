@@ -14,11 +14,11 @@ import java.util.TreeMap;
 
 public class Receipt {
 
-    static final double VAT6 = 0.06;
-    static final double VAT12 = 0.12;
-    static final double VAT25 = 0.25;
-    static final int WIDTH = 83;
-    static final String EMPTY_COLUMN = "    ";
+    private final double VAT6 = 0.06;
+    private final double VAT12 = 0.12;
+    private final double VAT25 = 0.25;
+    private final int WIDTH = 83;
+    private final String EMPTY_COLUMN = "    ";
 
     private final Order order;
     private final String date;
@@ -29,23 +29,23 @@ public class Receipt {
     private final TreeMap<Double, BigDecimal> VATs = new TreeMap<>(); // maps the different vat-rates with amount of VAT in receipt for that rate
     private final TreeMap<Double, BigDecimal> netVATs = new TreeMap<>(); // maps the different vat-rates with amount of netVAT in receipt for that rate
     private final TreeMap<Double, BigDecimal> grossVATs = new TreeMap<>(); // maps the different vat-rates with amount of grossVAT in receipt for that rate
+
     private BigDecimal totalPricePlusVat;
 
     public Receipt(Order order) {
         this(order, new Date());
-
     }
 
     // able to send in date as parameter to allow for testing
     public Receipt(Order order, Date date){
         if (order == null)
             throw new IllegalArgumentException("Payment is null");
-        if (order.getItems().isEmpty())
-            throw new IllegalArgumentException("Can not create receipt for empty order");
         if (date == null)
             throw new IllegalArgumentException("Date is null");
+        if (order.getItems().isEmpty())
+            throw new IllegalArgumentException("Can not create receipt for empty order");
         this.order = order;
-        this.date = new SimpleDateFormat("yyyy-MM-dd").format(date);  ;
+        this.date = new SimpleDateFormat("yyyy-MM-dd").format(date);
         this.time = new SimpleDateFormat("HH:mm").format(date);
         totalPricePlusVat = BigDecimal.ZERO;
         setUpVATsMaps();
@@ -110,7 +110,7 @@ public class Receipt {
     }
 
 
-    // formats to row so it is lined up as four colums
+    // formats to row so it is lined up as four columns
     private String formatRow(String column1, String column2, String column3, String column4){
         String row = String.format("%-20s %20s %20s %20s", column1, column2, column3, column4);
         if (row.length() > WIDTH)
@@ -179,7 +179,7 @@ public class Receipt {
 
     //sets up the vat maps with value zero
     private void setUpVATsMaps(){
-        BigDecimal zero = new BigDecimal("0");
+        BigDecimal zero = BigDecimal.ZERO;
         for (int i = 0; i < 3; i++) {
             VATs.put(VAT6, zero);
             grossVATs.put(VAT6, zero);
