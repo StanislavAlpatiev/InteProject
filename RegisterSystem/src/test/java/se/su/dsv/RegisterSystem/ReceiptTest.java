@@ -151,6 +151,7 @@ public class ReceiptTest {
         System.out.println(file.delete());
     }
 
+    // helper method to load textfile
     String loadTextFile(String fileName) {
         StringBuilder readFile = new StringBuilder();
         try {

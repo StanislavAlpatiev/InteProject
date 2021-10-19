@@ -1,5 +1,9 @@
 package se.su.dsv.RegisterSystem;
 
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
@@ -32,7 +36,7 @@ public class Receipt {
 
     }
 
-    // to allow for test with mock date
+    // able to send in date as parameter to allow for testing
     public Receipt(Order order, Date date){
         if (order == null)
             throw new IllegalArgumentException("Payment is null");
@@ -53,7 +57,18 @@ public class Receipt {
     }
 
     public void printToFile(){
-
+        String fileName = order.getNumber();
+        try {
+            FileWriter writer = new FileWriter(fileName + ".txt");
+            PrintWriter out = new PrintWriter(writer);
+            out.print(getReceipt());
+            writer.close();
+            out.close();
+        }catch (FileNotFoundException e) {
+            System.err.println("Cant open file");
+        } catch (IOException e) {
+            System.err.print(e.getMessage());
+        }
     }
 
 
@@ -69,7 +84,7 @@ public class Receipt {
 
         sb.append(new String(new char[WIDTH]).replace("\0", "=")).append("\n");
 
-        // creates row for each unique item in order and sums the item prices (plus vat) aswell as make vat calculations for each item
+        // creates row for each unique item in order and sums the item prices (plus vat) aswell as calls calculations for each item
         for (Map.Entry<Item, Integer> e : order.getItems().entrySet()) {
             BigDecimal currentItemPricePlusVat = e.getKey().getPricePlusVat().getAmount().setScale(2, RoundingMode.CEILING);
             int noOfItems = e.getValue();
@@ -95,6 +110,7 @@ public class Receipt {
     }
 
 
+    // formats to row so it is lined up as four colums
     private String formatRow(String column1, String column2, String column3, String column4){
         String row = String.format("%-20s %20s %20s %20s", column1, column2, column3, column4);
         if (row.length() > WIDTH)
@@ -103,6 +119,8 @@ public class Receipt {
     }
 
 
+    // creates row for specific item with name of item and total price for that item.
+    //if multiple items it will account for that aswell aswell as pant
     private String createItemRow(Item item, int noOfItems) {
         StringBuilder sb = new StringBuilder();
 
@@ -122,6 +140,8 @@ public class Receipt {
 
     }
 
+    // creates the account for the different vats represented by the items in the receipt
+    // will not account vats not represented by any item
     private String createVATRows() {
         StringBuilder sb = new StringBuilder();
 
@@ -137,6 +157,7 @@ public class Receipt {
 
     }
 
+    // updates the different vat maps based on the vat of the inserted item
     private void calculateVat(Item item, int amount) {
         BigDecimal currentItemPrice = item.getPrice().getAmount().setScale(2, RoundingMode.CEILING);
         BigDecimal currentItemPricePlusVat = item.getPricePlusVat().getAmount().setScale(2, RoundingMode.CEILING);
