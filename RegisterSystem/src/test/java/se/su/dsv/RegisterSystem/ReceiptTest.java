@@ -145,7 +145,7 @@ public class ReceiptTest {
         String receiptStr = receipt.getReceipt();
         receipt.printToFile();
 
-        assertEquals(receiptStr, loadTextFile(order.getNumber() + ".txt"));
+        assertEquals(receiptStr + "\n", loadTextFile(order.getNumber() + ".txt"));
 
         File file = new File("C:\\Users\\augus\\IdeaProjects\\InteProject\\RegisterSystem" + order.getNumber() + ".txt");
         System.out.println(file.delete());
