@@ -25,7 +25,7 @@ public class Receipt {
     private final TreeMap<Double, BigDecimal> VATs = new TreeMap<>(); // maps the different vat-rates with amount of VAT in receipt for that rate
     private final TreeMap<Double, BigDecimal> netVATs = new TreeMap<>(); // maps the different vat-rates with amount of netVAT in receipt for that rate
     private final TreeMap<Double, BigDecimal> grossVATs = new TreeMap<>(); // maps the different vat-rates with amount of grossVAT in receipt for that rate
-    private BigDecimal totalPricePlusVat = new BigDecimal("0");
+    private BigDecimal totalPricePlusVat;
 
     public Receipt(Order order) {
         this(order, new Date());
@@ -42,7 +42,8 @@ public class Receipt {
             throw new IllegalArgumentException("Date is null");
         this.order = order;
         this.date = new SimpleDateFormat("yyyy-MM-dd").format(date);  ;
-        this.time = new SimpleDateFormat("HH:mm").format(date);  ;
+        this.time = new SimpleDateFormat("HH:mm").format(date);
+        totalPricePlusVat = BigDecimal.ZERO;
         setUpVATsMaps();
         receipt = createReceipt();
     }
