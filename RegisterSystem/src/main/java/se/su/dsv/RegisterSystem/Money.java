@@ -76,7 +76,7 @@ public class Money implements Comparable<Money> {
 
     public String toExport() {
         StringBuilder sb = new StringBuilder();
-        sb.append(amount + "\n" + currency + "\n");
+        sb.append(amount + "@" + currency);
         return sb.toString();
     }
 

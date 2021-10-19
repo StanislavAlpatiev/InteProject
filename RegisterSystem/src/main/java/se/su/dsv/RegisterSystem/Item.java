@@ -151,14 +151,15 @@ public class Item implements Comparable<Item> {
         return Objects.hash(name, productNo, producer, type, price);
     }
 
-    public String toExport(){
+    @Override
+    public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("@\n" + getName() + "\n" + getProductNo() + "\n" + getProducer() + "\n" + isAgeRestricted() + "\n" + getType() + "\n" + getPrice().toExport());
+        sb.append(getName() + "@" + getProductNo() + "@" + getProducer() + "@" + getType() + "@" + getPrice().toExport());
         return sb.toString();
     }
 
-    @Override
-    public String toString() {
+    //@Override
+    public String toStrings() {
         return
             "name='" + getName() + "'" +
             ", productNo='" + getProductNo() + "'" +
