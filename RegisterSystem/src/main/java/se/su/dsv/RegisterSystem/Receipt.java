@@ -51,6 +51,10 @@ public class Receipt {
         return receipt;
     }
 
+    public void printToFile(){
+
+    }
+
 
 
 

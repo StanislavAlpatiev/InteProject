@@ -2,6 +2,7 @@ package se.su.dsv.RegisterSystem;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.*;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
@@ -132,6 +133,42 @@ public class ReceiptTest {
 
         assertEquals(EXPECTED_RECEIPT_MULTIPLE_ITEMS, receipt.getReceipt());
 
+    }
+
+    @Test
+    void printToFileTest() {
+        Item item1 = new Item("DN Newspaper", "12345678", "Dn", ItemType.NEWSPAPER, new Money(new BigDecimal("99.99"), Currency.SEK));
+        Item item2 = new Item("Coca-cola", "12345678", "Dn", new Money(new BigDecimal("29.99"), Currency.SEK), new BigDecimal("2"));
+        Item item3 = new Item("Watermelon bigpack", "12345678", "Dn", ItemType.GROCERY, new Money(new BigDecimal("66.66"), Currency.SEK));
+        Order order = new Order(item1, item2, item3);
+        Receipt receipt = new Receipt(order);
+        String receiptStr = receipt.getReceipt();
+        receipt.printToFile();
+
+        assertEquals(receiptStr, loadTextFile(order.getNumber() + ".txt"));
+
+        File file = new File("C:\\Users\\augus\\IdeaProjects\\InteProject\\RegisterSystem" + order.getNumber() + ".txt");
+        System.out.println(file.delete());
+    }
+
+    String loadTextFile(String fileName) {
+        StringBuilder readFile = new StringBuilder();
+        try {
+            FileReader reader = new FileReader(fileName);
+            BufferedReader in = new BufferedReader(reader);
+            String line;
+            while ((line = in.readLine()) != null) {
+                readFile.append(line);
+            }
+            in.close();
+            reader.close();
+
+        } catch (FileNotFoundException e) {
+            System.err.println("Cant open file");
+        } catch (IOException e) {
+            System.out.println("IO error " + e.getMessage());
+        }
+        return readFile.toString();
     }
 
 }
