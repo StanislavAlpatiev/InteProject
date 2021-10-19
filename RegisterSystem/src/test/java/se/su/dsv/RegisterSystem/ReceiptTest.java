@@ -147,7 +147,7 @@ public class ReceiptTest {
 
         assertEquals(receiptStr + "\n", loadTextFile(order.getNumber() + ".txt"));
 
-        File file = new File("C:\\Users\\augus\\IdeaProjects\\InteProject\\RegisterSystem" + order.getNumber() + ".txt");
+        File file = new File("src\\test\\resources\\" + order.getNumber() + ".txt");
         System.out.println(file.delete());
     }
 

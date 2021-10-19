@@ -59,7 +59,7 @@ public class Receipt {
     public void printToFile(){
         String fileName = order.getNumber();
         try {
-            FileWriter writer = new FileWriter(fileName + ".txt");
+            FileWriter writer = new FileWriter("src\\test\\resources\\" + fileName + ".txt");
             PrintWriter out = new PrintWriter(writer);
             out.print(getReceipt());
             writer.close();
