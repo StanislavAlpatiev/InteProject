@@ -82,18 +82,23 @@ public class Inventory {
     }
 
     public void importInventory(String fileName) throws FileNotFoundException {
-        HashMap<Item, Integer> newItems = new HashMap<>();
+
         try {
+            HashMap<String, Integer> newItems = new HashMap<>();
             // create Gson instance
             Gson gson = new Gson();
 
             // create a reader
             Reader reader = Files.newBufferedReader(Paths.get(fileName));
 
-            items = new Gson().fromJson(new FileReader(fileName), HashMap.class);
+            newItems = new Gson().fromJson(new FileReader(fileName), HashMap.class);
+            items.clear();
+            for (Map.Entry<String, Integer> entry: newItems.entrySet()) {
+                String stringEntry = entry.getKey();
+                String[] params = stringEntry.split("@");
+                add(new Item(params[0], params[1], params[2], ItemType.valueOf(params[3]), new Money(new BigDecimal(params[4]), Currency.valueOf(params[5]))));
 
-            //System.out.println(items.toString());
-
+            }
             // close reader
             reader.close();
 
