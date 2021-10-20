@@ -1,5 +1,6 @@
 package se.su.dsv.RegisterSystem;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class Register {
@@ -12,6 +13,9 @@ public class Register {
 
 
     public Register(Currency currency){
+        if(currency==null){
+            throw new IllegalArgumentException("Null currency!");
+        }
         this.currency = currency;
         inventory = new Inventory(bank, currency);
     }
@@ -28,7 +32,14 @@ public class Register {
         return inventory;
     }
 
-    public void setCurrency(Currency otherCurrency) {
+    //It will throw illegalargument if currency is null. If there is anything wrong with the API bank conversion, it throws IOException.
+    public void setCurrency(Currency currency) throws IllegalArgumentException, IOException {
+        if(currency==null){
+            throw new IllegalArgumentException("Null currency!");
+        }
+        this.currency = currency;
+        inventory.setCurrency(currency);
+    }
     public void addItem(){
         // Lägger till ett item
     }

@@ -59,12 +59,15 @@ public class Inventory {
     }
 
     public Currency getCurrency() {
-        return currency;
+        return currency; 
     }
 
     public void setCurrency(Currency currency) throws IOException {
         if(this.currency != currency){
             BigDecimal rate = bank.getRate(this.currency, currency);
+            if(rate == null){
+                return;
+            }
             for (Map.Entry<Item, Integer> entry : this.items.entrySet()){
                 Money price = bank.exchange(entry.getKey().getPrice(), currency, rate);
                 entry.getKey().setPrice(price);

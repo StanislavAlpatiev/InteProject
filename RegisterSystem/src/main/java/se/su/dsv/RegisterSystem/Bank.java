@@ -14,13 +14,13 @@ import java.net.URL;
 public class Bank implements BankService {
 
     @Override
-    public BigDecimal getRate(Currency from, Currency to) throws IOException {
+    public BigDecimal getRate(Currency from, Currency to) {
         // Setting URL
-        String url_str = ("https://v6.exchangerate-api.com/v6/3f192049848a3da4ed3985ce/pair/" + from + "/" + to);
+        String urlStr = ("https://v6.exchangerate-api.com/v6/3f192049848a3da4ed3985ce/pair/" + from + "/" + to);
 
         try {
             // Making Request
-            URL url = new URL(url_str);
+            URL url = new URL(urlStr);
 
             HttpURLConnection request = (HttpURLConnection) url.openConnection();
             request.connect();
@@ -29,20 +29,21 @@ public class Bank implements BankService {
             JsonElement root = JsonParser.parseReader(new InputStreamReader((InputStream) request.getContent()));
             JsonObject jsonobj = root.getAsJsonObject();
             // Accessing object
-            String req_result = jsonobj.get("result").getAsString();
-            if (req_result.equals("error")) {
+            String reqResults = jsonobj.get("result").getAsString();
+            if (reqResults.equals("error")) {
                 throw new IllegalStateException();
             }
 
             return jsonobj.get("conversion_rate").getAsBigDecimal();
 
         } catch (IOException e) {
-            throw new IOException();
+            System.err.print(e.getMessage());
+            return null;
         }
     }
 
     @Override
-    public Money exchange(Money money, Currency currency) throws IOException {
+    public Money exchange(Money money, Currency currency) {
         BigDecimal rate = getRate(money.getCurrency(), currency);
         return exchange(money, currency, rate);
     }

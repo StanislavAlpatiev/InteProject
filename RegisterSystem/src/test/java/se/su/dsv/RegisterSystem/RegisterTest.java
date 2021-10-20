@@ -2,6 +2,8 @@ package se.su.dsv.RegisterSystem;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -47,11 +49,19 @@ public class RegisterTest {
     }
 
     @Test
-    void setCurrencyChangesCurrencyInRegisterAndInventoryTest(){
-        Currency inventoryCurrency = defaultRegister.getInventory().getCurrency();
+    void setCurrencyChangesCurrencyInRegisterAndInventoryTest() throws IllegalArgumentException, IOException{
         defaultRegister.setCurrency(otherCurrency);
+
+        Currency inventoryCurrency = defaultRegister.getInventory().getCurrency();
         assertEquals(otherCurrency, defaultRegister.getCurrency());
         assertEquals(defaultRegister.getCurrency(), inventoryCurrency);
+    }
+
+    @Test
+    void setCurrencyWithNullParamThrowsTest(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            defaultRegister.setCurrency(null);
+        });
     }
 
     //import inventory? maybe something on order? 
