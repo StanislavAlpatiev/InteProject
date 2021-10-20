@@ -9,47 +9,33 @@ import org.junit.jupiter.api.Test;
 
 public class RegisterTest {
 
-    @Test
-    public void testItemIsAdded(){
-
-    }
-
-    @Test
-    public void testItemIsRemoved(){
-
-    }
-
-    @Test
-    public void testListIsEmptyAfterCheckout(){
-
-    }
-
-
-    
+    final Currency defaultCurrency = Currency.USD;
+    final Currency otherCurrency = Currency.SEK;
     Register defaultRegister;
-    Currency defaultCurrency = Currency.USD;
-    Currency otherCurrency = Currency.SEK;
 
     @BeforeEach
-    void initialize(){
+    void initialize() {
         defaultRegister = new Register(defaultCurrency);
     }
 
+    //Tests whether constructor constructs as it is supposed to with valid params.
     @Test
-    void constructorSetsCurrencyAndInventoryTest(){
+    void constructorSetsCurrencyAndInventoryTest() {
         assertEquals(defaultCurrency, defaultRegister.getCurrency());
-        assertTrue(defaultRegister.getInventory()!=null);
+        assertTrue(defaultRegister.getInventory() != null);
     }
 
+    //Tries to construct an object with null currency
     @Test
-    void constructorThrowsIfNullCurrency(){
+    void constructorThrowsIfNullCurrency() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Register(null);
         });
     }
 
+    //Changes currency of the register to SEK from USD, and sees if this change is visible in both Register and its Inventory
     @Test
-    void setCurrencyChangesCurrencyInRegisterAndInventoryTest() throws IllegalArgumentException, IOException{
+    void setCurrencyChangesCurrencyInRegisterAndInventoryTest() throws IllegalArgumentException, IOException {
         defaultRegister.setCurrency(otherCurrency);
 
         Currency inventoryCurrency = defaultRegister.getInventory().getCurrency();
@@ -57,13 +43,29 @@ public class RegisterTest {
         assertEquals(defaultRegister.getCurrency(), inventoryCurrency);
     }
 
+    //Tries to change to null currency.
     @Test
-    void setCurrencyWithNullParamThrowsTest(){
+    void setCurrencyWithNullParamThrowsTest() {
         assertThrows(IllegalArgumentException.class, () -> {
             defaultRegister.setCurrency(null);
         });
     }
 
-    //import inventory? maybe something on order? 
+    @Test
+    public void testItemIsAdded() {
+
+    }
+
+    @Test
+    public void testItemIsRemoved() {
+
+    }
+
+    @Test
+    public void testListIsEmptyAfterCheckout() {
+
+    }
+
+    // import inventory? maybe something on order?
 
 }
