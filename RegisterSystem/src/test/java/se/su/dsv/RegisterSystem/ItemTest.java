@@ -1,27 +1,28 @@
 package se.su.dsv.RegisterSystem;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 
 class ItemTest {
 
-    private static final Item DEFAULT_SMALL_BEVERAGE = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("10"), Currency.SEK), new BigDecimal("0.33"));
-    private static final Item DEFAULT_ONE_LITER_BEVERAGE = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("10"), Currency.SEK), new BigDecimal("1"));
-    private static final Item DEFAULT_BIG_BEVERAGE = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("10"), Currency.SEK), new BigDecimal("2"));
-    private static final Item DEFAULT_GROCERY = new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, new Money(new BigDecimal("10"), Currency.SEK));
-    private static final Item DEFAULT_TOBACCO = new Item("snus", "0204040", "Knox", ItemType.TOBACCO, new Money(new BigDecimal("10"), Currency.SEK));
-    private static final Item DEFAULT_NEWSPAPER = new Item("Aftonbladet", "0304040", "Aftonbladet", ItemType.NEWSPAPER, new Money(new BigDecimal("10"), Currency.SEK));
-
-    private static final Money DEFAULT_PRICE_PLUS_VAT = new Money(new BigDecimal("11.20"), Currency.SEK);
-    private static final Money DEFAULT_VAT_OF_ITEM = new Money(new BigDecimal("1.20"), Currency.SEK);
+    private static final Money DEFAULT_GROCERY_PRICE_PLUS_VAT = new Money(new BigDecimal("11.20"), Currency.SEK);
+    private static final Money DEFAULT_GROCERY_VAT_OF_ITEM = new Money(new BigDecimal("1.20"), Currency.SEK);
     private static final Money DEFAULT_MONEY = new Money(new BigDecimal("10"), Currency.SEK);
+
+    private static final Item DEFAULT_SMALL_BEVERAGE = new Item("coca cola", "0404040", "coca cola", DEFAULT_MONEY, new BigDecimal("0.33"));
+    private static final Item DEFAULT_ONE_LITER_BEVERAGE = new Item("coca cola", "0404040", "coca cola", DEFAULT_MONEY, new BigDecimal("1"));
+    private static final Item DEFAULT_BIG_BEVERAGE = new Item("coca cola", "0404040", "coca cola", DEFAULT_MONEY, new BigDecimal("2"));
+
+    private static final Item DEFAULT_GROCERY = new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, DEFAULT_MONEY);
+    private static final Item DEFAULT_TOBACCO = new Item("snus", "0204040", "Knox", ItemType.TOBACCO, DEFAULT_MONEY);
+    private static final Item DEFAULT_NEWSPAPER = new Item("Aftonbladet", "0304040", "Aftonbladet", ItemType.NEWSPAPER, DEFAULT_MONEY);
+
+    private static final Money PANT_ONE = new Money(BigDecimal.ONE, Currency.SEK);
+    private static final Money PANT_TWO = new Money(new BigDecimal("2"), Currency.SEK);
 
 
     @Test
@@ -34,20 +35,20 @@ class ItemTest {
     }
 
     @Test
-    void constructorNullParametersTest(){
-        assertThrows(NullPointerException.class, () -> {
+    void constructorNullParametersThrowIAETest(){
+        assertThrows(IllegalArgumentException.class, () -> {
             new Item(null, "0202020", "coca-cola", ItemType.BEVERAGE, DEFAULT_MONEY);
         });
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             new Item("coca-cola", null, "coca-cola", ItemType.BEVERAGE, DEFAULT_MONEY);
         });
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             new Item("coca-cola", "0202020", null, ItemType.BEVERAGE, DEFAULT_MONEY);
         });
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             new Item("coca-cola", "0202020", "coca-cola", ItemType.BEVERAGE, null);
         });
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             new Item("coca-cola", "0202020", "coca-cola", DEFAULT_MONEY, null);
         });
     }
@@ -74,23 +75,30 @@ class ItemTest {
 
     @Test
     void constructorSetsPantCorrectFor33Cl() {
-        assertEquals(BigDecimal.ONE, DEFAULT_SMALL_BEVERAGE.getPant());
+        assertEquals(PANT_ONE, DEFAULT_SMALL_BEVERAGE.getPant());
     }
 
     @Test
     void constructorSetsPantCorrectFor100Cl() {
-        assertEquals(new BigDecimal("2"), DEFAULT_ONE_LITER_BEVERAGE.getPant());
+        assertEquals(PANT_TWO, DEFAULT_ONE_LITER_BEVERAGE.getPant());
     }
 
     @Test
     void constructorSetsPantCorrectFor200Cl() {
-        assertEquals(new BigDecimal("2"), DEFAULT_BIG_BEVERAGE.getPant());
+        assertEquals(PANT_TWO, DEFAULT_BIG_BEVERAGE.getPant());
     }
 
     @Test
     void constructorThrowsIAEForNegativeCl(){
         assertThrows(IllegalArgumentException.class, () -> {
             new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("10"), Currency.SEK), new BigDecimal("-1"));
+        });
+    }
+
+    @Test
+    void constructorTooLongItemNameTest(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Item("really long name test OOOO", "0515102", "testproducer", ItemType.GROCERY, DEFAULT_MONEY);
         });
     }
 
@@ -104,17 +112,22 @@ class ItemTest {
 
     @Test
     void PricePlusVatCorrectTest(){
-        assertEquals(DEFAULT_PRICE_PLUS_VAT, DEFAULT_GROCERY.getPricePlusVat());
+        assertEquals(DEFAULT_GROCERY_PRICE_PLUS_VAT, DEFAULT_GROCERY.getPricePlusVat());
     }
 
     @Test
     void VatPriceOfItemTest(){
-        assertEquals(DEFAULT_VAT_OF_ITEM, DEFAULT_GROCERY.getVATAmountOfPrice());
+        assertEquals(DEFAULT_GROCERY_VAT_OF_ITEM, DEFAULT_GROCERY.getVATAmountOfPrice());
+    }
+
+    @Test
+    void pricePlusVatAndPantCorrectTest(){
+        assertEquals(new Money(new BigDecimal("13.20"), Currency.SEK),DEFAULT_BIG_BEVERAGE.getPricePlusVat());
     }
 
     @Test
     void toStringTest(){
-        assertEquals("name='mjöl', productNo='0104040', producer='ICA', ageRestricted='false', type='GROCERY', price='10 SEK'", DEFAULT_GROCERY.toString());
+        assertEquals("mjöl@0104040@ICA@GROCERY@10@SEK", DEFAULT_GROCERY.toString());
     }
 
 
