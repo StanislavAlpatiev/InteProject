@@ -122,7 +122,7 @@ public class Receipt {
 
 
     // creates row for specific item with name of item and total price for that item.
-    //if multiple items it will account for that aswell aswell as pant
+    //if multiple items it will account for that aswell as pant
     private String createItemRow(Item item, BigDecimal amountOfItem) {
         StringBuilder sb = new StringBuilder();
 
@@ -130,7 +130,7 @@ public class Receipt {
         BigDecimal itemPricePlusVat = item.getPricePlusVat().getAmount()
                 .setScale(2, RoundingMode.CEILING);
         BigDecimal totalItemPricePlusVat = itemPricePlusVat.multiply(amountOfItem);
-        BigDecimal totalItemPant = item.getPant().setScale(2, RoundingMode.CEILING).multiply(amountOfItem);
+        BigDecimal totalItemPant = item.getPant().getAmount().setScale(2, RoundingMode.CEILING).multiply(amountOfItem);
 
         String pantColumn = (totalItemPant.toString().equals("0.00")) ? EMPTY_COLUMN :
                 "inkl. pant " + totalItemPant.toString();
