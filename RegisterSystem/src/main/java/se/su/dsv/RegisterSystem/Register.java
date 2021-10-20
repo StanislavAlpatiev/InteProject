@@ -3,7 +3,7 @@ package se.su.dsv.RegisterSystem;
 public class Register {
 
     private Currency currency;
-    private Inventory inventory;
+    private final Inventory inventory;
     private static final Bank bank = new Bank();
 
 
@@ -19,4 +19,12 @@ public class Register {
     public Bank getBank(){
         return bank;
     }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public void setCurrency(Currency otherCurrency) {
+    }
+
 }
