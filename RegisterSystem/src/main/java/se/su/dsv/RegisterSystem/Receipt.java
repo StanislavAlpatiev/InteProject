@@ -14,10 +14,10 @@ import java.util.TreeMap;
 
 public class Receipt {
 
-    private final double VAT6 = 0.06;
-    private final double VAT12 = 0.12;
-    private final double VAT25 = 0.25;
+
+    private final double[] VAT_RATES = {0.06, 0.12, 0.25};
     private final int WIDTH = 83;
+    private final String ROW_DIVIDER = new String(new char[WIDTH]).replace("\0", "=");
     private final String EMPTY_COLUMN = "    ";
 
     private final Order order;
@@ -30,7 +30,7 @@ public class Receipt {
     private final TreeMap<Double, BigDecimal> netVATs = new TreeMap<>(); // maps the different vat-rates with amount of netVAT in receipt for that rate
     private final TreeMap<Double, BigDecimal> grossVATs = new TreeMap<>(); // maps the different vat-rates with amount of grossVAT in receipt for that rate
 
-    private BigDecimal totalPricePlusVat;
+    private BigDecimal totalPricePlusVat = BigDecimal.ZERO.setScale(2, RoundingMode.CEILING);
 
     public Receipt(Order order) {
         this(order, new Date());
@@ -47,7 +47,6 @@ public class Receipt {
         this.order = order;
         this.date = new SimpleDateFormat("yyyy-MM-dd").format(date);
         this.time = new SimpleDateFormat("HH:mm").format(date);
-        totalPricePlusVat = BigDecimal.ZERO;
         setUpVATsMaps();
         receipt = createReceipt();
     }
@@ -77,23 +76,26 @@ public class Receipt {
     private String createReceipt() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(new String(new char[WIDTH]).replace("\0", "=")).append("\n");
+        sb.append(ROW_DIVIDER).append("\n");
 
         sb.append(formatRow("OrderNr:", order.getNumber(), EMPTY_COLUMN, EMPTY_COLUMN));
         sb.append(formatRow("Datum:", date, "Tid:", time));
 
-        sb.append(new String(new char[WIDTH]).replace("\0", "=")).append("\n");
+        sb.append(ROW_DIVIDER).append("\n");
 
-        // creates row for each unique item in order and sums the item prices (plus vat) aswell as calls calculations for each item
+        // creates row for each unique item in order and sums the item prices (plus vat)
+        // aswell as make vat calculations for each item
         for (Map.Entry<Item, Integer> e : order.getItems().entrySet()) {
-            BigDecimal currentItemPricePlusVat = e.getKey().getPricePlusVat().getAmount().setScale(2, RoundingMode.CEILING);
-            int noOfItems = e.getValue();
-            sb.append(createItemRow(e.getKey(), e.getValue()));
-            totalPricePlusVat = totalPricePlusVat.add(currentItemPricePlusVat.multiply(new BigDecimal(noOfItems)));
-            calculateVat(e.getKey(), e.getValue());
+
+            Item currentItem = e.getKey();
+            BigDecimal amountOfCurrentItem = new BigDecimal(e.getValue().toString());
+
+            sb.append(createItemRow(currentItem, amountOfCurrentItem));
+
+            calculateVat(currentItem, amountOfCurrentItem);
         }
 
-        sb.append(new String(new char[WIDTH]).replace("\0", "=")).append("\n");
+        sb.append(ROW_DIVIDER).append("\n");
 
         //create row for the total price
         sb.append(formatRow("TOTAL",EMPTY_COLUMN,EMPTY_COLUMN, totalPricePlusVat.setScale(2, RoundingMode.CEILING).toString()));
@@ -103,7 +105,7 @@ public class Receipt {
         //creates the rows accounting vats
         sb.append(createVATRows());
 
-        sb.append(new String(new char[WIDTH]).replace("\0", "="));
+        sb.append(ROW_DIVIDER);
 
 
         return sb.toString();
@@ -120,22 +122,26 @@ public class Receipt {
 
 
     // creates row for specific item with name of item and total price for that item.
-    //if multiple items it will account for that aswell aswell as pant
-    private String createItemRow(Item item, int noOfItems) {
+    //if multiple items it will account for that aswell as pant
+    private String createItemRow(Item item, BigDecimal amountOfItem) {
         StringBuilder sb = new StringBuilder();
 
-        String currentItemName = item.getName();
-        String currentItemPricePlusVat = item.getPricePlusVat().getAmount().setScale(2, RoundingMode.CEILING).toString();
-        String totalCurrentItemPricePlusVat = item.getPricePlusVat().getAmount().setScale(2, RoundingMode.CEILING).multiply(new BigDecimal(noOfItems)).toString();
-        String totalItemPant = item.getPant().setScale(2, RoundingMode.CEILING).multiply(new BigDecimal(noOfItems)).toString();
+        String itemName = item.getName();
+        BigDecimal itemPricePlusVat = item.getPricePlusVat().getAmount()
+                .setScale(2, RoundingMode.CEILING);
+        BigDecimal totalItemPricePlusVat = itemPricePlusVat.multiply(amountOfItem);
+        BigDecimal totalItemPant = item.getPant().getAmount().setScale(2, RoundingMode.CEILING).multiply(amountOfItem);
 
-        String pantColumn = (totalItemPant.equals("0.00")) ? EMPTY_COLUMN : "inkl. pant " + totalItemPant;
+        String pantColumn = (totalItemPant.toString().equals("0.00")) ? EMPTY_COLUMN :
+                "inkl. pant " + totalItemPant.toString();
 
+        if (amountOfItem.intValue() > 1)
+            sb.append(formatRow(itemName, amountOfItem + "*" +
+                    itemPricePlusVat.toString(), pantColumn, totalItemPricePlusVat.toString()));
+        else
+            sb.append(formatRow(itemName, EMPTY_COLUMN, pantColumn, itemPricePlusVat.toString()));
 
-        sb.append((noOfItems > 1) ? formatRow(currentItemName, noOfItems + "*" + currentItemPricePlusVat, pantColumn, totalCurrentItemPricePlusVat)
-                : formatRow(currentItemName, EMPTY_COLUMN, pantColumn, currentItemPricePlusVat));
-
-
+        totalPricePlusVat = totalPricePlusVat.add(totalItemPricePlusVat);
         return sb.toString();
 
     }
@@ -144,13 +150,16 @@ public class Receipt {
     // will not account vats not represented by any item
     private String createVATRows() {
         StringBuilder sb = new StringBuilder();
+        String totalAmountOfVAT;
+        String totalNetVAT;
+        String totalGrossVat;
 
-        for (Double e : grossVATs.keySet()) {
-            if (!grossVATs.get(e).toString().equals("0")) {
-                BigDecimal v = VATs.get(e).setScale(2, RoundingMode.CEILING);
-                BigDecimal n = netVATs.get(e).setScale(2, RoundingMode.CEILING);
-                BigDecimal g = grossVATs.get(e).setScale(2, RoundingMode.CEILING);
-                sb.append(formatRow(e * 100 + "0", v.toString(), n.toString(), g.toString()));
+        for (Double d : VAT_RATES) {
+            if (!grossVATs.get(d).toString().equals("0")) {
+                totalAmountOfVAT = VATs.get(d).setScale(2, RoundingMode.CEILING).toString();
+                totalNetVAT = netVATs.get(d).setScale(2, RoundingMode.CEILING).toString();
+                totalGrossVat = grossVATs.get(d).setScale(2, RoundingMode.CEILING).toString();
+                sb.append(formatRow(d * 100 + "0", totalAmountOfVAT, totalNetVAT, totalGrossVat));
             }
         }
         return sb.toString();
@@ -158,40 +167,37 @@ public class Receipt {
     }
 
     // updates the different vat maps based on the vat of the inserted item
-    private void calculateVat(Item item, int amount) {
-        BigDecimal currentItemPrice = item.getPrice().getAmount().setScale(2, RoundingMode.CEILING);
-        BigDecimal currentItemPricePlusVat = item.getPricePlusVat().getAmount().setScale(2, RoundingMode.CEILING);
-        BigDecimal currentItemAmountOfVAT = item.getVATAmountOfPrice().getAmount().setScale(2, RoundingMode.CEILING);
+    private void calculateVat(Item item, BigDecimal amount) {
+        double itemVATRate = item.getVat().doubleValue();
 
-        BigDecimal old = grossVATs.get(item.getVat().doubleValue());
-        BigDecimal nev = grossVATs.get(item.getVat().doubleValue()).add(currentItemPricePlusVat.multiply(new BigDecimal(amount)));
+        BigDecimal currentItemPrice = item.getPrice().getAmount()
+                .setScale(2, RoundingMode.CEILING);
+        BigDecimal currentItemPricePlusVat = item.getPricePlusVat().getAmount()
+                .setScale(2, RoundingMode.CEILING);
+        BigDecimal currentItemAmountOfVAT = item.getVATAmountOfPrice().getAmount()
+                .setScale(2, RoundingMode.CEILING);
+
+
+        BigDecimal old = grossVATs.get(itemVATRate);
+        BigDecimal nev = grossVATs.get(itemVATRate).add(currentItemPricePlusVat.multiply(amount));
         grossVATs.replace(item.getVat().doubleValue(), old, nev);
 
-        old = VATs.get(item.getVat().doubleValue());
-        nev = VATs.get(item.getVat().doubleValue()).add(currentItemAmountOfVAT.multiply(new BigDecimal(amount)));
-        VATs.replace(item.getVat().doubleValue(), old, nev);
+        old = VATs.get(itemVATRate);
+        nev = VATs.get(itemVATRate).add(currentItemAmountOfVAT.multiply(amount));
+        VATs.replace(itemVATRate, old, nev);
 
-        old = netVATs.get(item.getVat().doubleValue());
-        nev = netVATs.get(item.getVat().doubleValue()).add(currentItemPrice.multiply(new BigDecimal(amount)));
-        netVATs.replace(item.getVat().doubleValue(), old, nev);
+        old = netVATs.get(itemVATRate);
+        nev = netVATs.get(itemVATRate).add(currentItemPrice.multiply(amount));
+        netVATs.replace(itemVATRate, old, nev);
 
     }
 
     //sets up the vat maps with value zero
     private void setUpVATsMaps(){
-        BigDecimal zero = BigDecimal.ZERO;
-        for (int i = 0; i < 3; i++) {
-            VATs.put(VAT6, zero);
-            grossVATs.put(VAT6, zero);
-            netVATs.put(VAT6, zero);
-
-            VATs.put(VAT12, zero);
-            grossVATs.put(VAT12, zero);
-            netVATs.put(VAT12, zero);
-
-            VATs.put(VAT25, zero);
-            grossVATs.put(VAT25, zero);
-            netVATs.put(VAT25, zero);
+        for (double vatRate : VAT_RATES) {
+            VATs.put(vatRate, BigDecimal.ZERO);
+            grossVATs.put(vatRate, BigDecimal.ZERO);
+            netVATs.put(vatRate, BigDecimal.ZERO);
         }
     }
 
