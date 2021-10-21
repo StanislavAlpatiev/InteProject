@@ -26,6 +26,7 @@ class InventoryTest {
     static final Item NEWSPAPER = new Item("Aftonbladet", "0304040", "Aftonbladet", ItemType.NEWSPAPER, new Money(new BigDecimal("80"), Currency.SEK));
     static final Currency DEFAULT_CURRENCY = Currency.USD;
     static final MockBank DEFAULT_MOCK_BANK = new MockBank();
+    
     Inventory defaultInventory;
 
 

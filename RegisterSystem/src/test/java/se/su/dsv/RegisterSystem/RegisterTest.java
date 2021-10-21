@@ -7,32 +7,41 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class RegisterTest {
 
+    final Customer DEFAULT_CUSTOMER = new Customer("Mr Customer", "Street Road", LocalDate.now(), "0707070700",
+    "customer@test.com");
+
     final Currency DEFAULT_CURRENCY = Currency.USD;
     final Currency OTHER_CURRENCY = Currency.SEK;
+
     final Money DEFAULT_MONEY = new Money(new BigDecimal(1000), DEFAULT_CURRENCY);
     final Money OTHER_MONEY = new Money(new BigDecimal(1000), OTHER_CURRENCY);
 
     final Item DEFAULT_ITEM = new Item("Mjölk", "0123456789", "Arla", ItemType.GROCERY, DEFAULT_MONEY);
-    // DEFAULT_ITEM2 costs twice of DEFAULT_ITEM
+    // DEFAULT_ITEM2 costs twice of DEFAULT_ITEM to get some variety.
     final Item DEFAULT_ITEM2 = new Item("Tryffel", "9876543210", "FancyProducts", ItemType.GROCERY,
             DEFAULT_MONEY.add(DEFAULT_MONEY));
-    final Item[] ITEMS = {DEFAULT_ITEM, DEFAULT_ITEM2};
 
-    final Order DEFAULT_ORDER = new Order(ITEMS);
+    final Item[] ITEMS = { DEFAULT_ITEM, DEFAULT_ITEM2 };
+    final Order DEFAULT_ORDER = new Order(DEFAULT_CURRENCY, ITEMS);
+
     Register defaultRegister;
     Wallet defaultWallet;
 
+    @BeforeAll
+    static void setUp() {
+        
+    }
+
     @BeforeEach
-    void initialize() {
+    void initialize() throws IOException {
         defaultRegister = new Register(DEFAULT_CURRENCY);
-        defaultWallet = new Wallet(
-                new Customer("Mr Customer", "Street Road", LocalDate.now(), "07070707", "customer@test.com"),
-                DEFAULT_MONEY);
+        defaultWallet = new Wallet(DEFAULT_CUSTOMER);
         defaultRegister.getInventory().add(DEFAULT_ITEM);
         defaultRegister.getInventory().add(DEFAULT_ITEM);
         defaultRegister.getInventory().add(DEFAULT_ITEM2);
@@ -44,11 +53,11 @@ public class RegisterTest {
     // Tests whether constructor constructs as it is supposed to with valid params.
     @Test
     void constructorSetsCurrencyAndInventoryTest() {
-        //makes sure the currency is set
+        // makes sure the currency is set
         assertEquals(DEFAULT_CURRENCY, defaultRegister.getCurrency());
-        //makes sure an inventory is created in constructor
+        // makes sure an inventory is created in constructor
         assertTrue(defaultRegister.getInventory() != null);
-        //makes sure the currency is carried down into the inventory.
+        // makes sure the currency is carried down into the inventory.
         assertEquals(DEFAULT_CURRENCY, defaultRegister.getInventory().getCurrency());
 
     }
@@ -80,6 +89,23 @@ public class RegisterTest {
         });
     }
 
+    //Tries to checkout with null order
+    @Test
+    void nullOrderThrowsTest() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            defaultRegister.checkOut(null, defaultWallet);
+        });
+    }
+
+    //Tries to checkout with null wallet
+    @Test
+    void nullWalletThrowsTest() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            defaultRegister.checkOut(DEFAULT_ORDER, null);
+        });
+    }
+
+    //Tries to buy objects not in inventory
     @Test
     void itemsInCheckoutNotAvailableInInventoryThrowsTest() {
         // Since there is only one DEFAULT_ITEM2, it is removed - since the order has 2
@@ -92,6 +118,7 @@ public class RegisterTest {
         });
     }
 
+    //Sees whether bought items are removed from the inventory
     @Test
     void itemsRemovedFromInventoryWhenBoughtInRegisterTest() throws FileNotFoundException {
         defaultRegister.checkOut(DEFAULT_ORDER, defaultWallet);
@@ -107,6 +134,7 @@ public class RegisterTest {
         assertEquals(1, inventory.getItems().get(DEFAULT_ITEM));
     }
 
+    //Tries to buy items without enough money in wallet.
     @Test
     void walletNotEnoughMoneyThrowsTest() {
         // There is as much money in the wallet as there is in the order
@@ -118,6 +146,7 @@ public class RegisterTest {
         });
     }
 
+    //Sees whether money is removed from wallet during checkout.
     @Test
     void moneyIsRemovedFromWalletDuringCheckoutTest() {
 
@@ -127,23 +156,24 @@ public class RegisterTest {
         // because the total cost of the order is supposed to be the same as the
         // contents of the wallet in USD.
         assertEquals(0, defaultWallet.getWalletContent().get(DEFAULT_CURRENCY).getAmount().compareTo(BigDecimal.ZERO));
-
     }
 
+    // Test whether money in wallet is available in several currencies instead of only in separate ones
+    // That is, if you have 100 in SEK, and 100 in USD, you can buy for whatever those add up to.
     @Test
-    void nullOrderThrowsTest() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            defaultRegister.checkOut(null, defaultWallet);
-        });
+    void walletMoneyInOtherCurrency() {
+
+        defaultWallet.remove(DEFAULT_MONEY);
+
+        // 10 loops because MockBank uses a 1 to 10 conversion USD to SEK. Wouldn't work with bank api
+        // So, removing 1000, in USD, and then adding 10000 in SEK should balance out +-0 in actual value.
+        for (int i = 0; i < 10; i++) {
+            defaultWallet.add(OTHER_MONEY);
+        }
+
+        defaultRegister.checkOut(DEFAULT_ORDER, defaultWallet);
+
+        //Since wallet content is equals to cost of order, after checkout there should be 0 left in wallet. 
+        assertEquals(BigDecimal.ZERO, defaultWallet.getTotalAmount(DEFAULT_CURRENCY));
     }
-
-    @Test
-    void nullWalletThrowsTest() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            defaultRegister.checkOut(DEFAULT_ORDER, null);
-        });
-    }
-
-    // import inventory? maybe something on order?
-
 }
