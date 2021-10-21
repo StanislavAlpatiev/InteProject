@@ -23,7 +23,6 @@ public class RegisterTest {
     final Money OTHER_MONEY = new Money(new BigDecimal(1000), OTHER_CURRENCY);
 
     final Item DEFAULT_ITEM = new Item("Mjölk", "0123456789", "Arla", ItemType.GROCERY, DEFAULT_MONEY);
-    // DEFAULT_ITEM2 costs twice of DEFAULT_ITEM to get some variety.
     final Item DEFAULT_ITEM2 = new Item("Tryffel", "9876543210", "FancyProducts", ItemType.GROCERY,
             DEFAULT_MONEY.add(DEFAULT_MONEY));
 
@@ -45,7 +44,7 @@ public class RegisterTest {
         defaultRegister.getInventory().add(DEFAULT_ITEM);
         defaultRegister.getInventory().add(DEFAULT_ITEM);
         defaultRegister.getInventory().add(DEFAULT_ITEM2);
-
+        System.out.println("Hej");
         // Makes sure there is as much money in money as there is in the order
         defaultWallet.add(DEFAULT_ORDER.getTotalPricePlusVat());
     }
