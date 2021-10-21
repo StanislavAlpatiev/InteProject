@@ -41,7 +41,7 @@ public class RegisterTest {
     @BeforeEach
     void initialize() throws IOException {
         defaultRegister = new Register(DEFAULT_CURRENCY);
-        defaultWallet = new Wallet(DEFAULT_CUSTOMER);
+        defaultWallet = new Wallet(DEFAULT_CUSTOMER, new MockBank());
         defaultRegister.getInventory().add(DEFAULT_ITEM);
         defaultRegister.getInventory().add(DEFAULT_ITEM);
         defaultRegister.getInventory().add(DEFAULT_ITEM2);
