@@ -171,11 +171,8 @@ public class RegisterTest {
 
         defaultRegister.checkOut(DEFAULT_ORDER, defaultWallet);
 
-        //Since wallet content is equals to cost of order, after checkout there should be 0 left in wallet. 
-<<<<<<< HEAD
+        //Since wallet content is equals to cost of order, after checkout there should be 0 left in wallet.
         assertEquals(BigDecimal.valueOf(0.0), defaultWallet.totalValueInCurrency(DEFAULT_CURRENCY).getAmount());
-=======
         //assertEquals(BigDecimal.ZERO, defaultWallet.getTotalAmount(DEFAULT_CURRENCY));
->>>>>>> Main
     }
 }
