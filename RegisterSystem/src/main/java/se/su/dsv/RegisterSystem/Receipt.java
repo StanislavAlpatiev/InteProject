@@ -9,7 +9,6 @@ import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
-import java.util.TreeMap;
 
 
 public class Receipt {
@@ -49,6 +48,7 @@ public class Receipt {
         return receipt;
     }
 
+    //TODO: add check if file already exists
     public void printToFile(){
         String fileName = order.getNumber();
         try {
@@ -63,7 +63,6 @@ public class Receipt {
             System.err.print(e.getMessage());
         }
     }
-
 
 
 
@@ -112,12 +111,9 @@ public class Receipt {
     //if multiple items it will account for that aswell as pant
     private String createItemRow(Item item, BigDecimal amountOfItem) {
         String itemName = item.getName();
-        String itemPricePlusVat = item.getPricePlusVat().getAmount()
-                .setScale(2, RoundingMode.CEILING).toString();
-        String totalItemPricePlusVat = order.getTotalPricePerItem(item).getAmount()
-                .setScale(2, RoundingMode.CEILING).toString();
-        String totalItemPant = order.getTotalPantPerItem(item).getAmount()
-                .setScale(2, RoundingMode.CEILING).toString();
+        String itemPricePlusVat = formatMoneyValue(item.getPricePlusVat());
+        String totalItemPricePlusVat = formatMoneyValue(order.getTotalPricePerItem(item));
+        String totalItemPant = formatMoneyValue(order.getTotalPantPerItem(item));
 
         String pantColumn = (totalItemPant.equals("0.00")) ? EMPTY_COLUMN :
                 "inkl. pant " + totalItemPant;
@@ -134,17 +130,18 @@ public class Receipt {
     // will not account vats not represented by any item
     private String createVATRow(double VAT) {
 
-        String totalAmountOfVAT = order.getAmountOfVat(VAT).getAmount()
-                .setScale(2, RoundingMode.CEILING).toString();
-        String totalNetVAT = order.getNetVat(VAT).getAmount()
-                .setScale(2, RoundingMode.CEILING).toString();
-        String totalGrossVat = order.getGrossVat(VAT).getAmount()
-                .setScale(2, RoundingMode.CEILING).toString();
+        String totalAmountOfVAT = formatMoneyValue(order.getAmountOfVat(VAT));
+        String totalNetVAT = formatMoneyValue(order.getNetVat(VAT));
+        String totalGrossVat = formatMoneyValue(order.getGrossVat(VAT));
 
         if (totalAmountOfVAT.equals("0.00"))
             return "";
 
         return formatRow(VAT * 100 + "0", totalAmountOfVAT, totalNetVAT, totalGrossVat);
+    }
+
+    private String formatMoneyValue(Money value){
+        return value.getAmount().setScale(2, RoundingMode.CEILING).toString();
     }
 
 }
