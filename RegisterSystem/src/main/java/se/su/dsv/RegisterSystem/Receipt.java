@@ -45,7 +45,7 @@ public class Receipt {
         return receipt;
     }
 
-    //TODO: add check if file already exists
+
     public void printToFile(){
         String fileName = order.getNumber();
         String pathName = "src\\test\\resources\\" + fileName + ".txt";

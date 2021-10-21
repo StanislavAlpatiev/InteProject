@@ -7,15 +7,10 @@ import java.util.*;
 
 public class Order {
 
-
-    private final TreeMap<Item, BigDecimal> items = new TreeMap<>();
-    private final HashMap<Item, Money> pricePerItem = new HashMap<>();
-    private final HashMap<Item, Money> pantPerItem = new HashMap<>();
+    //TODO clean up and write more comments
 
 
-    private final HashMap<Double, Money> VATs = new HashMap<>(); // maps the different vat-rates with amount of VAT for that rate
-    private final HashMap<Double, Money> netVATs = new HashMap<>(); // maps the different vat-rates with amount of netVAT for that rate
-    private final HashMap<Double, Money> grossVATs = new HashMap<>(); // maps the different vat-rates with amount of grossVAT for that rate
+    private final HashMap<Item, BigDecimal> items = new HashMap<>();
 
     private final String number;
     private final Currency currency;
@@ -28,15 +23,14 @@ public class Order {
             throw new IllegalArgumentException("Null currency");
         this.currency = currency;
         number = generateOrderNumber();
-        setUp();
+        totalPricePlusVat = new Money(BigDecimal.ZERO, currency);
     }
 
     public Order(Currency currency, Item... items) {
         this(currency);
         if (items == null)
             throw new IllegalArgumentException("Null item");
-        for (Item item : items)
-            addItem(item);
+        addItem(items);
     }
 
     public void addItem(Item item) {
@@ -44,15 +38,18 @@ public class Order {
             throw new IllegalArgumentException("Null item");
         if (item.getPrice().getCurrency() != currency)
             throw new IllegalArgumentException("Item price has wrong currency");
-        addToItemMaps(item);
-        addToVATMaps(item);
-
+        if (!items.containsKey(item))
+            items.put(item, BigDecimal.ONE);
+        else
+            // if item is present in the amount of it increases
+            items.put(item, items.get(item).add(BigDecimal.ONE));
+        //the total price increases by the gross price of the item
         totalPricePlusVat = totalPricePlusVat.add(item.getPricePlusVatAndPant());
 
     }
 
     public void addItem(Item... items) {
-        for (Item item : items){
+        for (Item item : items) {
             addItem(item);
         }
     }
@@ -61,55 +58,93 @@ public class Order {
         if (item == null)
             throw new IllegalArgumentException("Null item");
         if (!items.containsKey(item))
+            //the order is unchanged if the item doesn't exist
             return false;
+        if (items.get(item).doubleValue() > 1)
+            //if there exists multiples of the item the amount of it will decrease
+            items.put(item, items.get(item).subtract(BigDecimal.ONE));
+        else
+            items.remove(item);
+        //the total price decreases by the gross price of the item
         totalPricePlusVat = totalPricePlusVat.subtract(item.getPricePlusVatAndPant());
-        subtractFromItemMaps(item);
-        subtractFromVATMaps(item);
         return true;
     }
 
     public void removeItem(Item... items) {
-        for (Item item : items){
+        for (Item item : items) {
             removeItem(item);
         }
+    }
+
+    public void clear() {
+        items.clear();
+        //resets the total price to zero if all items are removed
+        totalPricePlusVat = new Money(BigDecimal.ZERO, currency);
     }
 
     public Money getTotalPricePlusVat() {
         return totalPricePlusVat;
     }
 
+    /**
+     * returns total amount of VAT in the order for a specific VAT rate
+     */
     public Money getAmountOfVat(double vatRate) {
-        if (VAT.valueOfLabel(vatRate) == 0)
-            throw new IllegalArgumentException("Not a valid VAT rate");
-        return VATs.get(vatRate);
+        checkValidVat(vatRate);
+        BigDecimal result = BigDecimal.ZERO;
+        for (Item item : items.keySet()) {
+            BigDecimal addend = calculateTotalPerVATRate(item, vatRate, item.getVATAmountOfPrice());
+            result = result.add(addend);
+        }
+        return new Money(result, currency);
     }
 
+    /**
+     * returns the total netVAT in the order for a specific VAT rate
+     */
     public Money getNetVat(double vatRate) {
-        if (VAT.valueOfLabel(vatRate) == 0)
-            throw new IllegalArgumentException("Not a valid VAT rate");
-        return netVATs.get(vatRate);
+        checkValidVat(vatRate);
+        BigDecimal result = BigDecimal.ZERO;
+        for (Item item : items.keySet()) {
+            BigDecimal addend = calculateTotalPerVATRate(item, vatRate, item.getPrice());
+            result = result.add(addend);
+        }
+        return new Money(result, currency);
     }
 
+    /**
+     * returns the total grossVAT in the order for a specific VAT rate
+     */
     public Money getGrossVat(double vatRate) {
-        if (VAT.valueOfLabel(vatRate) == 0)
-            throw new IllegalArgumentException("Not a valid VAT rate");
-        return grossVATs.get(vatRate);
+        checkValidVat(vatRate);
+        BigDecimal result = BigDecimal.ZERO;
+        for (Item item : items.keySet()) {
+            BigDecimal addend = calculateTotalPerVATRate(item, vatRate, item.getPricePlusVatAndPant());
+            result = result.add(addend);
+        }
+        return new Money(result, currency);
     }
 
+    /**
+     * returns the total grossPrice for a specific item
+     */
     public Money getTotalPricePerItem(Item item) {
-        if (item == null)
-            throw new IllegalArgumentException("Null item");
-        if (!pricePerItem.containsKey(item))
-            throw new IllegalArgumentException("Item not found");
-        return pricePerItem.get(item);
+        checkValidItem(item);
+        BigDecimal moneyAmount = item.getPricePlusVatAndPant().getAmount();
+        BigDecimal itemAmount = items.get(item);
+
+        return new Money(moneyAmount.multiply(itemAmount), currency);
     }
 
+    /**
+     * returns the total pant for a specific item
+     */
     public Money getTotalPantPerItem(Item item) {
-        if (item == null)
-            throw new IllegalArgumentException("Null item");
-        if (!pantPerItem.containsKey(item))
-            throw new IllegalArgumentException("Item not found");
-        return pantPerItem.get(item);
+        checkValidItem(item);
+        BigDecimal moneyAmount = item.getPant().getAmount();
+        BigDecimal itemAmount = items.get(item);
+
+        return new Money(moneyAmount.multiply(itemAmount), currency);
     }
 
 
@@ -122,24 +157,14 @@ public class Order {
         return number;
     }
 
-    //sets up the vat maps with value zero
-    private void setUp() {
-        Money zero = new Money(BigDecimal.ZERO, currency);
-        totalPricePlusVat = zero;
-        for (VAT vatRate : VAT.values()) {
-            VATs.put(vatRate.label, zero);
-            grossVATs.put(vatRate.label, zero);
-            netVATs.put(vatRate.label, zero);
-        }
-    }
 
     /**
-     * TODO: should check if order number already exists in database?
+     * returns an unique ordernumber based on the current date
      */
+    //TODO: should check if order number already exists in database?
     private String generateOrderNumber() {
         if (number != null)
             throw new IllegalStateException("Order number already generated");
-
         StringBuilder sb = new StringBuilder();
         generateDatePartOfOrderNr(sb);
         generateEndPartOfOrderNumber(sb);
@@ -147,12 +172,16 @@ public class Order {
         return sb.toString();
     }
 
+
     private void generateDatePartOfOrderNr(StringBuilder sb) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDateTime now = LocalDateTime.now();
         sb.append(dtf.format(now));
     }
 
+    /**
+     * generates four random uppercase letters to be put in the order number
+     */
     private void generateEndPartOfOrderNumber(StringBuilder sb) {
         Random r = new Random();
 
@@ -160,48 +189,27 @@ public class Order {
             sb.append((char) (r.nextInt(26) + 'A'));
     }
 
-    private void addToVATMaps(Item item) {
-        double vatRate = item.getVat().doubleValue();
 
-        grossVATs.put(vatRate, grossVATs.get(vatRate).add(item.getPricePlusVatAndPant()));
-        netVATs.put(vatRate, netVATs.get(vatRate).add(item.getPrice()));
-        VATs.put(vatRate, VATs.get(vatRate).add(item.getVATAmountOfPrice()));
+    private void checkValidVat(double vatRate) {
+        if (VAT.valueOfLabel(vatRate) == 0)
+            throw new IllegalArgumentException("Not a valid VAT rate");
     }
 
-    private void subtractFromVATMaps(Item item) {
-        double vatRate = item.getVat().doubleValue();
-        grossVATs.put(vatRate, grossVATs.get(vatRate).subtract(item.getPricePlusVatAndPant()));
-        netVATs.put(vatRate, netVATs.get(vatRate).subtract(item.getPrice()));
-        VATs.put(vatRate, VATs.get(vatRate).subtract(item.getVATAmountOfPrice()));
+
+    /**
+     * calculates total of specified item value based on VAT rate of the item
+     */
+    private BigDecimal calculateTotalPerVATRate(Item item, double vatRate, Money value) {
+        if (item.getVat().doubleValue() == vatRate)
+            return value.getAmount().multiply(items.get(item));
+        return BigDecimal.ZERO;
     }
 
-    private void addToItemMaps(Item item) {
-        if (items.containsKey(item)) {
 
-            items.put(item, items.get(item).add(BigDecimal.ONE));
-            pricePerItem.put(item, pricePerItem.get(item).add(item.getPricePlusVatAndPant()));
-            pantPerItem.put(item, pantPerItem.get(item).add(item.getPant()));
-
-        } else {
-
-            items.put(item, BigDecimal.ONE);
-            pricePerItem.put(item, item.getPricePlusVatAndPant());
-            pantPerItem.put(item, item.getPant());
-        }
-    }
-
-    private void subtractFromItemMaps(Item item) {
-        if (items.get(item).doubleValue() > 1) {
-
-            items.put(item, items.get(item).subtract(BigDecimal.ONE));
-            pricePerItem.put(item, pricePerItem.get(item).subtract(item.getPricePlusVatAndPant()));
-            pantPerItem.put(item, pantPerItem.get(item).subtract(item.getPant()));
-
-        } else {
-
-            items.remove(item);
-            pricePerItem.remove(item);
-            pantPerItem.remove(item);
-        }
+    private void checkValidItem(Item item) {
+        if (item == null)
+            throw new IllegalArgumentException("Null item");
+        if (!items.containsKey(item))
+            throw new IllegalArgumentException("Item not found");
     }
 }
