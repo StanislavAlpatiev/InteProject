@@ -149,6 +149,7 @@ public class Order {
 
     private void generateEndPartOfOrderNumber(StringBuilder sb) {
         Random r = new Random();
+
         for (int i = 0; i < 4; i++)
             sb.append((char) (r.nextInt(26) + 'A'));
     }
@@ -163,6 +164,7 @@ public class Order {
 
     private void subtractFromVATMaps(Item item) {
         double vatRate = item.getVat().doubleValue();
+
         grossVATs.put(vatRate, grossVATs.get(vatRate).subtract(item.getPricePlusVat()));
         netVATs.put(vatRate, netVATs.get(vatRate).subtract(item.getPrice()));
         VATs.put(vatRate, VATs.get(vatRate).subtract(item.getVATAmountOfPrice()));
@@ -170,10 +172,13 @@ public class Order {
 
     private void addToItemMaps(Item item) {
         if (items.containsKey(item)) {
+
             items.put(item, items.get(item).add(BigDecimal.ONE));
             pricePerItem.put(item, pricePerItem.get(item).add(item.getPricePlusVat()));
             pantPerItem.put(item, pantPerItem.get(item).add(item.getPant()));
+
         } else {
+
             items.put(item, BigDecimal.ONE);
             pricePerItem.put(item, item.getPricePlusVat());
             pantPerItem.put(item, item.getPant());
@@ -182,10 +187,13 @@ public class Order {
 
     private void subtractFromItemMaps(Item item) {
         if (items.get(item).doubleValue() > 1) {
+
             items.put(item, items.get(item).subtract(BigDecimal.ONE));
             pricePerItem.put(item, pricePerItem.get(item).subtract(item.getPricePlusVat()));
             pantPerItem.put(item, pantPerItem.get(item).subtract(item.getPant()));
+
         } else {
+
             items.remove(item);
             pricePerItem.remove(item);
             pantPerItem.remove(item);
