@@ -340,13 +340,9 @@ public class OrderTest {
         order.removeItem(DEFAULT_NEWSPAPER, DEFAULT_BEVERAGE, DEFAULT_TOBACCO);
         for (Item item : order.getItems().keySet()) {
             double vatRate = item.getVat().doubleValue();
-<<<<<<< HEAD
-            //Money expected = item.getPricePlusVat();
-=======
             Money expected = item.getPricePlusVatAndPant();
->>>>>>> august
             Money actual = order.getGrossVat(vatRate);
-//            assertEquals(expected, actual);
+           assertEquals(expected, actual);
         }
     }
 
