@@ -7,6 +7,9 @@ public class MockBank implements BankService {
     
     @Override
     public BigDecimal getRate(Currency from, Currency to) throws IOException {
+        if(from == to) {
+            return BigDecimal.valueOf(1);
+        }
         if(from == Currency.USD){
             return BigDecimal.valueOf(10);
         } else if (from == Currency.SEK){
@@ -24,6 +27,9 @@ public class MockBank implements BankService {
     @Override
     public Money exchange(Money money, Currency currency, BigDecimal rate) {
         BigDecimal newAmount = money.getAmount().multiply(rate);
+//        System.out.println(rate);
+//        System.out.println(money);
+        System.out.println(newAmount);
         return new Money(newAmount, currency);
     }
 

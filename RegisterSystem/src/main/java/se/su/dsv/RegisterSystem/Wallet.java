@@ -1,5 +1,7 @@
 package se.su.dsv.RegisterSystem;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,15 +12,19 @@ import java.util.stream.Collectors;
 public class Wallet {
     private final Customer owner;
     private Map<Currency, Money> walletContent = new HashMap<Currency, Money>();
+    private BankService bank;
 
-    public Wallet(Customer owner, Money... money) {
+    public Wallet(Customer owner, BankService bank, Money... money) {
         this.owner = owner;
+        this.bank = bank;
         if (Arrays.stream(money).count() > 0) {
             Arrays.stream(money).forEach(e -> {
                 walletContent.put(e.getCurrency(), e);
             });
         }
+
     }
+
 
     public Customer getOwner() {
         return owner;
@@ -70,5 +76,15 @@ public class Wallet {
     @Override
     public int hashCode() {
         return Objects.hash(owner);
+    }
+
+    public Money totalValueInCurrency(Currency currency) throws IOException {
+        Money moneyOfCurrency = new Money(new BigDecimal("0"), currency);
+        for (Map.Entry<Currency, Money> entry : walletContent.entrySet()) {
+            System.out.println(entry.getValue());
+            moneyOfCurrency = moneyOfCurrency.add(bank.exchange(entry.getValue(), currency));
+            System.out.println(moneyOfCurrency);
+        }
+        return moneyOfCurrency;
     }
 }
