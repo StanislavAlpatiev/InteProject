@@ -204,6 +204,15 @@ public class OrderTest {
     }
 
     @Test
+    void successfulRemoveDecreasesTotalOrderPriceMultipleValues() {
+        Order order = new Order(DEFAULT_CURRENCY, DEFAULT_GROCERY, DEFAULT_TOBACCO, DEFAULT_BEVERAGE);
+        order.removeItem(DEFAULT_TOBACCO);
+        Money expected = DEFAULT_GROCERY.getPricePlusVatAndPant().add(DEFAULT_BEVERAGE.getPricePlusVatAndPant());
+        Money actual = order.getTotalPricePlusVat();
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void clearRemovesItems() {
         Order order = new Order(DEFAULT_CURRENCY, DEFAULT_TOBACCO, DEFAULT_GROCERY);
         order.clear();
@@ -255,6 +264,8 @@ public class OrderTest {
         }
     }
 
+
+    //kanske utnyttja remove på dessa
     @ParameterizedTest
     @EnumSource(VAT.class)
     void getAmountOfVatReturnsZeroForVatRateNotRepresentedInOrder(VAT vat) {
