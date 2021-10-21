@@ -34,12 +34,7 @@ public class Register {
         inventory.setCurrency(currency);
     }
 
-<<<<<<< HEAD
     public void addItem() {
-=======
-    public void setCurrency(Currency otherCurrency) {}
-    public void addItem(){
->>>>>>> 84da8a4d73a628c38480e6f995ccc2cefd52728e
         // Lägger till ett item
     }
 
