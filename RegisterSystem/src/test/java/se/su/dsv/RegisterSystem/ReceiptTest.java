@@ -10,6 +10,7 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//TODO: Add comments to what every method does
 public class ReceiptTest {
 
     // to be able to create receipt without random generated order number
@@ -105,6 +106,7 @@ public class ReceiptTest {
 
         mockOrder.addItem(DEFAULT_ITEM_1);
 
+        //TODO: refactor Date since it is deprecated
         Date mockDate = new Date(99, Calendar.JANUARY, 1, 0, 0);
         Receipt receipt = new Receipt(mockOrder, mockDate);
 
@@ -128,6 +130,8 @@ public class ReceiptTest {
         for (int i = 0; i < 9; i++) {
             mockOrder.addItem(DEFAULT_ITEM_4);
         }
+        
+        //TODO: refactor Date since it is deprecated
         Date mockDate = new Date(99, Calendar.JANUARY, 1, 0, 0);
         Receipt receipt = new Receipt(mockOrder, mockDate);
 

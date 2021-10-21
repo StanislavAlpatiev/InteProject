@@ -3,6 +3,7 @@ package se.su.dsv.RegisterSystem;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+//TODO: Add comments to each method
 public class Item implements Comparable<Item> {
 
     private final String name;

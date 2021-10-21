@@ -3,6 +3,7 @@ package se.su.dsv.RegisterSystem;
 import java.io.IOException;
 import java.util.HashMap;
 
+//TODO: add comments to each method
 public class Register {
 
     private Currency currency;

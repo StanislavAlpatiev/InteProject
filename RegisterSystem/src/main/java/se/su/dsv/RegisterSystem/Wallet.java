@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+//TODO: Comments for each method!
 public class Wallet {
     private final Customer owner;
     private Map<Currency, Money> walletContent = new HashMap<Currency, Money>();
