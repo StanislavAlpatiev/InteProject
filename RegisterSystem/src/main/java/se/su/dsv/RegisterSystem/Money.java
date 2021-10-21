@@ -3,6 +3,7 @@ package se.su.dsv.RegisterSystem;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+//TODO: comments for each method!
 public class Money implements Comparable<Money> {
 
     private BigDecimal amount;

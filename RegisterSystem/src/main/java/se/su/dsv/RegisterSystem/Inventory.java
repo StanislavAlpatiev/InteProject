@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+//Add comments to each method!
 public class Inventory {
 
     private HashMap<Item, Integer> items;
