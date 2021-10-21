@@ -26,9 +26,9 @@ public class Order {
     public Order(Currency currency) {
         if (currency == null)
             throw new IllegalArgumentException("Null currency");
-        setUp();
         this.currency = currency;
         number = generateOrderNumber();
+        setUp();
     }
 
     public Order(Currency currency, Item... items) {
@@ -42,6 +42,8 @@ public class Order {
     public void addItem(Item item) {
         if (item == null)
             throw new IllegalArgumentException("Null item");
+        if (item.getPrice().getCurrency() != currency)
+            throw new IllegalArgumentException("Item price has wrong currency");
         addToItemMaps(item);
         addToVATMaps(item);
 
@@ -122,7 +124,7 @@ public class Order {
 
     //sets up the vat maps with value zero
     private void setUp() {
-        Money zero = new Money(BigDecimal.ZERO, Currency.SEK);
+        Money zero = new Money(BigDecimal.ZERO, currency);
         totalPricePlusVat = zero;
         for (VAT vatRate : VAT.values()) {
             VATs.put(vatRate.label, zero);
@@ -168,12 +170,8 @@ public class Order {
 
     private void subtractFromVATMaps(Item item) {
         double vatRate = item.getVat().doubleValue();
-<<<<<<< HEAD
-        grossVATs.put(vatRate, grossVATs.get(vatRate).subtract(item.getPricePlusVatAndPant()));
-=======
 
-        grossVATs.put(vatRate, grossVATs.get(vatRate).subtract(item.getPricePlusVat()));
->>>>>>> ea8879453f8f2c68a7f7141feafb78cd51e5e8b7
+        grossVATs.put(vatRate, grossVATs.get(vatRate).subtract(item.getPricePlusVatAndPant()));
         netVATs.put(vatRate, netVATs.get(vatRate).subtract(item.getPrice()));
         VATs.put(vatRate, VATs.get(vatRate).subtract(item.getVATAmountOfPrice()));
     }

@@ -101,6 +101,16 @@ public class OrderTest {
     }
 
     @Test
+    void addItemsThrowsExceptionWhenItemHasWrongCurrency() {
+        {
+            assertThrows(IllegalArgumentException.class, () -> {
+                DEFAULT_ORDER.addItem(new Item("Item", "12345678", "Producer",
+                        ItemType.GROCERY, new Money(new BigDecimal("50"), Currency.USD)));}
+            );
+        }
+    }
+
+    @Test
     void addItemsAddsItemToOrder() {
         DEFAULT_ORDER.addItem(DEFAULT_NEWSPAPER);
         assertTrue(DEFAULT_ORDER.getItems().containsKey(DEFAULT_NEWSPAPER));
@@ -329,7 +339,7 @@ public class OrderTest {
         order.removeItem(DEFAULT_NEWSPAPER, DEFAULT_BEVERAGE, DEFAULT_TOBACCO);
         for (Item item : order.getItems().keySet()) {
             double vatRate = item.getVat().doubleValue();
-            Money expected = item.getPricePlusVat();
+            Money expected = item.getPricePlusVatAndPant();
             Money actual = order.getGrossVat(vatRate);
             assertEquals(expected, actual);
         }
