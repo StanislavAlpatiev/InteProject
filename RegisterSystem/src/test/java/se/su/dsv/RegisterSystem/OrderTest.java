@@ -1,7 +1,8 @@
 package se.su.dsv.RegisterSystem;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ public class OrderTest {
     static final Item DEFAULT_TOBACCO = new Item("Snus", "12345678", "Dn", ItemType.TOBACCO,
             new Money(new BigDecimal("999.75"), DEFAULT_CURRENCY));
     static final Order DEFAULT_ORDER = new Order(DEFAULT_CURRENCY);
+    static final Money ZERO = new Money(BigDecimal.ZERO, DEFAULT_CURRENCY);
 
 
     @Test
@@ -197,9 +199,8 @@ public class OrderTest {
     void successfulRemoveDecreasesTotalOrderPrice() {
         Order order = new Order(DEFAULT_CURRENCY, DEFAULT_TOBACCO);
         order.removeItem(DEFAULT_TOBACCO);
-        Money expected = new Money(BigDecimal.ZERO, DEFAULT_CURRENCY);
         Money actual = order.getTotalPricePlusVat();
-        assertEquals(expected, actual);
+        assertEquals(ZERO, actual);
     }
 
     @Test
@@ -213,9 +214,8 @@ public class OrderTest {
     void clearRemovesTotalPrice() {
         Order order = new Order(DEFAULT_CURRENCY, DEFAULT_TOBACCO);
         order.clear();
-        Money expected = new Money(BigDecimal.ZERO, DEFAULT_CURRENCY);
         Money actual = order.getTotalPricePlusVat();
-        assertEquals(expected, actual);
+        assertEquals(ZERO, actual);
     }
 
     @Test
@@ -253,6 +253,23 @@ public class OrderTest {
             Money actual = order.getGrossVat(vatRate);
             assertEquals(expected, actual);
         }
+    }
+
+    @ParameterizedTest
+    @EnumSource(VAT.class)
+    void getAmountOfVatReturnsZeroForVatRateNotRepresentedInOrder(VAT vat) {
+        assertEquals(ZERO, DEFAULT_ORDER.getAmountOfVat(vat.label));
+    }
+
+    @ParameterizedTest
+    @EnumSource(VAT.class)
+    void getNetVatReturnsZeroForVatRateNotRepresentedInOrder(VAT vat) {
+        assertEquals(ZERO, DEFAULT_ORDER.getNetVat(vat.label));
+    }
+    @ParameterizedTest
+    @EnumSource(VAT.class)
+    void getGrossVatReturnsZeroForVatRateNotRepresentedInOrder(VAT vat) {
+        assertEquals(ZERO, DEFAULT_ORDER.getGrossVat(vat.label));
     }
 
     @Test

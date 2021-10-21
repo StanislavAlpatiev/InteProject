@@ -191,7 +191,10 @@ public class Order {
 
 
     private void checkValidVat(double vatRate) {
-        if (VAT.valueOfLabel(vatRate) == 0)
+        for (VAT validRate : VAT.values()){
+            if (vatRate == validRate.label)
+                return;
+        }
             throw new IllegalArgumentException("Not a valid VAT rate");
     }
 
