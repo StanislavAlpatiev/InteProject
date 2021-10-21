@@ -14,18 +14,22 @@ public class OrderTest {
     //TODO clean up and write comments, better names for tests
 
 
-    static Item DEFAULT_ITEM_1;
-    static Item DEFAULT_ITEM_2;
-    static Item DEFAULT_ITEM_3;
-    static Item DEFAULT_ITEM_4;
+    static Item DEFAULT_NEWSPAPER;
+    static Item DEFAULT_BEVERAGE;
+    static Item DEFAULT_GROCERY;
+    static Item DEFAULT_TOBACCO;
     static Order DEFAULT_ORDER;
 
     @BeforeAll
     static void setUp() {
-        DEFAULT_ITEM_1 = new Item("DN Newspaper", "12345678", "Dn", ItemType.NEWSPAPER, new Money(new BigDecimal("200"), Currency.SEK));
-        DEFAULT_ITEM_2 = new Item("Coca-cola", "12345678", "Dn", new Money(new BigDecimal("20"), Currency.SEK), new BigDecimal("20"));
-        DEFAULT_ITEM_3 = new Item("Watermelon bigpack", "12345678", "Dn", ItemType.GROCERY, new Money(new BigDecimal("50"), Currency.SEK));
-        DEFAULT_ITEM_4 = new Item("Snus", "12345678", "Dn", ItemType.TOBACCO, new Money(new BigDecimal("1000"), Currency.SEK));
+        DEFAULT_NEWSPAPER = new Item("DN Newspaper", "12345678", "Dn",
+                ItemType.NEWSPAPER, new Money(new BigDecimal("200"), Currency.SEK));
+        DEFAULT_BEVERAGE = new Item("Coca-cola", "12345678", "Dn",
+                new Money(new BigDecimal("20"), Currency.SEK), new BigDecimal("20"));
+        DEFAULT_GROCERY = new Item("Watermelon bigpack", "12345678", "Dn",
+                ItemType.GROCERY, new Money(new BigDecimal("50"), Currency.SEK));
+        DEFAULT_TOBACCO = new Item("Snus", "12345678", "Dn", ItemType.TOBACCO,
+                new Money(new BigDecimal("1000"), Currency.SEK));
         DEFAULT_ORDER = new Order();
     }
 
@@ -41,9 +45,9 @@ public class OrderTest {
 
     @Test
     void constructorAddsItemsToOrder() {
-        Order order = new Order(DEFAULT_ITEM_1, DEFAULT_ITEM_2);
-        assertTrue(order.getItems().containsKey(DEFAULT_ITEM_1));
-        assertTrue(order.getItems().containsKey(DEFAULT_ITEM_2));
+        Order order = new Order(DEFAULT_NEWSPAPER, DEFAULT_GROCERY);
+        assertTrue(order.getItems().containsKey(DEFAULT_NEWSPAPER));
+        assertTrue(order.getItems().containsKey(DEFAULT_GROCERY));
     }
 
 
@@ -57,8 +61,9 @@ public class OrderTest {
     void constructorGeneratesOrderNumberBasedOnCurrentDate() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDateTime now = LocalDateTime.now();
-        Order order = new Order();
-        assertEquals(order.getNumber().substring(0, 8), dtf.format(now));
+        String expected = dtf.format(now);
+        String actual = DEFAULT_ORDER.getNumber().substring(0, 8);
+        assertEquals(expected, actual);
     }
 
 
@@ -77,24 +82,24 @@ public class OrderTest {
     void addItemsThrowsExceptionWhenParameterIsNull() {
         {
             assertThrows(IllegalArgumentException.class, () -> {
-                DEFAULT_ORDER.addItem(null);
+                DEFAULT_ORDER.addItem((Item)null);
             });
         }
     }
 
     @Test
     void addItemsAddsItemToOrder() {
-        DEFAULT_ORDER.addItem(DEFAULT_ITEM_1);
-        assertTrue(DEFAULT_ORDER.getItems().containsKey(DEFAULT_ITEM_1));
-        assertDoesNotThrow(() -> DEFAULT_ORDER.getTotalPricePerItem(DEFAULT_ITEM_1));
-        assertDoesNotThrow(() -> DEFAULT_ORDER.getTotalPantPerItem(DEFAULT_ITEM_1));
+        DEFAULT_ORDER.addItem(DEFAULT_NEWSPAPER);
+        assertTrue(DEFAULT_ORDER.getItems().containsKey(DEFAULT_NEWSPAPER));
+        assertDoesNotThrow(() -> DEFAULT_ORDER.getTotalPricePerItem(DEFAULT_NEWSPAPER));
+        assertDoesNotThrow(() -> DEFAULT_ORDER.getTotalPantPerItem(DEFAULT_NEWSPAPER));
     }
 
     @Test
     void addItemsIncreasesTotalOrderPriceForEmptyOrder() {
         Order order = new Order();
-        order.addItem(DEFAULT_ITEM_1);
-        Money expected = DEFAULT_ITEM_1.getPricePlusVat();
+        order.addItem(DEFAULT_NEWSPAPER);
+        Money expected = DEFAULT_NEWSPAPER.getPricePlusVat();
         Money actual = order.getTotalPricePlusVat();
         assertEquals(expected, actual);
     }
@@ -102,9 +107,9 @@ public class OrderTest {
 
     @Test
     void addItemsIncreasesTotalOrderPriceForOrderContainingItems() {
-        Order order = new Order(DEFAULT_ITEM_1);
-        order.addItem(DEFAULT_ITEM_2);
-        Money expected = DEFAULT_ITEM_1.getPricePlusVat().add(DEFAULT_ITEM_2.getPricePlusVat());
+        Order order = new Order(DEFAULT_BEVERAGE);
+        order.addItem(DEFAULT_GROCERY);
+        Money expected = DEFAULT_BEVERAGE.getPricePlusVat().add(DEFAULT_GROCERY.getPricePlusVat());
         Money actual = order.getTotalPricePlusVat();
         assertEquals(expected, actual);
     }
@@ -114,8 +119,21 @@ public class OrderTest {
         Order order = addItemsWithDifferentVats();
         for (Item item : order.getItems().keySet()) {
             double vatRate = item.getVat().doubleValue();
-            Money expectedAmountOfVAT = item.getVATAmountOfPrice();
-            assertEquals(expectedAmountOfVAT, order.getAmountOfVat(vatRate));
+            Money expected = item.getVATAmountOfPrice();
+            Money actual = order.getAmountOfVat(vatRate);
+            assertEquals(expected, actual);
+        }
+    }
+
+    @Test
+    void addItemsUpdatesVATMapContainingItems() {
+        Order order = addItemsWithDifferentVats();
+        for (Item item : order.getItems().keySet()) {
+            order.addItem(item);
+            double vatRate = item.getVat().doubleValue();
+            Money expected = item.getVATAmountOfPrice().add(item.getVATAmountOfPrice());
+            Money actual = order.getAmountOfVat(vatRate);
+            assertEquals(expected, actual);
         }
     }
 
@@ -124,18 +142,45 @@ public class OrderTest {
         Order order = addItemsWithDifferentVats();
         for (Item item : order.getItems().keySet()) {
             double vatRate = item.getVat().doubleValue();
-            Money expectedNetVAT = item.getPrice();
-            assertEquals(expectedNetVAT, order.getNetVat(vatRate));
+            Money expected = item.getPrice();
+            Money actual = order.getNetVat(vatRate);
+            assertEquals(expected, actual);
         }
     }
+
+    @Test
+    void addItemsUpdatesNetMapContainingItems() {
+        Order order = addItemsWithDifferentVats();
+        for (Item item : order.getItems().keySet()) {
+            order.addItem(item);
+            double vatRate = item.getVat().doubleValue();
+            Money expected = item.getPrice().add(item.getPrice());
+            Money actual = order.getNetVat(vatRate);
+            assertEquals(expected, actual);
+        }
+    }
+
 
     @Test
     void addItemsUpdatesGrossVATMap() {
         Order order = addItemsWithDifferentVats();
         for (Item item : order.getItems().keySet()) {
             double vatRate = item.getVat().doubleValue();
-            Money expectedGrossVAT = item.getPricePlusVat();
-            assertEquals(expectedGrossVAT, order.getGrossVat(vatRate));
+            Money expected = item.getPricePlusVat();
+            Money actual = order.getGrossVat(vatRate);
+            assertEquals(expected, actual);
+        }
+    }
+
+    @Test
+    void addItemsUpdatesGrossMapContainingItems() {
+        Order order = addItemsWithDifferentVats();
+        for (Item item : order.getItems().keySet()) {
+            order.addItem(item);
+            double vatRate = item.getVat().doubleValue();
+            Money expected = item.getPricePlusVat().add(item.getPricePlusVat());
+            Money actual = order.getGrossVat(vatRate);
+            assertEquals(expected, actual);
         }
     }
 
@@ -144,43 +189,43 @@ public class OrderTest {
     void removeThrowsExceptionWhenParameterIsNull() {
         {
             assertThrows(IllegalArgumentException.class, () -> {
-                DEFAULT_ORDER.removeItem(null);
+                DEFAULT_ORDER.removeItem((Item)null);
             });
         }
     }
 
     @Test
     void removeItemsRemovesItemFromOrder() {
-        Order order = new Order(DEFAULT_ITEM_1);
-        order.removeItem(DEFAULT_ITEM_1);
-        assertFalse(order.getItems().containsKey(DEFAULT_ITEM_1));
-        assertThrows(IllegalArgumentException.class, () -> order.getTotalPricePerItem(DEFAULT_ITEM_1));
-        assertThrows(IllegalArgumentException.class, () -> order.getTotalPantPerItem(DEFAULT_ITEM_1));
+        Order order = new Order(DEFAULT_TOBACCO);
+        order.removeItem(DEFAULT_TOBACCO);
+        assertFalse(order.getItems().containsKey(DEFAULT_TOBACCO));
+        assertThrows(IllegalArgumentException.class, () -> order.getTotalPricePerItem(DEFAULT_TOBACCO));
+        assertThrows(IllegalArgumentException.class, () -> order.getTotalPantPerItem(DEFAULT_TOBACCO));
     }
 
     @Test
     void removeItemsDecreasesAmountOfSameItem() {
-        Order order = new Order(DEFAULT_ITEM_1, DEFAULT_ITEM_1);
-        order.removeItem(DEFAULT_ITEM_1);
-        assertEquals(order.getItems().get(DEFAULT_ITEM_1), new BigDecimal("1"));
+        Order order = new Order(DEFAULT_GROCERY, DEFAULT_GROCERY);
+        order.removeItem(DEFAULT_GROCERY);
+        assertEquals(order.getItems().get(DEFAULT_GROCERY), new BigDecimal("1"));
     }
 
     @Test
     void removeItemsReturnsTrueWhenRemoveSucceed() {
-        Order order = new Order(DEFAULT_ITEM_1);
-        assertTrue(order.removeItem(DEFAULT_ITEM_1));
+        Order order = new Order(DEFAULT_GROCERY);
+        assertTrue(order.removeItem(DEFAULT_GROCERY));
     }
 
     @Test
     void removeItemsReturnsFalseWhenRemoveFailed() {
-        Order order = new Order(DEFAULT_ITEM_1);
-        assertFalse(order.removeItem(DEFAULT_ITEM_2));
+        Order order = new Order(DEFAULT_GROCERY);
+        assertFalse(order.removeItem(DEFAULT_TOBACCO));
     }
 
     @Test
     void removeItemsDecreasesTotalOrderPriceForOrderWithOneItem() {
-        Order order = new Order(DEFAULT_ITEM_1);
-        order.removeItem(DEFAULT_ITEM_1);
+        Order order = new Order(DEFAULT_TOBACCO);
+        order.removeItem(DEFAULT_TOBACCO);
         double expected = 0;
         double actual = order.getTotalPricePlusVat().getAmount().doubleValue();
         assertEquals(expected, actual);
@@ -188,17 +233,17 @@ public class OrderTest {
 
     @Test
     void removeItemsDecreasesTotalOrderPriceForOrderWithMultipleItems() {
-        Order order = new Order(DEFAULT_ITEM_1, DEFAULT_ITEM_2);
-        order.removeItem(DEFAULT_ITEM_1);
-        Money expected = DEFAULT_ITEM_2.getPricePlusVat();
+        Order order = new Order(DEFAULT_NEWSPAPER, DEFAULT_BEVERAGE);
+        order.removeItem(DEFAULT_NEWSPAPER);
+        Money expected = DEFAULT_BEVERAGE.getPricePlusVat();
         Money actual = order.getTotalPricePlusVat();
         assertEquals(expected, actual);
     }
 
     @Test
-    void totalOrderPriceStaysUnchangedWhenTryToRemoveItemNotInOrder() {
+    void totalOrderPriceStaysUnchangedWhenTryToRemoveNonExistingItem() {
         Order order = new Order();
-        order.removeItem(DEFAULT_ITEM_2);
+        order.removeItem(DEFAULT_NEWSPAPER);
         double expected = 0;
         double actual = order.getTotalPricePlusVat().getAmount().doubleValue();
         assertEquals(expected, actual);
@@ -228,7 +273,6 @@ public class OrderTest {
     }
 
     @Test
-        //split up, change name
     void removeItemsUpdatesGrossVATMap() {
         Order order = removeItemsWithDifferentVats();
         for (Item item : order.getItems().keySet()) {
@@ -260,11 +304,12 @@ public class OrderTest {
 
     @Test
     void getTotalPantPerItemReturnsCorrectValue() {
-        Order order = new Order(DEFAULT_ITEM_2);
-        Money expected = DEFAULT_ITEM_2.getPant();
-        Money actual = order.getTotalPantPerItem(DEFAULT_ITEM_2);
-        assertEquals(expected, actual);
-
+        Order order = addItemsWithDifferentVats();
+        for (Item item : order.getItems().keySet()) {
+            Money expected = item.getPant();
+            Money actual = order.getTotalPantPerItem(item);
+            assertEquals(expected, actual);
+        }
     }
 
     @Test
@@ -301,17 +346,13 @@ public class OrderTest {
 
     Order addItemsWithDifferentVats() {
         Order order = new Order();
-        order.addItem(DEFAULT_ITEM_1);
-        order.addItem(DEFAULT_ITEM_2);
-        order.addItem(DEFAULT_ITEM_4);
+        order.addItem(DEFAULT_NEWSPAPER, DEFAULT_BEVERAGE, DEFAULT_TOBACCO);
         return order;
     }
 
     Order removeItemsWithDifferentVats() {
-        Order order = new Order(DEFAULT_ITEM_1, DEFAULT_ITEM_2, DEFAULT_ITEM_4);
-        order.removeItem(DEFAULT_ITEM_1);
-        order.removeItem(DEFAULT_ITEM_2);
-        order.removeItem(DEFAULT_ITEM_4);
+        Order order = new Order(DEFAULT_NEWSPAPER, DEFAULT_BEVERAGE, DEFAULT_TOBACCO);
+        order.removeItem(DEFAULT_NEWSPAPER, DEFAULT_BEVERAGE, DEFAULT_TOBACCO);
         return order;
     }
 

@@ -13,24 +13,13 @@ public class Order {
     private final HashMap<Item, Money> pantPerItem = new HashMap<>();
 
 
-    private final HashMap<Double, Money> VATs = new HashMap<>(); // maps the different vat-rates with amount of VAT in receipt for that rate
-    private final HashMap<Double, Money> netVATs = new HashMap<>(); // maps the different vat-rates with amount of netVAT in receipt for that rate
-    private final HashMap<Double, Money> grossVATs = new HashMap<>(); // maps the different vat-rates with amount of grossVAT in receipt for that rate
+    private final HashMap<Double, Money> VATs = new HashMap<>(); // maps the different vat-rates with amount of VAT for that rate
+    private final HashMap<Double, Money> netVATs = new HashMap<>(); // maps the different vat-rates with amount of netVAT for that rate
+    private final HashMap<Double, Money> grossVATs = new HashMap<>(); // maps the different vat-rates with amount of grossVAT for that rate
 
     private final String number;
 
     private Money totalPricePlusVat;
-
-    //sets up the vat maps with value zero
-    private void setUp() {
-        Money zero = new Money(BigDecimal.ZERO, Currency.SEK);
-        totalPricePlusVat = zero;
-        for (VAT vatRate : VAT.values()) {
-            VATs.put(vatRate.label, zero);
-            grossVATs.put(vatRate.label, zero);
-            netVATs.put(vatRate.label, zero);
-        }
-    }
 
 
     public Order() {
@@ -46,24 +35,9 @@ public class Order {
             addItem(item);
     }
 
-    /**
-     * TODO: should check if order number already exists in database?
-     */
-    private String generateOrderNumber() {
-        if (number != null)
-            throw new IllegalStateException("Order number already generated");
-
-        StringBuilder sb = new StringBuilder();
-        generateDate(sb);
-        generateRandomFourCharacters(sb);
-
-        return sb.toString();
-    }
-
     public void addItem(Item item) {
         if (item == null)
             throw new IllegalArgumentException("Null item");
-
         addToItemMaps(item);
         addToVATMaps(item);
 
@@ -71,29 +45,28 @@ public class Order {
 
     }
 
+    public void addItem(Item... items) {
+        for (Item item : items){
+            addItem(item);
+        }
+    }
+
     public boolean removeItem(Item item) {
         if (item == null)
             throw new IllegalArgumentException("Null item");
         if (!items.containsKey(item))
             return false;
-        subtractFromItemMaps(item);
         totalPricePlusVat = totalPricePlusVat.subtract(item.getPricePlusVat());
+        subtractFromItemMaps(item);
         subtractFromVATMaps(item);
         return true;
     }
 
-    private void generateDate(StringBuilder sb) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
-        LocalDateTime now = LocalDateTime.now();
-        sb.append(dtf.format(now));
+    public void removeItem(Item... items) {
+        for (Item item : items){
+            removeItem(item);
+        }
     }
-
-    private void generateRandomFourCharacters(StringBuilder sb) {
-        Random r = new Random();
-        for (int i = 0; i < 4; i++)
-            sb.append((char) (r.nextInt(26) + 'A'));
-    }
-
 
     public Money getTotalPricePlusVat() {
         return totalPricePlusVat;
@@ -143,6 +116,43 @@ public class Order {
         return number;
     }
 
+    //sets up the vat maps with value zero
+    private void setUp() {
+        Money zero = new Money(BigDecimal.ZERO, Currency.SEK);
+        totalPricePlusVat = zero;
+        for (VAT vatRate : VAT.values()) {
+            VATs.put(vatRate.label, zero);
+            grossVATs.put(vatRate.label, zero);
+            netVATs.put(vatRate.label, zero);
+        }
+    }
+
+    /**
+     * TODO: should check if order number already exists in database?
+     */
+    private String generateOrderNumber() {
+        if (number != null)
+            throw new IllegalStateException("Order number already generated");
+
+        StringBuilder sb = new StringBuilder();
+        generateDatePartOfOrderNr(sb);
+        generateEndPartOfOrderNumber(sb);
+
+        return sb.toString();
+    }
+
+    private void generateDatePartOfOrderNr(StringBuilder sb) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDateTime now = LocalDateTime.now();
+        sb.append(dtf.format(now));
+    }
+
+    private void generateEndPartOfOrderNumber(StringBuilder sb) {
+        Random r = new Random();
+        for (int i = 0; i < 4; i++)
+            sb.append((char) (r.nextInt(26) + 'A'));
+    }
+
     private void addToVATMaps(Item item) {
         double vatRate = item.getVat().doubleValue();
 
@@ -153,7 +163,6 @@ public class Order {
 
     private void subtractFromVATMaps(Item item) {
         double vatRate = item.getVat().doubleValue();
-
         grossVATs.put(vatRate, grossVATs.get(vatRate).subtract(item.getPricePlusVat()));
         netVATs.put(vatRate, netVATs.get(vatRate).subtract(item.getPrice()));
         VATs.put(vatRate, VATs.get(vatRate).subtract(item.getVATAmountOfPrice()));
@@ -182,5 +191,4 @@ public class Order {
             pantPerItem.remove(item);
         }
     }
-
 }
