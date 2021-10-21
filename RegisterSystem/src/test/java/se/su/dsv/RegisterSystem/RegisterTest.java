@@ -1,8 +1,6 @@
 package se.su.dsv.RegisterSystem;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -54,7 +52,7 @@ public class RegisterTest {
         // makes sure the currency is set
         assertEquals(DEFAULT_CURRENCY, defaultRegister.getCurrency());
         // makes sure an inventory is created in constructor
-        assertTrue(defaultRegister.getInventory() != null);
+        assertNotNull(defaultRegister.getInventory());
         // makes sure the currency is carried down into the inventory.
         assertEquals(DEFAULT_CURRENCY, defaultRegister.getInventory().getCurrency());
 
@@ -118,7 +116,7 @@ public class RegisterTest {
 
     //Sees whether bought items are removed from the inventory
     @Test
-    void itemsRemovedFromInventoryWhenBoughtInRegisterTest() throws FileNotFoundException {
+    void itemsRemovedFromInventoryWhenBoughtInRegisterTest() throws IOException {
         defaultRegister.checkOut(DEFAULT_ORDER, defaultWallet);
 
         Inventory inventory = defaultRegister.getInventory();
@@ -146,7 +144,7 @@ public class RegisterTest {
 
     //Sees whether money is removed from wallet during checkout.
     @Test
-    void moneyIsRemovedFromWalletDuringCheckoutTest() {
+    void moneyIsRemovedFromWalletDuringCheckoutTest() throws IOException {
 
         defaultRegister.checkOut(DEFAULT_ORDER, defaultWallet);
         // compareTo(BigDecimal.ZERO) returns 0 if the contents of the wallet is 0 -
@@ -171,8 +169,13 @@ public class RegisterTest {
 
         defaultRegister.checkOut(DEFAULT_ORDER, defaultWallet);
 
+<<<<<<< HEAD
         //Since wallet content is equals to cost of order, after checkout there should be 0 left in wallet.
         assertEquals(BigDecimal.valueOf(0.0), defaultWallet.totalValueInCurrency(DEFAULT_CURRENCY).getAmount());
         //assertEquals(BigDecimal.ZERO, defaultWallet.getTotalAmount(DEFAULT_CURRENCY));
+=======
+        //Since wallet content is equals to cost of order, after checkout there should be 0 left in wallet. 
+        assertEquals(BigDecimal.valueOf(0.0), defaultWallet.totalValueInCurrency(DEFAULT_CURRENCY).getAmount());
+>>>>>>> 08d6bcdb8b36e3cdbe9c6e5544a97ea9ca5e1f53
     }
 }

@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 class InventoryTest {
 

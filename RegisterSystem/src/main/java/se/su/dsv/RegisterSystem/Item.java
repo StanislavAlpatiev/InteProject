@@ -193,6 +193,9 @@ public class Item implements Comparable<Item> {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append(getName() + "@" + getProductNo() + "@" + getProducer() + "@" + getType() + "@" + getPrice().toExport());
+        if(type == ItemType.BEVERAGE){
+            sb.append("@" + volumeLiter);
+        }
         return sb.toString();
     }
 }
