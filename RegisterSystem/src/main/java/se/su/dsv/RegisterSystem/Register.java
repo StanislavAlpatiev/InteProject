@@ -12,7 +12,6 @@ public class Register {
     private Currency currency;
     private final Inventory inventory;
     private static final Bank bank = new Bank();
-    private HashMap<Item, Integer> itemsBeingBought = new HashMap<>();
 
     public Register(Currency currency) {
         if (currency == null) {
@@ -76,16 +75,6 @@ public class Register {
         this.currency = currency;
         inventory.setCurrency(currency);
     }
-
-    public void addItem() {
-        // Lägger till ett item
-    }
-
-    public void removeItem() {
-        // Tar bort ett item
-    }
-
-
 
     public Currency getCurrency() {
         return currency;

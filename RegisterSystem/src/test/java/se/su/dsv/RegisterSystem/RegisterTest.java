@@ -1,8 +1,6 @@
 package se.su.dsv.RegisterSystem;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -54,7 +52,7 @@ public class RegisterTest {
         // makes sure the currency is set
         assertEquals(DEFAULT_CURRENCY, defaultRegister.getCurrency());
         // makes sure an inventory is created in constructor
-        assertTrue(defaultRegister.getInventory() != null);
+        assertNotNull(defaultRegister.getInventory());
         // makes sure the currency is carried down into the inventory.
         assertEquals(DEFAULT_CURRENCY, defaultRegister.getInventory().getCurrency());
 
