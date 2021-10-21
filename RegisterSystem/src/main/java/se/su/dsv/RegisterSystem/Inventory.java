@@ -119,8 +119,14 @@ public class Inventory {
             for (Map.Entry<String, Integer> entry : newItems.entrySet()) {
                 String stringEntry = entry.getKey();
                 String[] params = stringEntry.split("@");
-                add(new Item(params[0], params[1], params[2], ItemType.valueOf(params[3]),
-                        new Money(new BigDecimal(params[4]), Currency.valueOf(params[5]))));
+                if(params.length==7){
+                    Money money = new Money(new BigDecimal(params[4]), Currency.valueOf(params[5]));
+                    add(new Item(params[0], params[1], params[2], money, new BigDecimal(params[6])));
+                } else {
+                    add(new Item(params[0], params[1], params[2], ItemType.valueOf(params[3]),
+                    new Money(new BigDecimal(params[4]), Currency.valueOf(params[5]))));
+                }
+
 
             }
             // close reader
