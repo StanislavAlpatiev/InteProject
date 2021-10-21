@@ -62,7 +62,7 @@ public class Money implements Comparable<Money> {
             return false;
         }
         Money money = (Money) o;
-        return Objects.equals(amount, money.amount) && Objects.equals(currency, money.currency);
+        return amount.compareTo(money.amount)==0 && Objects.equals(currency, money.currency);
     }
 
     //generates hashcode

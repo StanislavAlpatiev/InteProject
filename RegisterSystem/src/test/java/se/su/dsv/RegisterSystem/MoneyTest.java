@@ -125,6 +125,14 @@ class MoneyTest {
         assertEquals(money2, money);
     }
 
+    //Tests if two equal even if they have .0 or not at the end
+    @Test
+    void differentScaleIsEqualTest() {
+        Money money = new Money(new BigDecimal(0.0000), Currency.USD);
+        Money money2 = new Money(new BigDecimal(0), Currency.USD);
+        assertEquals(money, money2);
+    }
+
     //Test that if equals() is fed with null, the result is false.
     @Test
     void equalsNullIsFalseTest() {
@@ -168,7 +176,7 @@ class MoneyTest {
     void compareToThisCurrencyGreaterThenOtherCurrencyTest() {
         Money money = new Money(DEFAULT_AMOUNT, Currency.EUR);
         Money otherMoney = new Money(DEFAULT_AMOUNT, Currency.USD);
-        assertTrue((money.compareTo(otherMoney) > 0));
+        assertTrue((money.compareTo(otherMoney) < 0));
     }
 
     //Test that compareTo() return -1 when this.currency is less then other.currency
@@ -176,7 +184,7 @@ class MoneyTest {
     void compareToThisCurrencyLessThenOtherCurrencyTest() {
         Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
         Money otherMoney = new Money(DEFAULT_AMOUNT, Currency.EUR);
-        assertTrue(money.compareTo(otherMoney) < 0);
+        assertTrue(money.compareTo(otherMoney) > 0);
     }
 
     @Test
