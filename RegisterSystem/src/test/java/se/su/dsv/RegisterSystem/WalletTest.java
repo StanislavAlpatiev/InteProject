@@ -72,18 +72,28 @@ class WalletTest {
     //Test if remove money works when remove money of a currency that is present in wallet
     //Example: wallet contains USD, test if removing USD from wallet works
     @Test
-    void removingMoneyOfSameCurrencyTest() {
+    void removingMoneyOfSameCurrencyTest() throws IOException {
         // Creating wallet with 10 EUR and 10 USD
         Wallet wallet = new Wallet(DEFAULT_OWNER, DEFAULT_BANK, DEFAULT_MONEY_USD, DEFAULT_MONEY_EUR);
-        //Removing 10 USD
+
+        //Comparison value constructed from total money in wallet in USD, then removing 10 from it.
+        BigDecimal value = wallet.totalValueInCurrency(Currency.USD).getAmount();
+        BigDecimal newValue = value.subtract(DEFAULT_MONEY_USD.getAmount());
+
+        //Repeating the steps above but through Wallet.
         wallet.remove(DEFAULT_MONEY_USD);
-        //Comparing map to wallets walletContent
-        assertEquals(new Money(BigDecimal.ZERO, Currency.USD), wallet.getWalletContent().get(Currency.USD));
+        Money remaining = wallet.totalValueInCurrency(Currency.USD);
+
+        //Comparing comparison value with what was left in the wallet.
+        assertEquals(newValue, remaining.getAmount());
+
+        //Testing whether USD mapping is gone since it became 0.
+        assertNull(wallet.getWalletContent().get(Currency.USD));
     }
 
     //Test if removing several money objects of different currency works
     @Test
-    void removingMoneyOfDifferentCurrenciesTest() {
+    void removingMoneyOfDifferentCurrenciesTest() throws IOException {
         // Creating wallet with 100 EUR and 30 USD and 90 GBP
         Wallet wallet = new Wallet(DEFAULT_OWNER, DEFAULT_BANK, new Money(new BigDecimal(30), Currency.USD),
                 new Money(new BigDecimal(100), Currency.EUR), new Money(new BigDecimal(90), Currency.GBP));

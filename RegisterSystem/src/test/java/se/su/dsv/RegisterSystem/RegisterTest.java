@@ -17,8 +17,8 @@ public class RegisterTest {
     final Currency DEFAULT_CURRENCY = Currency.USD;
     final Currency OTHER_CURRENCY = Currency.SEK;
 
-    final Money DEFAULT_MONEY = new Money(new BigDecimal(1000), DEFAULT_CURRENCY);
-    final Money OTHER_MONEY = new Money(new BigDecimal(1000), OTHER_CURRENCY);
+    final Money DEFAULT_MONEY = new Money(new BigDecimal(1000.0), DEFAULT_CURRENCY);
+    final Money OTHER_MONEY = new Money(new BigDecimal(1000.0), OTHER_CURRENCY);
 
     final Item DEFAULT_ITEM = new Item("Mjölk", "0123456789", "Arla", ItemType.GROCERY, DEFAULT_MONEY);
     final Item DEFAULT_ITEM2 = new Item("Tryffel", "9876543210", "FancyProducts", ItemType.GROCERY,
@@ -132,7 +132,7 @@ public class RegisterTest {
 
     //Tries to buy items without enough money in wallet.
     @Test
-    void walletNotEnoughMoneyThrowsTest() {
+    void walletNotEnoughMoneyThrowsTest() throws IOException {
         // There is as much money in the wallet as there is in the order
         // - that means that removing 1k means there won't be enought money.
         defaultWallet.remove(DEFAULT_MONEY);
@@ -145,13 +145,14 @@ public class RegisterTest {
     //Sees whether money is removed from wallet during checkout.
     @Test
     void moneyIsRemovedFromWalletDuringCheckoutTest() throws IOException {
+        defaultWallet.add(DEFAULT_MONEY);
 
         defaultRegister.checkOut(DEFAULT_ORDER, defaultWallet);
-        // compareTo(BigDecimal.ZERO) returns 0 if the contents of the wallet is 0 -
-        // which is what we want in this case,
-        // because the total cost of the order is supposed to be the same as the
-        // contents of the wallet in USD.
-        assertEquals(0, defaultWallet.getWalletContent().get(DEFAULT_CURRENCY).getAmount().compareTo(BigDecimal.ZERO));
+
+        //More wallet already contains money since before this test (see the beforeEach-method)
+        //Therefore, this tests sees whether what remains after checkout is as much as how
+        //much more money was in the wallet than the cost of the order
+        assertEquals(DEFAULT_MONEY, defaultWallet.getWalletContent().get(DEFAULT_CURRENCY));
     }
 
     // Test whether money in wallet is available in several currencies instead of only in separate ones
@@ -173,6 +174,6 @@ public class RegisterTest {
         assertEquals(BigDecimal.valueOf(0.0), defaultWallet.totalValueInCurrency(DEFAULT_CURRENCY).getAmount());
         //assertEquals(BigDecimal.ZERO, defaultWallet.getTotalAmount(DEFAULT_CURRENCY));
         //Since wallet content is equals to cost of order, after checkout there should be 0 left in wallet. 
-        assertEquals(BigDecimal.valueOf(0.0), defaultWallet.totalValueInCurrency(DEFAULT_CURRENCY).getAmount());
+        assertEquals(BigDecimal.valueOf(0), defaultWallet.totalValueInCurrency(DEFAULT_CURRENCY).getAmount());
     }
 }

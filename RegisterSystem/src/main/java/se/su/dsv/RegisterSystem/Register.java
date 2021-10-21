@@ -61,7 +61,7 @@ public class Register {
     }
 
     //Helper method for checkout, removes total cost of order from wallet.
-    private void updateWallet(Wallet wallet, Money toPay){
+    private void updateWallet(Wallet wallet, Money toPay) throws IOException{
         //Currently only removes in one currency!
         wallet.remove(toPay);
     }
