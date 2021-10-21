@@ -18,7 +18,8 @@ public class ReceiptTest {
 
         String mockNumber;
 
-        public MockOrder(String mockOrderNumber) {
+        public MockOrder(Currency currency, String mockOrderNumber) {
+            super(currency);
             mockNumber = mockOrderNumber;
         }
 
@@ -32,6 +33,7 @@ public class ReceiptTest {
     private static final Item DEFAULT_ITEM_2 = new Item("Coca-cola", "12345678", "Dn", new Money(new BigDecimal("20"), Currency.SEK), new BigDecimal("20"));
     private static final Item DEFAULT_ITEM_3 = new Item("Watermelon bigpack", "12345678", "Dn", ItemType.GROCERY, new Money(new BigDecimal("50"), Currency.SEK));
     private static final Item DEFAULT_ITEM_4 = new Item("Snus", "12345678", "Dn", ItemType.TOBACCO, new Money(new BigDecimal("1000"), Currency.SEK));
+    private static final String DEFAULT_ORDER_NUMBER = "19990101XXXX";
     //private static final Item LONG_STRING_ITEM = new Item("Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "12345678", "Dn", ItemType.TOBACCO, new Money(new BigDecimal(Integer.MAX_VALUE), Currency.SEK));
 
     static final String EXPECTED_RECEIPT_ONE_ITEM ="===================================================================================\n" +
@@ -76,7 +78,7 @@ public class ReceiptTest {
     void constructorThrowsExceptionWhenOrderIsEmpty() {
         {
             assertThrows(IllegalArgumentException.class, () -> {
-                new Receipt(new Order());
+                new Receipt(new Order(Currency.SEK));
             });
         }
     }
@@ -85,7 +87,7 @@ public class ReceiptTest {
     void constructorThrowsExceptionWhenDateIsNull() {
         {
             assertThrows(IllegalArgumentException.class, () -> {
-                new Receipt(new Order(DEFAULT_ITEM_1), null);
+                new Receipt(new Order(Currency.SEK, DEFAULT_ITEM_1), null);
             });
         }
     }
@@ -102,7 +104,7 @@ public class ReceiptTest {
     @Test
     void receiptMatchesExpectedReceiptOneItem() {
 
-        ReceiptTest.MockOrder mockOrder = new ReceiptTest.MockOrder("19990101XXXX");
+        ReceiptTest.MockOrder mockOrder = new ReceiptTest.MockOrder(Currency.SEK, DEFAULT_ORDER_NUMBER);
 
         mockOrder.addItem(DEFAULT_ITEM_1);
 
@@ -117,17 +119,20 @@ public class ReceiptTest {
     @Test
     void receiptMatchesExpectedReceiptWithMultipleItems() {
 
-        ReceiptTest.MockOrder mockOrder = new ReceiptTest.MockOrder("19990101XXXX");
+        ReceiptTest.MockOrder mockOrder = new ReceiptTest.MockOrder(Currency.SEK, DEFAULT_ORDER_NUMBER);
 
         mockOrder.addItem(DEFAULT_ITEM_1);
 
-        for (int i = 0; i < 5; i++) {
+        int noOfSameItemAdded = 5;
+        for (int i = 0; i < noOfSameItemAdded; i++)
             mockOrder.addItem(DEFAULT_ITEM_2);
-        }
-        for (int i = 0; i < 7; i++) {
+
+        noOfSameItemAdded = 7;
+        for (int i = 0; i < noOfSameItemAdded; i++)
             mockOrder.addItem(DEFAULT_ITEM_3);
-        }
-        for (int i = 0; i < 9; i++) {
+
+        noOfSameItemAdded = 9;
+        for (int i = 0; i < noOfSameItemAdded; i++) {
             mockOrder.addItem(DEFAULT_ITEM_4);
         }
         
@@ -141,10 +146,7 @@ public class ReceiptTest {
 
     @Test
     void printToFileTest() {
-        Item item1 = new Item("DN Newspaper", "12345678", "Dn", ItemType.NEWSPAPER, new Money(new BigDecimal("99.99"), Currency.SEK));
-        Item item2 = new Item("Coca-cola", "12345678", "Dn", new Money(new BigDecimal("29.99"), Currency.SEK), new BigDecimal("2"));
-        Item item3 = new Item("Watermelon bigpack", "12345678", "Dn", ItemType.GROCERY, new Money(new BigDecimal("66.66"), Currency.SEK));
-        Order order = new Order(item1, item2, item3);
+        Order order = new Order(Currency.SEK, DEFAULT_ITEM_1, DEFAULT_ITEM_2, DEFAULT_ITEM_3);
         Receipt receipt = new Receipt(order);
         String receiptStr = receipt.getReceipt();
         receipt.printToFile();
@@ -152,7 +154,21 @@ public class ReceiptTest {
         assertEquals(receiptStr + "\n", loadTextFile("src\\test\\resources\\" + order.getNumber() + ".txt"));
 
         File file = new File("src\\test\\resources\\" + order.getNumber() + ".txt");
-        System.out.println(file.delete());
+        assertTrue(file.delete());
+    }
+
+    @Test
+    void printToFileThrowsExceptionWhenFileAlreadyExists() {
+        ReceiptTest.MockOrder mockOrder = new ReceiptTest.MockOrder(Currency.SEK, DEFAULT_ORDER_NUMBER);
+
+        mockOrder.addItem(DEFAULT_ITEM_1);
+        Receipt receipt = new Receipt(mockOrder);
+        receipt.printToFile();
+
+        assertThrows(IllegalStateException.class, () -> {receipt.printToFile();});
+
+        File file = new File("src\\test\\resources\\" + mockOrder.getNumber() + ".txt");
+        assertTrue(file.delete());
     }
 
     // helper method to load textfile
