@@ -119,8 +119,21 @@ public class OrderTest {
         Order order = addItemsWithDifferentVats();
         for (Item item : order.getItems().keySet()) {
             double vatRate = item.getVat().doubleValue();
-            Money expectedAmountOfVAT = item.getVATAmountOfPrice();
-            assertEquals(expectedAmountOfVAT, order.getAmountOfVat(vatRate));
+            Money expected = item.getVATAmountOfPrice();
+            Money actual = order.getAmountOfVat(vatRate);
+            assertEquals(expected, actual);
+        }
+    }
+
+    @Test
+    void addItemsUpdatesVATMapContainingItems() {
+        Order order = addItemsWithDifferentVats();
+        for (Item item : order.getItems().keySet()) {
+            order.addItem(item);
+            double vatRate = item.getVat().doubleValue();
+            Money expected = item.getVATAmountOfPrice().add(item.getVATAmountOfPrice());
+            Money actual = order.getAmountOfVat(vatRate);
+            assertEquals(expected, actual);
         }
     }
 
@@ -129,18 +142,45 @@ public class OrderTest {
         Order order = addItemsWithDifferentVats();
         for (Item item : order.getItems().keySet()) {
             double vatRate = item.getVat().doubleValue();
-            Money expectedNetVAT = item.getPrice();
-            assertEquals(expectedNetVAT, order.getNetVat(vatRate));
+            Money expected = item.getPrice();
+            Money actual = order.getNetVat(vatRate);
+            assertEquals(expected, actual);
         }
     }
+
+    @Test
+    void addItemsUpdatesNetMapContainingItems() {
+        Order order = addItemsWithDifferentVats();
+        for (Item item : order.getItems().keySet()) {
+            order.addItem(item);
+            double vatRate = item.getVat().doubleValue();
+            Money expected = item.getPrice().add(item.getPrice());
+            Money actual = order.getNetVat(vatRate);
+            assertEquals(expected, actual);
+        }
+    }
+
 
     @Test
     void addItemsUpdatesGrossVATMap() {
         Order order = addItemsWithDifferentVats();
         for (Item item : order.getItems().keySet()) {
             double vatRate = item.getVat().doubleValue();
-            Money expectedGrossVAT = item.getPricePlusVat();
-            assertEquals(expectedGrossVAT, order.getGrossVat(vatRate));
+            Money expected = item.getPricePlusVat();
+            Money actual = order.getGrossVat(vatRate);
+            assertEquals(expected, actual);
+        }
+    }
+
+    @Test
+    void addItemsUpdatesGrossMapContainingItems() {
+        Order order = addItemsWithDifferentVats();
+        for (Item item : order.getItems().keySet()) {
+            order.addItem(item);
+            double vatRate = item.getVat().doubleValue();
+            Money expected = item.getPricePlusVat().add(item.getPricePlusVat());
+            Money actual = order.getGrossVat(vatRate);
+            assertEquals(expected, actual);
         }
     }
 
