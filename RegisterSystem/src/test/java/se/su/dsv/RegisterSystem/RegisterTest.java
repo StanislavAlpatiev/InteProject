@@ -44,7 +44,6 @@ public class RegisterTest {
         defaultRegister.getInventory().add(DEFAULT_ITEM);
         defaultRegister.getInventory().add(DEFAULT_ITEM);
         defaultRegister.getInventory().add(DEFAULT_ITEM2);
-        System.out.println("Hej");
         // Makes sure there is as much money in money as there is in the order
         defaultWallet.add(DEFAULT_ORDER.getTotalPricePlusVat());
     }
@@ -160,7 +159,7 @@ public class RegisterTest {
     // Test whether money in wallet is available in several currencies instead of only in separate ones
     // That is, if you have 100 in SEK, and 100 in USD, you can buy for whatever those add up to.
     @Test
-    void walletMoneyInOtherCurrency() {
+    void walletMoneyInOtherCurrency() throws IOException {
 
         defaultWallet.remove(DEFAULT_MONEY);
 
@@ -173,6 +172,6 @@ public class RegisterTest {
         defaultRegister.checkOut(DEFAULT_ORDER, defaultWallet);
 
         //Since wallet content is equals to cost of order, after checkout there should be 0 left in wallet. 
-        assertEquals(BigDecimal.ZERO, defaultWallet.getTotalAmount(DEFAULT_CURRENCY));
+        assertEquals(BigDecimal.valueOf(0.0), defaultWallet.totalValueInCurrency(DEFAULT_CURRENCY).getAmount());
     }
 }
