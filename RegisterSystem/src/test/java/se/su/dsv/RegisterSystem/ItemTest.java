@@ -102,6 +102,13 @@ class ItemTest {
         });
     }
 
+    //If currency is not set to SEK, pant should be 0
+    @Test
+    void constructorPantCurrencyNotSEKIsZeroTest(){
+        Item notInSEK = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("10"), Currency.USD), new BigDecimal("2"));
+        assertEquals(new Money(BigDecimal.ZERO, Currency.USD), notInSEK.getPant());
+    }
+
     @Test
     void setPriceChangesPriceCorrectlyTest(){
         Item item = new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, new Money(new BigDecimal("10"), Currency.SEK));
@@ -110,9 +117,11 @@ class ItemTest {
         assertEquals(new Money(new BigDecimal("20"), Currency.SEK), item.getPrice());
     }
 
+    //if Currency of Item is changed to SEK, pant should be added
+
     @Test
     void PricePlusVatCorrectTest(){
-        assertEquals(DEFAULT_GROCERY_PRICE_PLUS_VAT, DEFAULT_GROCERY.getPricePlusVat());
+        assertEquals(DEFAULT_GROCERY_PRICE_PLUS_VAT, DEFAULT_GROCERY.getPricePlusVatAndPant());
     }
 
     @Test
@@ -122,7 +131,7 @@ class ItemTest {
 
     @Test
     void pricePlusVatAndPantCorrectTest(){
-        assertEquals(new Money(new BigDecimal("13.20"), Currency.SEK),DEFAULT_BIG_BEVERAGE.getPricePlusVat());
+        assertEquals(new Money(new BigDecimal("13.20"), Currency.SEK),DEFAULT_BIG_BEVERAGE.getPricePlusVatAndPant());
     }
 
     @Test
