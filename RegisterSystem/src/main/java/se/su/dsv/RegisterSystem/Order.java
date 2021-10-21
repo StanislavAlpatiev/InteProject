@@ -149,6 +149,7 @@ public class Order {
 
     private void generateEndPartOfOrderNumber(StringBuilder sb) {
         Random r = new Random();
+
         for (int i = 0; i < 4; i++)
             sb.append((char) (r.nextInt(26) + 'A'));
     }
@@ -163,17 +164,25 @@ public class Order {
 
     private void subtractFromVATMaps(Item item) {
         double vatRate = item.getVat().doubleValue();
+<<<<<<< HEAD
         grossVATs.put(vatRate, grossVATs.get(vatRate).subtract(item.getPricePlusVatAndPant()));
+=======
+
+        grossVATs.put(vatRate, grossVATs.get(vatRate).subtract(item.getPricePlusVat()));
+>>>>>>> ea8879453f8f2c68a7f7141feafb78cd51e5e8b7
         netVATs.put(vatRate, netVATs.get(vatRate).subtract(item.getPrice()));
         VATs.put(vatRate, VATs.get(vatRate).subtract(item.getVATAmountOfPrice()));
     }
 
     private void addToItemMaps(Item item) {
         if (items.containsKey(item)) {
+
             items.put(item, items.get(item).add(BigDecimal.ONE));
             pricePerItem.put(item, pricePerItem.get(item).add(item.getPricePlusVatAndPant()));
             pantPerItem.put(item, pantPerItem.get(item).add(item.getPant()));
+
         } else {
+
             items.put(item, BigDecimal.ONE);
             pricePerItem.put(item, item.getPricePlusVatAndPant());
             pantPerItem.put(item, item.getPant());
@@ -182,10 +191,13 @@ public class Order {
 
     private void subtractFromItemMaps(Item item) {
         if (items.get(item).doubleValue() > 1) {
+
             items.put(item, items.get(item).subtract(BigDecimal.ONE));
             pricePerItem.put(item, pricePerItem.get(item).subtract(item.getPricePlusVatAndPant()));
             pantPerItem.put(item, pantPerItem.get(item).subtract(item.getPant()));
+
         } else {
+
             items.remove(item);
             pricePerItem.remove(item);
             pantPerItem.remove(item);
