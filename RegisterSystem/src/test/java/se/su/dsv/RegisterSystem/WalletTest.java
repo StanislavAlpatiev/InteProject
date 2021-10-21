@@ -2,6 +2,7 @@ package se.su.dsv.RegisterSystem;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -16,11 +17,13 @@ class WalletTest {
     static final Money DEFAULT_MONEY_SEK = new Money(new BigDecimal(10), Currency.SEK);
     static final Money DEFAULT_MONEY_GBP = new Money(new BigDecimal(10), Currency.GBP);
     static final Money DEFAULT_MONEY_EUR = new Money(new BigDecimal(10), Currency.EUR);
-    static final Wallet DEFAULT_WALLET = new Wallet(DEFAULT_OWNER, DEFAULT_MONEY_USD, DEFAULT_MONEY_SEK, DEFAULT_MONEY_GBP, DEFAULT_MONEY_EUR);
+    static final MockBank DEFAULT_BANK = new MockBank();
+    static final Wallet DEFAULT_WALLET = new Wallet(DEFAULT_OWNER, DEFAULT_BANK, DEFAULT_MONEY_USD, DEFAULT_MONEY_SEK, DEFAULT_MONEY_GBP, DEFAULT_MONEY_EUR);
+
 
     @Test
     void constructorTest() {
-        Wallet testWallet = new Wallet(DEFAULT_OWNER, new Money(new BigDecimal(10), Currency.USD),
+        Wallet testWallet = new Wallet(DEFAULT_OWNER, DEFAULT_BANK, new Money(new BigDecimal(10), Currency.USD),
                 new Money(new BigDecimal(10), Currency.SEK), new Money(new BigDecimal(10), Currency.GBP),
                 new Money(new BigDecimal(10), Currency.EUR));
 
@@ -31,7 +34,7 @@ class WalletTest {
     //Test that the wallet is empty when no money is added in constructor
     @Test
     void walletContentEmptyWhenConstructorTakesNoMoneyTest() {
-        assertEquals(0, new Wallet(DEFAULT_OWNER).getWalletContent().size());
+        assertEquals(0, new Wallet(DEFAULT_OWNER, DEFAULT_BANK).getWalletContent().size());
     }
 
     //Add should be able to add several money objects
@@ -39,7 +42,7 @@ class WalletTest {
     @Test
     void addingMoneyToEmptyWalletTest() {
         //Adding to wallet
-        Wallet wallet = new Wallet(DEFAULT_OWNER);
+        Wallet wallet = new Wallet(DEFAULT_OWNER, DEFAULT_BANK);
         wallet.add(DEFAULT_MONEY_USD);
 
         //Mock map with entry
@@ -53,7 +56,7 @@ class WalletTest {
     @Test
     void addingMoneyOfSameCurrencyTest() {
         //Adding money of Existing Currency to wallet
-        Wallet wallet = new Wallet(DEFAULT_OWNER, DEFAULT_MONEY_USD, DEFAULT_MONEY_EUR);
+        Wallet wallet = new Wallet(DEFAULT_OWNER, DEFAULT_BANK, DEFAULT_MONEY_USD, DEFAULT_MONEY_EUR);
         wallet.add(DEFAULT_MONEY_USD);
         //Mock map with entry
         HashMap<Currency, Money> map = new HashMap<>();
@@ -66,7 +69,7 @@ class WalletTest {
     @Test
     void removingMoneyOfSameCurrencyTest() {
         // Creating wallet with 10 EUR and 10 USD
-        Wallet wallet = new Wallet(DEFAULT_OWNER, DEFAULT_MONEY_USD, DEFAULT_MONEY_EUR);
+        Wallet wallet = new Wallet(DEFAULT_OWNER, DEFAULT_BANK, DEFAULT_MONEY_USD, DEFAULT_MONEY_EUR);
         //Removing 10 USD
         wallet.remove(DEFAULT_MONEY_USD);
         //Comparing map to wallets walletContent
@@ -77,7 +80,7 @@ class WalletTest {
     @Test
     void removingMoneyOfDifferentCurrenciesTest() {
         // Creating wallet with 100 EUR and 30 USD and 90 GBP
-        Wallet wallet = new Wallet(DEFAULT_OWNER, new Money(new BigDecimal(30), Currency.USD),
+        Wallet wallet = new Wallet(DEFAULT_OWNER, DEFAULT_BANK, new Money(new BigDecimal(30), Currency.USD),
                 new Money(new BigDecimal(100), Currency.EUR), new Money(new BigDecimal(90), Currency.GBP));
 
         //MockWalletContent with money expected money objects after removal of money
@@ -96,5 +99,14 @@ class WalletTest {
         assertEquals(mockWalletContent, wallet.getWalletContent());
     }
 
+    // USES MockBank where the exchange rate is 10 to 1 for SEK to USD
+    // Method checks whether getTotalValueInCurrency return expected moneyObject
+    @Test
+    void getTotalValueInCurrencyTest() throws IOException {
+        Wallet wallet = new Wallet(DEFAULT_OWNER, DEFAULT_BANK, new Money(new BigDecimal("100"), Currency.SEK), new Money(new BigDecimal("10"), Currency.USD));
+        System.out.println(wallet.getWalletContent());
+        Money money = wallet.totalValueInCurrency(DEFAULT_MONEY_USD.getCurrency());
+        assertEquals(new BigDecimal("20.0"), money.getAmount());
+    }
 
 }
