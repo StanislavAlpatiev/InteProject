@@ -18,7 +18,8 @@ public class ReceiptTest {
 
         String mockNumber;
 
-        public MockOrder(String mockOrderNumber) {
+        public MockOrder(Currency currency, String mockOrderNumber) {
+            super(currency);
             mockNumber = mockOrderNumber;
         }
 
@@ -77,7 +78,7 @@ public class ReceiptTest {
     void constructorThrowsExceptionWhenOrderIsEmpty() {
         {
             assertThrows(IllegalArgumentException.class, () -> {
-                new Receipt(new Order());
+                new Receipt(new Order(Currency.SEK));
             });
         }
     }
@@ -86,7 +87,7 @@ public class ReceiptTest {
     void constructorThrowsExceptionWhenDateIsNull() {
         {
             assertThrows(IllegalArgumentException.class, () -> {
-                new Receipt(new Order(DEFAULT_ITEM_1), null);
+                new Receipt(new Order(Currency.SEK, DEFAULT_ITEM_1), null);
             });
         }
     }
@@ -103,7 +104,7 @@ public class ReceiptTest {
     @Test
     void receiptMatchesExpectedReceiptOneItem() {
 
-        ReceiptTest.MockOrder mockOrder = new ReceiptTest.MockOrder(DEFAULT_ORDER_NUMBER);
+        ReceiptTest.MockOrder mockOrder = new ReceiptTest.MockOrder(Currency.SEK, DEFAULT_ORDER_NUMBER);
 
         mockOrder.addItem(DEFAULT_ITEM_1);
 
@@ -118,17 +119,20 @@ public class ReceiptTest {
     @Test
     void receiptMatchesExpectedReceiptWithMultipleItems() {
 
-        ReceiptTest.MockOrder mockOrder = new ReceiptTest.MockOrder(DEFAULT_ORDER_NUMBER);
+        ReceiptTest.MockOrder mockOrder = new ReceiptTest.MockOrder(Currency.SEK, DEFAULT_ORDER_NUMBER);
 
         mockOrder.addItem(DEFAULT_ITEM_1);
 
-        for (int i = 0; i < 5; i++) {
+        int noOfSameItemAdded = 5;
+        for (int i = 0; i < noOfSameItemAdded; i++)
             mockOrder.addItem(DEFAULT_ITEM_2);
-        }
-        for (int i = 0; i < 7; i++) {
+
+        noOfSameItemAdded = 7;
+        for (int i = 0; i < noOfSameItemAdded; i++)
             mockOrder.addItem(DEFAULT_ITEM_3);
-        }
-        for (int i = 0; i < 9; i++) {
+
+        noOfSameItemAdded = 9;
+        for (int i = 0; i < noOfSameItemAdded; i++) {
             mockOrder.addItem(DEFAULT_ITEM_4);
         }
         
@@ -142,7 +146,7 @@ public class ReceiptTest {
 
     @Test
     void printToFileTest() {
-        Order order = new Order(DEFAULT_ITEM_1, DEFAULT_ITEM_2, DEFAULT_ITEM_3);
+        Order order = new Order(Currency.SEK, DEFAULT_ITEM_1, DEFAULT_ITEM_2, DEFAULT_ITEM_3);
         Receipt receipt = new Receipt(order);
         String receiptStr = receipt.getReceipt();
         receipt.printToFile();
@@ -155,7 +159,7 @@ public class ReceiptTest {
 
     @Test
     void printToFileThrowsExceptionWhenFileAlreadyExists() {
-        ReceiptTest.MockOrder mockOrder = new ReceiptTest.MockOrder(DEFAULT_ORDER_NUMBER);
+        ReceiptTest.MockOrder mockOrder = new ReceiptTest.MockOrder(Currency.SEK, DEFAULT_ORDER_NUMBER);
 
         mockOrder.addItem(DEFAULT_ITEM_1);
         Receipt receipt = new Receipt(mockOrder);

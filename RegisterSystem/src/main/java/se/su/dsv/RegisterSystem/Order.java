@@ -18,17 +18,21 @@ public class Order {
     private final HashMap<Double, Money> grossVATs = new HashMap<>(); // maps the different vat-rates with amount of grossVAT for that rate
 
     private final String number;
+    private final Currency currency;
 
     private Money totalPricePlusVat;
 
 
-    public Order() {
+    public Order(Currency currency) {
+        if (currency == null)
+            throw new IllegalArgumentException("Null currency");
         setUp();
+        this.currency = currency;
         number = generateOrderNumber();
     }
 
-    public Order(Item... items) {
-        this();
+    public Order(Currency currency, Item... items) {
+        this(currency);
         if (items == null)
             throw new IllegalArgumentException("Null item");
         for (Item item : items)
