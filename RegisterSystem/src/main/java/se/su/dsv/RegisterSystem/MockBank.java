@@ -27,9 +27,6 @@ public class MockBank implements BankService {
     @Override
     public Money exchange(Money money, Currency currency, BigDecimal rate) {
         BigDecimal newAmount = money.getAmount().multiply(rate);
-//        System.out.println(rate);
-//        System.out.println(money);
-        System.out.println(newAmount);
         return new Money(newAmount, currency);
     }
 

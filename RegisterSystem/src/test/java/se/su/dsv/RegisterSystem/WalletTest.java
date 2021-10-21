@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WalletTest {
     static final Customer DEFAULT_OWNER = new Customer("Erik Andersson", "Lingonvägen 17",
-             LocalDate.of(2000, 10, 17), "0722371555", "erik.andresson@gmail.com");
+            LocalDate.of(2000, 10, 17), "0722371555", "erik.andresson@gmail.com");
     static final Money DEFAULT_MONEY_USD = new Money(new BigDecimal(10), Currency.USD);
     static final Money DEFAULT_MONEY_SEK = new Money(new BigDecimal(10), Currency.SEK);
     static final Money DEFAULT_MONEY_GBP = new Money(new BigDecimal(10), Currency.GBP);
@@ -21,6 +21,7 @@ class WalletTest {
     static final Wallet DEFAULT_WALLET = new Wallet(DEFAULT_OWNER, DEFAULT_BANK, DEFAULT_MONEY_USD, DEFAULT_MONEY_SEK, DEFAULT_MONEY_GBP, DEFAULT_MONEY_EUR);
 
 
+    //Test that the constructor sets values properly and that the get methods return the expected values
     @Test
     void constructorTest() {
         Wallet testWallet = new Wallet(DEFAULT_OWNER, DEFAULT_BANK, new Money(new BigDecimal(10), Currency.USD),
@@ -53,6 +54,7 @@ class WalletTest {
         assertEquals(map, wallet.getWalletContent());
     }
 
+    //Test if adding money to wallet of a currency that is already present sums their value
     @Test
     void addingMoneyOfSameCurrencyTest() {
         //Adding money of Existing Currency to wallet
@@ -66,6 +68,9 @@ class WalletTest {
         assertEquals(map.get(Currency.USD), wallet.getWalletContent().get(Currency.USD));
     }
 
+
+    //Test if remove money works when remove money of a currency that is present in wallet
+    //Example: wallet contains USD, test if removing USD from wallet works
     @Test
     void removingMoneyOfSameCurrencyTest() {
         // Creating wallet with 10 EUR and 10 USD
@@ -99,8 +104,8 @@ class WalletTest {
         assertEquals(mockWalletContent, wallet.getWalletContent());
     }
 
-    // USES MockBank where the exchange rate is 10 to 1 for SEK to USD
-    // Method checks whether getTotalValueInCurrency return expected moneyObject
+    //USES MockBank where the exchange rate is 10 to 1 for SEK to USD
+    //Method checks whether getTotalValueInCurrency return expected moneyObject
     @Test
     void getTotalValueInCurrencyTest() throws IOException {
         Wallet wallet = new Wallet(DEFAULT_OWNER, DEFAULT_BANK, new Money(new BigDecimal("100"), Currency.SEK), new Money(new BigDecimal("10"), Currency.USD));
