@@ -3,7 +3,7 @@ package se.su.dsv.RegisterSystem;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-//TODO: Add comments to each method
+//Holds all information for a specific item
 public class Item implements Comparable<Item> {
 
     private final String name;
@@ -13,10 +13,11 @@ public class Item implements Comparable<Item> {
     private final ItemType type;
     private Money price;
     private BigDecimal volumeCl;
-    private final BigDecimal vat;
+    private BigDecimal vat;
     private Money pant;
 
 
+    //first item constructor that sets all attributes and sets the vat for different categories of Items
     public Item(String name, String productNo, String producer, ItemType type, Money price) {
 
         if(name == null || productNo == null || producer == null || price == null){
@@ -34,20 +35,10 @@ public class Item implements Comparable<Item> {
         this.price = price;
         this.pant = new Money (BigDecimal.ZERO, price.getCurrency());
 
-        switch(type){
-            case NEWSPAPER:
-                this.vat = new BigDecimal("0.06");
-                break;
-            case TOBACCO:
-                this.vat = new BigDecimal("0.25");
-                this.ageRestricted = true;
-                break;
-            default:
-                this.vat = new BigDecimal("0.12");
-                break;
-        }
+        setVat();
     }
 
+    //second Item constructor that takes volumeCl as parameter and passes BEVERAGE into the first constructor, then sets pant for the volume of the beverage
     public Item(String name, String productNo, String producer, Money price, BigDecimal volumeCl) {
         this(name, productNo, producer, ItemType.BEVERAGE, price);
 
@@ -61,16 +52,7 @@ public class Item implements Comparable<Item> {
 
         this.volumeCl = volumeCl;
 
-        //pant is set to SEK if we set up the item in another currency we would have to convert the pant form SEK to the desired currency
-        if(price.getCurrency().equals(Currency.SEK)){
-            if(volumeCl.doubleValue() >= BigDecimal.ONE.doubleValue()){
-                this.pant = new Money (new BigDecimal("2"), price.getCurrency());
-            }else{
-                this.pant = new Money (BigDecimal.ONE, price.getCurrency());
-            }
-        }else{
-            //TODO implement this
-        }
+        setPant(price.getCurrency());
 
     }
 
@@ -114,38 +96,64 @@ public class Item implements Comparable<Item> {
         this.price = price;
     }
 
-
-    //TODO rename method
-    public Money getPricePlusVat() {
-        if (type == ItemType.BEVERAGE) {
-            return price.add(getVATAmountOfPrice()).add(pant);
+    //sets pant for a specific currency, is only implemented for SEK
+    public void setPant(Currency currency){
+        if(price.getCurrency() == Currency.SEK){
+            if(volumeCl.doubleValue() >= BigDecimal.ONE.doubleValue()){
+                this.pant = new Money (new BigDecimal("2"), price.getCurrency());
+            }else{
+                this.pant = new Money (BigDecimal.ONE, price.getCurrency());
+            }
+        }else{
+            new Money (BigDecimal.ZERO, price.getCurrency());
         }
-        return price.add(getVATAmountOfPrice());
     }
 
+    //sets vat, is only implemented for swedish tax laws, could be expanded
+    public void setVat(){
+        switch(type){
+            case NEWSPAPER:
+                this.vat = new BigDecimal("0.06");
+                break;
+            case TOBACCO:
+                this.vat = new BigDecimal("0.25");
+                this.ageRestricted = true;
+                break;
+            default:
+                this.vat = new BigDecimal("0.12");
+                break;
+        }
+    }
+
+    //TODO implement
+    //never used, could be used in Inventory.setCurrency()
+    public void setCurrency(Currency currency){
+        MockBank bank = new MockBank();
+
+        if(currency != price.getCurrency()){
+//            bank.exchange(price, currency, new BigDecimal("1.2"));
+//            setPant(currency);
+//            setVat(currency);
+        }
+    }
+
+    //returns the full price including vat and pant
+    public Money getPricePlusVatAndPant() {
+        return price.add(getVATAmountOfPrice().add(pant));
+    }
+
+    //returns only the vat amount
     public Money getVATAmountOfPrice() {
         return new Money(price.getAmount().multiply(vat), price.getCurrency());
     }
 
-
+    //compares Items by name
     @Override
     public int compareTo(Item o) {
         return name.compareTo(o.name);
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) {
-//            return true;
-//        }
-//        if (!(o instanceof Item)) {
-//            return false;
-//        }
-//        Item other = (Item) o;
-//        return name.equals(other.name);
-//
-//    }
-
+    //returns equal if the Items are both Items and name, productNo, producer, type and price are equal
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -162,26 +170,17 @@ public class Item implements Comparable<Item> {
                 getPrice().equals(item.getPrice());
     }
 
+    //generates hashcode
     @Override
     public int hashCode() {
         return Objects.hash(name, productNo, producer, type, price);
     }
 
+    //returns formatted string
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append(getName() + "@" + getProductNo() + "@" + getProducer() + "@" + getType() + "@" + getPrice().toExport());
         return sb.toString();
-    }
-
-    //@Override
-    public String toStrings() {
-        return
-            "name='" + getName() + "'" +
-            ", productNo='" + getProductNo() + "'" +
-            ", producer='" + getProducer() + "'" +
-            ", ageRestricted='" + isAgeRestricted() + "'" +
-            ", type='" + getType() + "'" +
-            ", price='" + getPrice() + "'";
     }
 }

@@ -1,9 +1,6 @@
 package se.su.dsv.RegisterSystem;
 
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
@@ -51,8 +48,12 @@ public class Receipt {
     //TODO: add check if file already exists
     public void printToFile(){
         String fileName = order.getNumber();
+        String pathName = "src\\test\\resources\\" + fileName + ".txt";
+        File file = new File(pathName);
+        if (file.exists())
+            throw new IllegalStateException("File already exists");
         try {
-            FileWriter writer = new FileWriter("src\\test\\resources\\" + fileName + ".txt");
+            FileWriter writer = new FileWriter(pathName);
             PrintWriter out = new PrintWriter(writer);
             out.print(getReceipt());
             writer.close();
@@ -111,7 +112,7 @@ public class Receipt {
     //if multiple items it will account for that aswell as pant
     private String createItemRow(Item item, BigDecimal amountOfItem) {
         String itemName = item.getName();
-        String itemPricePlusVat = formatMoneyValue(item.getPricePlusVat());
+        String itemPricePlusVat = formatMoneyValue(item.getPricePlusVatAndPant());
         String totalItemPricePlusVat = formatMoneyValue(order.getTotalPricePerItem(item));
         String totalItemPant = formatMoneyValue(order.getTotalPantPerItem(item));
 
