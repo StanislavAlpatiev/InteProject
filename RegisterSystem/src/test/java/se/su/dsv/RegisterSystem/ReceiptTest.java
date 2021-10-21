@@ -29,10 +29,10 @@ public class ReceiptTest {
         }
     }
 
-    private static final Item DEFAULT_ITEM_1 = new Item("DN Newspaper", "12345678", "Dn", ItemType.NEWSPAPER, new Money(new BigDecimal("200"), Currency.SEK));
-    private static final Item DEFAULT_ITEM_2 = new Item("Coca-cola", "12345678", "Dn", new Money(new BigDecimal("20"), Currency.SEK), new BigDecimal("20"));
-    private static final Item DEFAULT_ITEM_3 = new Item("Watermelon bigpack", "12345678", "Dn", ItemType.GROCERY, new Money(new BigDecimal("50"), Currency.SEK));
-    private static final Item DEFAULT_ITEM_4 = new Item("Snus", "12345678", "Dn", ItemType.TOBACCO, new Money(new BigDecimal("1000"), Currency.SEK));
+    private static final Item DEFAULT_ITEM_1 = new Item("DN Newspaper", "12345678", "Dn", ItemType.NEWSPAPER, new Money(new BigDecimal("269.99"), Currency.SEK));
+    private static final Item DEFAULT_ITEM_2 = new Item("Coca-cola", "12345678", "Dn", new Money(new BigDecimal("49.45"), Currency.SEK), new BigDecimal("5"));
+    private static final Item DEFAULT_ITEM_3 = new Item("Watermelon bigpack", "12345678", "Dn", ItemType.GROCERY, new Money(new BigDecimal("9.7955"), Currency.SEK));
+    private static final Item DEFAULT_ITEM_4 = new Item("Snus", "12345678", "Dn", ItemType.TOBACCO, new Money(new BigDecimal("999.99"), Currency.SEK));
     private static final String DEFAULT_ORDER_NUMBER = "19990101XXXX";
     //private static final Item LONG_STRING_ITEM = new Item("Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "12345678", "Dn", ItemType.TOBACCO, new Money(new BigDecimal(Integer.MAX_VALUE), Currency.SEK));
 
@@ -40,27 +40,27 @@ public class ReceiptTest {
             "OrderNr:                     19990101XXXX                                          \n" +
             "Datum:                         1999-01-01                 Tid:                00:00\n" +
             "===================================================================================\n" +
-            "DN Newspaper                                                                 212.00\n" +
+            "DN Newspaper                                                                 286.19\n" +
             "===================================================================================\n" +
-            "TOTAL                                                                        212.00\n" +
+            "TOTAL                                                                        286.19\n" +
             "Moms %                               Moms                Netto               Brutto\n" +
-            "6.00                                12.00               200.00               212.00\n" +
+            "6.00                                16.20               269.99               286.19\n" +
             "===================================================================================";
 
     static final String EXPECTED_RECEIPT_MULTIPLE_ITEMS = "===================================================================================\n" +
             "OrderNr:                     19990101XXXX                                          \n" +
             "Datum:                         1999-01-01                 Tid:                00:00\n" +
             "===================================================================================\n" +
-            "Coca-cola                         5*24.40     inkl. pant 10.00               122.00\n" +
-            "DN Newspaper                                                                 212.00\n" +
-            "Snus                            9*1250.00                                  11250.00\n" +
-            "Watermelon bigpack                7*56.00                                    392.00\n" +
+            "Coca-cola                         5*57.38     inkl. pant 10.00               286.92\n" +
+            "DN Newspaper                                                                 286.19\n" +
+            "Snus                            9*1249.99                                  11249.89\n" +
+            "Watermelon bigpack                7*10.97                                     76.80\n" +
             "===================================================================================\n" +
-            "TOTAL                                                                      11976.00\n" +
+            "TOTAL                                                                      11899.80\n" +
             "Moms %                               Moms                Netto               Brutto\n" +
-            "6.00                                12.00               200.00               212.00\n" +
-            "12.00                               54.00               450.00               514.00\n" +
-            "25.00                             2250.00              9000.00             11250.00\n" +
+            "6.00                                16.20               269.99               286.19\n" +
+            "12.00                               37.90               315.82               363.72\n" +
+            "25.00                             2249.98              8999.91             11249.89\n" +
             "===================================================================================";
 
 

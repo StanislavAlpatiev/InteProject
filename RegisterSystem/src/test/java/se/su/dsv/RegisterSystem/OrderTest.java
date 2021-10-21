@@ -17,13 +17,13 @@ public class OrderTest {
 
     static final Currency DEFAULT_CURRENCY = Currency.SEK;
     static final Item DEFAULT_NEWSPAPER = new Item("DN Newspaper", "12345678", "Dn",
-            ItemType.NEWSPAPER, new Money(new BigDecimal("200"), DEFAULT_CURRENCY));
+            ItemType.NEWSPAPER, new Money(new BigDecimal("199.5"), DEFAULT_CURRENCY));
     static final Item DEFAULT_BEVERAGE = new Item("Coca-cola", "12345678", "Dn",
-            new Money(new BigDecimal("20"), DEFAULT_CURRENCY), new BigDecimal("20"));
+            new Money(new BigDecimal("17.85"), DEFAULT_CURRENCY), new BigDecimal("5"));
     static final Item DEFAULT_GROCERY = new Item("Watermelon bigpack", "12345678", "Dn",
-            ItemType.GROCERY, new Money(new BigDecimal("50"), DEFAULT_CURRENCY));
+            ItemType.GROCERY, new Money(new BigDecimal("69.99"), DEFAULT_CURRENCY));
     static final Item DEFAULT_TOBACCO = new Item("Snus", "12345678", "Dn", ItemType.TOBACCO,
-            new Money(new BigDecimal("1000"), DEFAULT_CURRENCY));
+            new Money(new BigDecimal("999.75"), DEFAULT_CURRENCY));
     static final Order DEFAULT_ORDER = new Order(DEFAULT_CURRENCY);
 
 

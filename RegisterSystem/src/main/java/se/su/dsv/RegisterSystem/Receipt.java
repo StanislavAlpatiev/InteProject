@@ -142,7 +142,7 @@ public class Receipt {
     }
 
     private String formatMoneyValue(Money value){
-        return value.getAmount().setScale(2, RoundingMode.CEILING).toString();
+        return value.getAmount().setScale(2, RoundingMode.HALF_UP).toString();
     }
 
 }
