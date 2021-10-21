@@ -12,7 +12,7 @@ public class Item implements Comparable<Item> {
     private boolean ageRestricted = false;
     private final ItemType type;
     private Money price;
-    private BigDecimal volumeCl;
+    private BigDecimal volumeLiter;
     private BigDecimal vat;
     private Money pant;
 
@@ -39,20 +39,20 @@ public class Item implements Comparable<Item> {
     }
 
     //second Item constructor that takes volumeCl as parameter and passes BEVERAGE into the first constructor, then sets pant for the volume of the beverage
-    public Item(String name, String productNo, String producer, Money price, BigDecimal volumeCl) {
+    public Item(String name, String productNo, String producer, Money price, BigDecimal volumeLiter) {
         this(name, productNo, producer, ItemType.BEVERAGE, price);
 
-        if(volumeCl == null){
+        if(volumeLiter == null){
             throw new IllegalArgumentException("volumeCl cant be null in Item constructor");
         }
 
-        if(volumeCl.doubleValue() <= 0){
+        if(volumeLiter.doubleValue() <= 0){
             throw new IllegalArgumentException();
         }
 
-        this.volumeCl = volumeCl;
+        this.volumeLiter = volumeLiter;
 
-        setPant(price.getCurrency());
+        setPant();
 
     }
 
@@ -88,28 +88,52 @@ public class Item implements Comparable<Item> {
         return vat;
     }
 
-    public BigDecimal getVolumeCl(){
-        return volumeCl;
+    public BigDecimal getVolumeLiter(){
+        return volumeLiter;
     }
 
-    public void setPrice(Money price){
-        this.price = price;
-    }
+    //sets price and changes pant, only changes the price if its not the same
+    public void setPrice(Money newPrice){
+        if(newPrice == null){
+            throw new IllegalArgumentException("setPrice cant set price to null");
+        }
+        if(!newPrice.equals(price)){
+            this.price = newPrice;
+            setVat();
 
-    //sets pant for a specific currency, is only implemented for SEK
-    public void setPant(Currency currency){
-        if(price.getCurrency() == Currency.SEK){
-            if(volumeCl.doubleValue() >= BigDecimal.ONE.doubleValue()){
-                this.pant = new Money (new BigDecimal("2"), price.getCurrency());
-            }else{
-                this.pant = new Money (BigDecimal.ONE, price.getCurrency());
+            if(type == ItemType.BEVERAGE){
+                setPant();
             }
-        }else{
-            new Money (BigDecimal.ZERO, price.getCurrency());
         }
     }
 
+    //sets pant for a specific currency, is only implemented for SEK and NOK, would be better to have pant be set to a different country in hindsight
+    public void setPant(){
+        Currency currency = price.getCurrency();
+        switch(price.getCurrency()){
+            case SEK:
+                if(volumeLiter.doubleValue() >= BigDecimal.ONE.doubleValue()){
+                    this.pant = new Money (new BigDecimal("2"), price.getCurrency());
+                }else{
+                    this.pant = new Money (BigDecimal.ONE, price.getCurrency());
+                }
+                break;
+            case NOK:
+                if(volumeLiter.doubleValue() >= BigDecimal.ONE.doubleValue()){
+                    this.pant = new Money (new BigDecimal("3"), price.getCurrency());
+                }else{
+                    this.pant = new Money (new BigDecimal("2"), price.getCurrency());
+                }
+                break;
+            default:
+                new Money (BigDecimal.ZERO, price.getCurrency());
+                break;
+        }
+
+    }
+
     //sets vat, is only implemented for swedish tax laws, could be expanded
+    //should be set for different countries, we have not implemented countries could be done with enum or a complete restructure
     public void setVat(){
         switch(type){
             case NEWSPAPER:
@@ -122,18 +146,6 @@ public class Item implements Comparable<Item> {
             default:
                 this.vat = new BigDecimal("0.12");
                 break;
-        }
-    }
-
-    //TODO implement
-    //never used, could be used in Inventory.setCurrency()
-    public void setCurrency(Currency currency){
-        MockBank bank = new MockBank();
-
-        if(currency != price.getCurrency()){
-//            bank.exchange(price, currency, new BigDecimal("1.2"));
-//            setPant(currency);
-//            setVat(currency);
         }
     }
 

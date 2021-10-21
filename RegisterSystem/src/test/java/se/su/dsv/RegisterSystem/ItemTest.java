@@ -128,6 +128,20 @@ class ItemTest {
         assertEquals(new Money(new BigDecimal("20"), Currency.SEK), item.getPrice());
     }
 
+    //tests that setPrice changes pant for switching between currencies
+    @Test
+    void pantChangesWithSetPriceToOtherCurrencyTest(){
+        Item beverageSmall = new Item("coca cola", "0404040", "coca cola", DEFAULT_MONEY, new BigDecimal("0.33"));
+        Item beverage1L = new Item("coca cola", "0404040", "coca cola", DEFAULT_MONEY, new BigDecimal("1"));
+        Item beverageLarge = new Item("coca cola", "0404040", "coca cola", DEFAULT_MONEY, new BigDecimal("2"));
+        beverageSmall.setPrice(new Money(BigDecimal.ONE, Currency.NOK));
+        beverage1L.setPrice(new Money(BigDecimal.ONE, Currency.NOK));
+        beverageLarge.setPrice(new Money(BigDecimal.ONE, Currency.NOK));
+        assertEquals(new Money(new BigDecimal("2"), Currency.NOK), beverageSmall.getPant());
+        assertEquals(new Money(new BigDecimal("3"), Currency.NOK), beverage1L.getPant());
+        assertEquals(new Money(new BigDecimal("3"), Currency.NOK), beverageLarge.getPant());
+
+    }
 
     // testar att priset plus VAT beräknas korrekt
     @Test
