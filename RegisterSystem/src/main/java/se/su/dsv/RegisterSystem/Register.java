@@ -28,7 +28,7 @@ public class Register {
         return inventory;
     }
 
-    public void setCurrency(Currency otherCurrency) {
+    public void setCurrency(Currency otherCurrency) {}
     public void addItem(){
         // Lägger till ett item
     }

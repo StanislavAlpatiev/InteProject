@@ -63,12 +63,17 @@ public class Order {
     public void addItem(Item item) {
         if (item == null)
             throw new IllegalArgumentException("Null item");
-
         addToItemMaps(item);
         addToVATMaps(item);
 
         totalPricePlusVat = totalPricePlusVat.add(item.getPricePlusVat());
 
+    }
+
+    public void addItem(Item... items) {
+        for (Item item : items){
+            addItem(item);
+        }
     }
 
     public boolean removeItem(Item item) {
@@ -80,6 +85,12 @@ public class Order {
         totalPricePlusVat = totalPricePlusVat.subtract(item.getPricePlusVat());
         subtractFromVATMaps(item);
         return true;
+    }
+
+    public void removeItem(Item... items) {
+        for (Item item : items){
+            removeItem(item);
+        }
     }
 
     private void generateDate(StringBuilder sb) {
