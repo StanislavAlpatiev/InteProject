@@ -19,7 +19,7 @@ public class Register {
         inventory = new Inventory(bank, currency);
     }
 
-    public void checkOut() {
+    public void checkOut(Order order, Wallet wallet) {
         // Räknar ihop summan av alla items som ska köpas, betalas med pengarna ur en
         // customers wallet, listan av items töms och kvittot skrivs ut,
     }
