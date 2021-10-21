@@ -7,12 +7,13 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class RegisterTest {
 
-    final Customer DEFAULT_CUSTOMER = new Customer("Mr Customer", "Street Road", LocalDate.now(), "07070707",
+    final Customer DEFAULT_CUSTOMER = new Customer("Mr Customer", "Street Road", LocalDate.now(), "0707070700",
     "customer@test.com");
 
     final Currency DEFAULT_CURRENCY = Currency.USD;
@@ -32,8 +33,13 @@ public class RegisterTest {
     Register defaultRegister;
     Wallet defaultWallet;
 
+    @BeforeAll
+    static void setUp() {
+        
+    }
+
     @BeforeEach
-    void initialize() {
+    void initialize() throws IOException {
         defaultRegister = new Register(DEFAULT_CURRENCY);
         defaultWallet = new Wallet(DEFAULT_CUSTOMER);
         defaultRegister.getInventory().add(DEFAULT_ITEM);
