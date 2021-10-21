@@ -170,6 +170,10 @@ public class Order {
 
     private void subtractFromVATMaps(Item item) {
         double vatRate = item.getVat().doubleValue();
+<<<<<<< HEAD
+=======
+
+>>>>>>> Main
         grossVATs.put(vatRate, grossVATs.get(vatRate).subtract(item.getPricePlusVatAndPant()));
         netVATs.put(vatRate, netVATs.get(vatRate).subtract(item.getPrice()));
         VATs.put(vatRate, VATs.get(vatRate).subtract(item.getVATAmountOfPrice()));
