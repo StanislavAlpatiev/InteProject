@@ -112,7 +112,7 @@ public class OrderTest {
     void addItemsIncreasesTotalOrderPriceForEmptyOrder() {
         Order order = new Order(DEFAULT_CURRENCY);
         order.addItem(DEFAULT_NEWSPAPER);
-        Money expected = DEFAULT_NEWSPAPER.getPricePlusVat();
+        Money expected = DEFAULT_NEWSPAPER.getPricePlusVatAndPant();
         Money actual = order.getTotalPricePlusVat();
         assertEquals(expected, actual);
     }
@@ -122,7 +122,7 @@ public class OrderTest {
     void addItemsIncreasesTotalOrderPriceForOrderContainingItems() {
         Order order = new Order(DEFAULT_CURRENCY, DEFAULT_BEVERAGE);
         order.addItem(DEFAULT_GROCERY);
-        Money expected = DEFAULT_BEVERAGE.getPricePlusVat().add(DEFAULT_GROCERY.getPricePlusVat());
+        Money expected = DEFAULT_BEVERAGE.getPricePlusVatAndPant().add(DEFAULT_GROCERY.getPricePlusVatAndPant());
         Money actual = order.getTotalPricePlusVat();
         assertEquals(expected, actual);
     }
@@ -179,7 +179,7 @@ public class OrderTest {
         Order order = addItemsWithDifferentVats();
         for (Item item : order.getItems().keySet()) {
             double vatRate = item.getVat().doubleValue();
-            Money expected = item.getPricePlusVat();
+            Money expected = item.getPricePlusVatAndPant();
             Money actual = order.getGrossVat(vatRate);
             assertEquals(expected, actual);
         }
@@ -191,7 +191,7 @@ public class OrderTest {
         for (Item item : order.getItems().keySet()) {
             order.addItem(item);
             double vatRate = item.getVat().doubleValue();
-            Money expected = item.getPricePlusVat().add(item.getPricePlusVat());
+            Money expected = item.getPricePlusVatAndPant().add(item.getPricePlusVatAndPant());
             Money actual = order.getGrossVat(vatRate);
             assertEquals(expected, actual);
         }
@@ -248,7 +248,7 @@ public class OrderTest {
     void removeItemsDecreasesTotalOrderPriceForOrderWithMultipleItems() {
         Order order = new Order(DEFAULT_CURRENCY, DEFAULT_NEWSPAPER, DEFAULT_BEVERAGE);
         order.removeItem(DEFAULT_NEWSPAPER);
-        Money expected = DEFAULT_BEVERAGE.getPricePlusVat();
+        Money expected = DEFAULT_BEVERAGE.getPricePlusVatAndPant();
         Money actual = order.getTotalPricePlusVat();
         assertEquals(expected, actual);
     }
@@ -348,7 +348,7 @@ public class OrderTest {
     void getTotalPricePerItemReturnsCorrectValue() {
         Order order = addItemsWithDifferentVats();
         for (Item item : order.getItems().keySet()) {
-            Money expected = item.getPricePlusVat();
+            Money expected = item.getPricePlusVatAndPant();
             Money actual = order.getTotalPricePerItem(item);
             assertEquals(expected, actual);
         }

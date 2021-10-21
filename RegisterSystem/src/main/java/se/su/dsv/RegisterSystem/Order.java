@@ -45,7 +45,7 @@ public class Order {
         addToItemMaps(item);
         addToVATMaps(item);
 
-        totalPricePlusVat = totalPricePlusVat.add(item.getPricePlusVat());
+        totalPricePlusVat = totalPricePlusVat.add(item.getPricePlusVatAndPant());
 
     }
 
@@ -60,7 +60,7 @@ public class Order {
             throw new IllegalArgumentException("Null item");
         if (!items.containsKey(item))
             return false;
-        totalPricePlusVat = totalPricePlusVat.subtract(item.getPricePlusVat());
+        totalPricePlusVat = totalPricePlusVat.subtract(item.getPricePlusVatAndPant());
         subtractFromItemMaps(item);
         subtractFromVATMaps(item);
         return true;
@@ -161,15 +161,19 @@ public class Order {
     private void addToVATMaps(Item item) {
         double vatRate = item.getVat().doubleValue();
 
-        grossVATs.put(vatRate, grossVATs.get(vatRate).add(item.getPricePlusVat()));
+        grossVATs.put(vatRate, grossVATs.get(vatRate).add(item.getPricePlusVatAndPant()));
         netVATs.put(vatRate, netVATs.get(vatRate).add(item.getPrice()));
         VATs.put(vatRate, VATs.get(vatRate).add(item.getVATAmountOfPrice()));
     }
 
     private void subtractFromVATMaps(Item item) {
         double vatRate = item.getVat().doubleValue();
+<<<<<<< HEAD
+        grossVATs.put(vatRate, grossVATs.get(vatRate).subtract(item.getPricePlusVatAndPant()));
+=======
 
         grossVATs.put(vatRate, grossVATs.get(vatRate).subtract(item.getPricePlusVat()));
+>>>>>>> ea8879453f8f2c68a7f7141feafb78cd51e5e8b7
         netVATs.put(vatRate, netVATs.get(vatRate).subtract(item.getPrice()));
         VATs.put(vatRate, VATs.get(vatRate).subtract(item.getVATAmountOfPrice()));
     }
@@ -178,13 +182,13 @@ public class Order {
         if (items.containsKey(item)) {
 
             items.put(item, items.get(item).add(BigDecimal.ONE));
-            pricePerItem.put(item, pricePerItem.get(item).add(item.getPricePlusVat()));
+            pricePerItem.put(item, pricePerItem.get(item).add(item.getPricePlusVatAndPant()));
             pantPerItem.put(item, pantPerItem.get(item).add(item.getPant()));
 
         } else {
 
             items.put(item, BigDecimal.ONE);
-            pricePerItem.put(item, item.getPricePlusVat());
+            pricePerItem.put(item, item.getPricePlusVatAndPant());
             pantPerItem.put(item, item.getPant());
         }
     }
@@ -193,7 +197,7 @@ public class Order {
         if (items.get(item).doubleValue() > 1) {
 
             items.put(item, items.get(item).subtract(BigDecimal.ONE));
-            pricePerItem.put(item, pricePerItem.get(item).subtract(item.getPricePlusVat()));
+            pricePerItem.put(item, pricePerItem.get(item).subtract(item.getPricePlusVatAndPant()));
             pantPerItem.put(item, pantPerItem.get(item).subtract(item.getPant()));
 
         } else {

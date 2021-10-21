@@ -112,7 +112,7 @@ public class Receipt {
     //if multiple items it will account for that aswell as pant
     private String createItemRow(Item item, BigDecimal amountOfItem) {
         String itemName = item.getName();
-        String itemPricePlusVat = formatMoneyValue(item.getPricePlusVat());
+        String itemPricePlusVat = formatMoneyValue(item.getPricePlusVatAndPant());
         String totalItemPricePlusVat = formatMoneyValue(order.getTotalPricePerItem(item));
         String totalItemPant = formatMoneyValue(order.getTotalPantPerItem(item));
 

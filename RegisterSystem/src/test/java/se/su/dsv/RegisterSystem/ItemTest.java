@@ -112,6 +112,13 @@ class ItemTest {
         });
     }
 
+    //If currency is not set to SEK, pant should be 0
+    @Test
+    void constructorPantCurrencyNotSEKIsZeroTest(){
+        Item notInSEK = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("10"), Currency.USD), new BigDecimal("2"));
+        assertEquals(new Money(BigDecimal.ZERO, Currency.USD), notInSEK.getPant());
+    }
+
     // testar att setPrice() metoden ändrar priset korrekt
     @Test
     void setPriceChangesPriceCorrectlyTest(){
@@ -121,10 +128,11 @@ class ItemTest {
         assertEquals(new Money(new BigDecimal("20"), Currency.SEK), item.getPrice());
     }
 
+
     // testar att priset plus VAT beräknas korrekt
     @Test
     void PricePlusVatCorrectTest(){
-        assertEquals(DEFAULT_GROCERY_PRICE_PLUS_VAT, DEFAULT_GROCERY.getPricePlusVat());
+        assertEquals(DEFAULT_GROCERY_PRICE_PLUS_VAT, DEFAULT_GROCERY.getPricePlusVatAndPant());
     }
 
     // testar att VAT delen av priset beräknas korrekt
@@ -136,7 +144,7 @@ class ItemTest {
     // testar att priset plus VAT och pant beräknas korrekt
     @Test
     void pricePlusVatAndPantCorrectTest(){
-        assertEquals(new Money(new BigDecimal("13.20"), Currency.SEK),DEFAULT_BIG_BEVERAGE.getPricePlusVat());
+        assertEquals(new Money(new BigDecimal("13.20"), Currency.SEK),DEFAULT_BIG_BEVERAGE.getPricePlusVatAndPant());
     }
 
     // testar att toString metoden fungerar som den ska
