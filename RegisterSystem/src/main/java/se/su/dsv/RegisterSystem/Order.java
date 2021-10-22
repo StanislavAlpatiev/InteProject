@@ -8,6 +8,8 @@ import java.util.*;
 public class Order {
 
     //TODO clean up and write more comments
+    // göra så att man kan välja hur många av samma item som ska adderas, samma för remove
+    // kolla att ordernummer inte finns
 
 
     private final HashMap<Item, BigDecimal> items = new HashMap<>();

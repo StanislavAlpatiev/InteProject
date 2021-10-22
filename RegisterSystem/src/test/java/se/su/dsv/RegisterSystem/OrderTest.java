@@ -15,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class OrderTest {
 
     //TODO clean up and write comments for every method, better names for tests
+    // add test checking if order is empty, zero price and no items. used for constructor and after remove
+    // test för framtida metod för att skicka in fler av samma items
 
 
     static final Currency DEFAULT_CURRENCY = Currency.SEK;
@@ -68,7 +70,6 @@ public class OrderTest {
     void constructorAddsMultipleItemsToOrder() {
         Order order = new Order(DEFAULT_CURRENCY, DEFAULT_NEWSPAPER, DEFAULT_BEVERAGE);
         orderContainItems(order, DEFAULT_NEWSPAPER, DEFAULT_BEVERAGE);
-
     }
 
 
