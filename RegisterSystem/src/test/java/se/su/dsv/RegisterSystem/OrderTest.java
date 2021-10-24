@@ -152,7 +152,7 @@ public class OrderTest {
     @Test
     void addItemsIncreasesTotalOrderPrice() {
         defaultOrder.addItem(DEFAULT_GROCERY, DEFAULT_BEVERAGE);
-        Money actual = defaultOrder.getTotalPricePlusVat();
+        Money actual = defaultOrder.getTotalGrossPrice();
         Money expected = DEFAULT_BEVERAGE.getPricePlusVatAndPant().add(DEFAULT_GROCERY.getPricePlusVatAndPant());
         assertEquals(expected, actual);
     }
@@ -205,7 +205,7 @@ public class OrderTest {
     void successfulRemoveDecreasesTotalOrderPrice() {
         defaultOrder.addItem(DEFAULT_TOBACCO);
         defaultOrder.removeItem(DEFAULT_TOBACCO);
-        Money actual = defaultOrder.getTotalPricePlusVat();
+        Money actual = defaultOrder.getTotalGrossPrice();
         assertEquals(ZERO, actual);
     }
 
@@ -214,7 +214,7 @@ public class OrderTest {
         defaultOrder.addItem(DEFAULT_GROCERY, DEFAULT_BEVERAGE, DEFAULT_TOBACCO);
         defaultOrder.removeItem(DEFAULT_TOBACCO, DEFAULT_BEVERAGE);
         Money expected = DEFAULT_GROCERY.getPricePlusVatAndPant();
-        Money actual = defaultOrder.getTotalPricePlusVat();
+        Money actual = defaultOrder.getTotalGrossPrice();
         assertEquals(expected, actual);
     }
 
@@ -229,7 +229,7 @@ public class OrderTest {
     void clearRemovesTotalPrice() {
         defaultOrder.addItem(DEFAULT_TOBACCO, DEFAULT_GROCERY);
         defaultOrder.clear();
-        Money actual = defaultOrder.getTotalPricePlusVat();
+        Money actual = defaultOrder.getTotalGrossPrice();
         assertEquals(ZERO, actual);
     }
 

@@ -43,7 +43,7 @@ public class RegisterTest {
         defaultRegister.getInventory().add(DEFAULT_ITEM);
         defaultRegister.getInventory().add(DEFAULT_ITEM2);
         // Makes sure there is as much money in money as there is in the order
-        defaultWallet.add(DEFAULT_ORDER.getTotalPricePlusVat());
+        defaultWallet.add(DEFAULT_ORDER.getTotalGrossPrice());
     }
 
     // Tests whether constructor constructs as it is supposed to with valid params.

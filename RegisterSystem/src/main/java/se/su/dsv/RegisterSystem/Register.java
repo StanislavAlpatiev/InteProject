@@ -32,7 +32,7 @@ public class Register {
             throw new IllegalArgumentException("Item not available!");
         }
 
-        Money toPay = order.getTotalPricePlusVat();
+        Money toPay = order.getTotalGrossPrice();
         Money walletMoney = wallet.totalValueInCurrency(currency);
 
         //checks whether there is enough money in wallet to pay for order
