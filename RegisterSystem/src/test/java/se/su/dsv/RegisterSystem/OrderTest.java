@@ -16,6 +16,7 @@ public class OrderTest {
     //TODO clean up and write comments for every method, better names for test
     // test för kontroll av ordernummer?
     // age restricted test?
+    // unvalid currency in more tests?
 
 
     static final Currency DEFAULT_CURRENCY = Currency.SEK;

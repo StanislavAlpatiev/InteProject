@@ -65,8 +65,12 @@ public class Receipt {
      */
     public void printToFile() {
         String fileName = order.getNumber();
+
+        //creates a new textfile with the ordernumber as name
         String pathName = "src\\test\\resources\\" + fileName + ".txt";
         File file = new File(pathName);
+
+        //throws exception if a file with the receipt already exists
         if (file.exists()) {
             throw new IllegalStateException("File already exists");
         }
