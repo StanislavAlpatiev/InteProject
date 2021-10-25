@@ -22,6 +22,7 @@ public class Order {
     private final Currency currency;
 
     private Money totalGrossPrice;
+    private boolean ageRestricted;
 
 
     public Order(Currency currency) {
@@ -56,6 +57,9 @@ public class Order {
             items.put(item, items.get(item).add(BigDecimal.ONE));
         //the total price increases by the gross price of the item
         totalGrossPrice = totalGrossPrice.add(item.getPricePlusVatAndPant());
+        if(item.isAgeRestricted()){
+            ageRestricted = item.isAgeRestricted();
+        }
 
     }
 
@@ -104,6 +108,9 @@ public class Order {
         totalGrossPrice = new Money(BigDecimal.ZERO, currency);
     }
 
+    public boolean isAgeRestricted(){
+        return ageRestricted;
+    }
 
     public Money getTotalGrossPrice() {
         return totalGrossPrice;

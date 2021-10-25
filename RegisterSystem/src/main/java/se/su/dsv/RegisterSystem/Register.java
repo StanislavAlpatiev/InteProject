@@ -2,6 +2,8 @@ package se.su.dsv.RegisterSystem;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -23,14 +25,7 @@ public class Register {
     //Core method of system. Items bought in the order are being deducted from inventory,
     //and money in wallet is being deducted by the total cost of the order.
     public void checkOut(Order order, Wallet wallet) throws IOException {
-        if(order == null || wallet == null){
-            throw new IllegalArgumentException("Null arguments into checkout");
-        }
-
-        //checks whether item in order are available in the inventory
-        if(!inventory.isAvailable(order)){
-            throw new IllegalArgumentException("Item not available!");
-        }
+        checkOutIsValid(order, wallet);
 
         Money toPay = order.getTotalGrossPrice();
         Money walletMoney = wallet.totalValueInCurrency(currency);
@@ -42,6 +37,28 @@ public class Register {
 
         updateInventory(order);
         updateWallet(wallet, toPay);
+    }
+
+    //Controls whether checkout parameters are valid for checkout
+    private void checkOutIsValid(Order order, Wallet wallet) {
+        if(order == null || wallet == null){
+            throw new IllegalArgumentException("Null arguments into checkout");
+        }
+        //checks whether item in order are available in the inventory
+        if(!inventory.isAvailable(order)){
+            throw new IllegalArgumentException("Item not available!");
+        }
+
+        //If order contains an item which is agerestricted... 
+        if(order.isAgeRestricted()){
+            //... then the age of the customer is calculated...
+            int yearsOld = Period.between(wallet.getOwner().getBirthday(), LocalDate.now()).getYears();
+
+            //...and if that age is below 18, refuse to checkout. 
+            if(yearsOld<18){
+                throw new IllegalArgumentException("Customer is too young for order");
+            }
+        }
     }
 
     //Helper method for checkout, removes items from inventory when they're bought.

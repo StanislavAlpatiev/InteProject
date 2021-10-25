@@ -11,8 +11,12 @@ import org.junit.jupiter.api.Test;
 
 public class RegisterTest {
 
-    final Customer DEFAULT_CUSTOMER = new Customer("Mr Customer", "Street Road", LocalDate.now(), "0707070700",
+    //Default customer who is 20 years old.
+    final Customer DEFAULT_CUSTOMER = new Customer("Mr Customer", "Street Road", LocalDate.now().minusYears(20), "0707070700",
     "customer@test.com");
+
+    //Customer 0 years old.
+    final Customer YOUNG_CUSTOMER = new Customer("Young Customer", "Street street", LocalDate.now(), "0707070700", "young@test.com");
 
     final Currency DEFAULT_CURRENCY = Currency.USD;
     final Currency OTHER_CURRENCY = Currency.SEK;
@@ -175,5 +179,24 @@ public class RegisterTest {
         //assertEquals(BigDecimal.ZERO, defaultWallet.getTotalAmount(DEFAULT_CURRENCY));
         //Since wallet content is equals to cost of order, after checkout there should be 0 left in wallet. 
         assertEquals(BigDecimal.valueOf(0), defaultWallet.totalValueInCurrency(DEFAULT_CURRENCY).getAmount());
+    }
+
+    @Test
+    void tooYoungCustomerForTobaccoTest() throws IOException {
+        //creates wallet owned by customer under 18
+        Wallet wallet = new Wallet(YOUNG_CUSTOMER, new MockBank());
+        //Adds money to make sure customer has enough money
+        wallet.add(new Money(new BigDecimal(100000), DEFAULT_CURRENCY));
+        //Agerestricted item
+        Item item = new Item("test", "012", "test", ItemType.TOBACCO, DEFAULT_MONEY);
+        //Creates order containing agerestricted item
+        Order order = new Order(DEFAULT_CURRENCY, item);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            defaultRegister.checkOut(order, wallet);
+        });
+
+
+
     }
 }
