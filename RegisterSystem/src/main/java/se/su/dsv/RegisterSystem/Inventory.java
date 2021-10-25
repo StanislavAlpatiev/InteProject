@@ -85,19 +85,31 @@ public class Inventory {
             return false;
         }
         TreeMap<Item, BigDecimal> itemAndAmount = order.getItems();
+
         for (Map.Entry<Item, BigDecimal> entry : itemAndAmount.entrySet()) {
-
-            // Checks if there is any of the item at all in the inventory
-            if (!items.containsKey(entry.getKey())) {
-                return false;
-            }
-
-            // Checks if the object is available, is there enough of them to satisfy order
-            if (entry.getValue().compareTo(new BigDecimal(items.get(entry.getKey()))) > 0) {
+            if(!itemAmountNeededIsAvailable(entry)){
                 return false;
             }
         }
         return true;
+    }
+
+    //Helper method for isAvailable(Order), determines if the number of items
+    //being bought in an order is equal or less than the amount of items of that
+    //type in inventory.
+    private boolean itemAmountNeededIsAvailable(Map.Entry<Item, BigDecimal> entry){
+        boolean itemIsAvailable = true; 
+        // Checks if there is any of the item at all in the inventory
+        if (!items.containsKey(entry.getKey())) {
+            itemIsAvailable = false;
+        }
+
+        // Checks if the object is available, is there enough of them to satisfy order
+        if (entry.getValue().compareTo(new BigDecimal(items.get(entry.getKey()))) > 0) {
+            itemIsAvailable = false;
+        }
+
+        return itemIsAvailable;
     }
 
     public void importInventory() throws FileNotFoundException {
