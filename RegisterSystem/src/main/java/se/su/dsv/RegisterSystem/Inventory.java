@@ -135,8 +135,6 @@ public class Inventory {
                     add(new Item(params[0], params[1], params[2], ItemType.valueOf(params[3]),
                             new Money(new BigDecimal(params[4]), Currency.valueOf(params[5]))));
                 }
-
-
             }
             // close reader
             reader.close();
