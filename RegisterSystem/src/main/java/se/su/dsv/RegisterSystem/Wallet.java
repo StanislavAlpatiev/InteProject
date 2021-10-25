@@ -53,7 +53,7 @@ public class Wallet {
     public void remove(Money money) throws IOException {
 
         //There is enough money of the currency in the wallet:
-        if(money.compareTo(walletContent.get(money.getCurrency()))<0){
+        if (money.compareTo(walletContent.get(money.getCurrency())) < 0) {
             Money newAmountInCurrency = walletContent.get(money.getCurrency()).subtract(money);
             walletContent.replace(money.getCurrency(), newAmountInCurrency);
             return;
@@ -61,7 +61,7 @@ public class Wallet {
 
         money = money.subtract(walletContent.get(money.getCurrency()));
         walletContent.remove(money.getCurrency());
-        
+
         for (Map.Entry<Currency, Money> entry : walletContent.entrySet()) {
             //exchange här leder till evig multiplikation! pga from är alltid gånger 10, vilket inte kan raderas helt. men borde inte¨
             //wallet få slut på pengar innan det? nej pga den kan ba fortsätta gå igenom loopen? 

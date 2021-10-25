@@ -9,8 +9,8 @@ public class Item implements Comparable<Item> {
     private final String name;
     private final String productNo;
     private final String producer;
-    private boolean ageRestricted = false;
     private final ItemType type;
+    private boolean ageRestricted = false;
     private Money price;
     private BigDecimal volumeLiter;
     private BigDecimal vat;
@@ -26,7 +26,7 @@ public class Item implements Comparable<Item> {
         //item producer name cant be longer than 25 characters because it needs to fit on the receipt
         argumentRegexFilter(producer, "^[\\p{L} -']{1,20}$");
 
-        if(price == null){
+        if (price == null) {
             throw new IllegalArgumentException("null parameter in Item constructor");
         }
 
@@ -35,7 +35,7 @@ public class Item implements Comparable<Item> {
         this.producer = producer;
         this.type = type;
         this.price = price;
-        this.pant = new Money (BigDecimal.ZERO, price.getCurrency());
+        this.pant = new Money(BigDecimal.ZERO, price.getCurrency());
 
         if(type == ItemType.TOBACCO){
             this.ageRestricted = true;
@@ -44,26 +44,25 @@ public class Item implements Comparable<Item> {
         setVat();
     }
 
-        //second Item constructor that takes volumeCl as parameter and passes BEVERAGE into the first constructor, then sets pant for the volume of the beverage
-        public Item(String name, String productNo, String producer, Money price, BigDecimal volumeLiter) {
-            this(name, productNo, producer, ItemType.BEVERAGE, price);
-    
-            //Checks whether volume is null, zero, or below, and throws if that is the case. 
-            if(volumeLiter == null || volumeLiter.compareTo(BigDecimal.ZERO)<=0){
-                throw new IllegalArgumentException();
-            }
-    
-            this.volumeLiter = volumeLiter;
-    
-            setPant();
+    //second Item constructor that takes volumeCl as parameter and passes BEVERAGE into the first constructor, then sets pant for the volume of the beverage
+    public Item(String name, String productNo, String producer, Money price, BigDecimal volumeLiter) {
+        this(name, productNo, producer, ItemType.BEVERAGE, price);
+
+        //Checks whether volume is null, zero, or below, and throws if that is the case.
+        if (volumeLiter == null || volumeLiter.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException();
         }
 
+        this.volumeLiter = volumeLiter;
+
+        setPant();
+    }
+
     private void argumentRegexFilter(String argument, String regex) {
-        if(argument == null || argument.isEmpty() || !argument.matches(regex)) {
+        if (argument == null || argument.isEmpty() || !argument.matches(regex)) {
             throw new IllegalArgumentException(argument + " does not match" + regex);
         }
     }
-
 
 
     public String getName() {
@@ -90,53 +89,54 @@ public class Item implements Comparable<Item> {
         return price;
     }
 
-    public Money getPant(){
-        return pant;
-    }
-
-    public BigDecimal getVat(){
-        return vat;
-    }
-
-    public BigDecimal getVolumeLiter(){
-        return volumeLiter;
-    }
-
     //sets price and changes pant, only changes the price if its not the same
-    public void setPrice(Money newPrice){
-        if(newPrice == null){
+    public void setPrice(Money newPrice) {
+        if (newPrice == null) {
             throw new IllegalArgumentException("setPrice cant set price to null");
         }
-        if(!newPrice.equals(price)){
+        if (!newPrice.equals(price)) {
             this.price = newPrice;
             setVat();
             setPant();
         }
     }
 
+    public Money getPant() {
+        return pant;
+    }
+
+    public BigDecimal getVat() {
+        return vat;
+    }
+
+    public BigDecimal getVolumeLiter() {
+        return volumeLiter;
+    }
+
     //sets pant for a specific currency, is only implemented for SEK and NOK, would be better to have pant be set to a different country in hindsight
-    public void setPant(){
-        if(type != ItemType.BEVERAGE){
+    public void setPant() {
+        if (type != ItemType.BEVERAGE) {
             return;
         }
         pant = determinePant();
     }
+
     //Helper method for setPant, see comment for that method for more information.
     private Money determinePant() {
-        switch(price.getCurrency()){
+        switch (price.getCurrency()) {
             case SEK:
-                if(volumeLiter.doubleValue() >= BigDecimal.ONE.doubleValue()){
-                    return new Money (new BigDecimal("2"), price.getCurrency());
+                if (volumeLiter.doubleValue() >= BigDecimal.ONE.doubleValue()) {
+                    return new Money(new BigDecimal("2"), price.getCurrency());
                 }
 
-                return new Money (BigDecimal.ONE, price.getCurrency());
+                return new Money(BigDecimal.ONE, price.getCurrency());
 
             case NOK:
-                if(volumeLiter.doubleValue() >= BigDecimal.ONE.doubleValue()){
-                    return new Money (new BigDecimal("3"), price.getCurrency());
+                if (volumeLiter.doubleValue() >= BigDecimal.ONE.doubleValue()) {
+                    return new Money(new BigDecimal("3"), price.getCurrency());
                 }
-                
-                return new Money (new BigDecimal("2"), price.getCurrency());
+
+                return new Money(new BigDecimal("2"), price.getCurrency());
 
             case DKK:
                 if(volumeLiter.doubleValue() >= BigDecimal.ONE.doubleValue()){
@@ -146,19 +146,19 @@ public class Item implements Comparable<Item> {
                 return new Money (new BigDecimal("1.50"), price.getCurrency());
 
             default:
-                return new Money (BigDecimal.ZERO, price.getCurrency());
+                return new Money(BigDecimal.ZERO, price.getCurrency());
         }
-        
+
     }
 
     //sets vat, is only implemented for swedish tax laws, could be expanded
     //should be set for different countries, we have not implemented countries could be done with enum or a complete restructure
-    public void setVat(){
+    public void setVat() {
         vat = determineVat();
     }
 
     private BigDecimal determineVat() {
-        switch(price.getCurrency()){
+        switch (price.getCurrency()) {
             case NOK:
                 if(type == ItemType.TOBACCO){
                 return new BigDecimal("0.25");
@@ -176,16 +176,15 @@ public class Item implements Comparable<Item> {
                 }
 
             default:  //DEFAULT is the Vat for SEK, but its default because we havent implemented the other currencies yet
-                if(type == ItemType.TOBACCO){
+                if (type == ItemType.TOBACCO) {
                     return new BigDecimal("0.25");
-                }else if(type == ItemType.NEWSPAPER){
+                } else if (type == ItemType.NEWSPAPER) {
                     return new BigDecimal("0.06");
-                }else{
+                } else {
                     return new BigDecimal("0.12");
                 }
         }
     }
-
 
 
     //returns the full price including vat and pant
@@ -229,10 +228,10 @@ public class Item implements Comparable<Item> {
 
     //returns formatted string
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getName() + "@" + getProductNo() + "@" + getProducer() + "@" + getType() + "@" + getPrice().toExport());
-        if(type == ItemType.BEVERAGE){
+        if (type == ItemType.BEVERAGE) {
             sb.append("@" + volumeLiter);
         }
         return sb.toString();

@@ -7,36 +7,12 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
-
 import static org.junit.jupiter.api.Assertions.*;
 
 //TODO: Add comments to what every method does
 public class ReceiptTest {
 
-    // to be able to create receipt without random generated order number
-    static class MockOrder extends Order {
-
-        String mockNumber;
-
-        public MockOrder(Currency currency, String mockOrderNumber) {
-            super(currency);
-            mockNumber = mockOrderNumber;
-        }
-
-        @Override
-        public String getNumber() {
-            return mockNumber;
-        }
-    }
-
-    private static final Item DEFAULT_ITEM_1 = new Item("DN Newspaper", "12345678", "Dn", ItemType.NEWSPAPER, new Money(new BigDecimal("269.99"), Currency.SEK));
-    private static final Item DEFAULT_ITEM_2 = new Item("Coca-cola", "12345678", "Dn", new Money(new BigDecimal("49.45"), Currency.SEK), new BigDecimal("5"));
-    private static final Item DEFAULT_ITEM_3 = new Item("Watermelon bigpack", "12345678", "Dn", ItemType.GROCERY, new Money(new BigDecimal("9.7955"), Currency.SEK));
-    private static final Item DEFAULT_ITEM_4 = new Item("Snus", "12345678", "Dn", ItemType.TOBACCO, new Money(new BigDecimal("999.99"), Currency.SEK));
-    private static final String DEFAULT_ORDER_NUMBER = "19990101XXXX";
-    //private static final Item LONG_STRING_ITEM = new Item("Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "12345678", "Dn", ItemType.TOBACCO, new Money(new BigDecimal(Integer.MAX_VALUE), Currency.SEK));
-
-    static final String EXPECTED_RECEIPT_ONE_ITEM ="===================================================================================\n" +
+    static final String EXPECTED_RECEIPT_ONE_ITEM = "===================================================================================\n" +
             "OrderNr:                     19990101XXXX                                          \n" +
             "Datum:                         1999-01-01                 Tid:                00:00\n" +
             "===================================================================================\n" +
@@ -46,7 +22,6 @@ public class ReceiptTest {
             "Moms %                               Moms                Netto               Brutto\n" +
             "6.00                                16.20               269.99               286.19\n" +
             "===================================================================================";
-
     static final String EXPECTED_RECEIPT_MULTIPLE_ITEMS = "===================================================================================\n" +
             "OrderNr:                     19990101XXXX                                          \n" +
             "Datum:                         1999-01-01                 Tid:                00:00\n" +
@@ -62,8 +37,12 @@ public class ReceiptTest {
             "12.00                               37.90               315.82               363.72\n" +
             "25.00                             2249.98              8999.91             11249.89\n" +
             "===================================================================================";
-
-
+    private static final Item DEFAULT_ITEM_1 = new Item("DN Newspaper", "12345678", "Dn", ItemType.NEWSPAPER, new Money(new BigDecimal("269.99"), Currency.SEK));
+    private static final Item DEFAULT_ITEM_2 = new Item("Coca-cola", "12345678", "Dn", new Money(new BigDecimal("49.45"), Currency.SEK), new BigDecimal("5"));
+    private static final Item DEFAULT_ITEM_3 = new Item("Watermelon bigpack", "12345678", "Dn", ItemType.GROCERY, new Money(new BigDecimal("9.7955"), Currency.SEK));
+    private static final Item DEFAULT_ITEM_4 = new Item("Snus", "12345678", "Dn", ItemType.TOBACCO, new Money(new BigDecimal("999.99"), Currency.SEK));
+    //private static final Item LONG_STRING_ITEM = new Item("Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "12345678", "Dn", ItemType.TOBACCO, new Money(new BigDecimal(Integer.MAX_VALUE), Currency.SEK));
+    private static final String DEFAULT_ORDER_NUMBER = "19990101XXXX";
 
     @Test
     void constructorThrowsExceptionForNullArgument() {
@@ -92,15 +71,6 @@ public class ReceiptTest {
         }
     }
 
-  /*  @Test
-    void exceptionIsThrownWhenNumberOfCharactersOnRowIsExceeded() {
-        {
-            assertThrows(IllegalStateException.class, () -> {
-                new Receipt(new Order(LONG_STRING_ITEM), new Date());
-            });
-        }
-    }*/
-
     @Test
     void receiptMatchesExpectedReceiptOneItem() {
 
@@ -116,6 +86,15 @@ public class ReceiptTest {
 
     }
 
+  /*  @Test
+    void exceptionIsThrownWhenNumberOfCharactersOnRowIsExceeded() {
+        {
+            assertThrows(IllegalStateException.class, () -> {
+                new Receipt(new Order(LONG_STRING_ITEM), new Date());
+            });
+        }
+    }*/
+
     @Test
     void receiptMatchesExpectedReceiptWithMultipleItems() {
 
@@ -124,18 +103,20 @@ public class ReceiptTest {
         mockOrder.addItem(DEFAULT_ITEM_1);
 
         int noOfSameItemAdded = 5;
-        for (int i = 0; i < noOfSameItemAdded; i++)
+        for (int i = 0; i < noOfSameItemAdded; i++) {
             mockOrder.addItem(DEFAULT_ITEM_2);
+        }
 
         noOfSameItemAdded = 7;
-        for (int i = 0; i < noOfSameItemAdded; i++)
+        for (int i = 0; i < noOfSameItemAdded; i++) {
             mockOrder.addItem(DEFAULT_ITEM_3);
+        }
 
         noOfSameItemAdded = 9;
         for (int i = 0; i < noOfSameItemAdded; i++) {
             mockOrder.addItem(DEFAULT_ITEM_4);
         }
-        
+
         //TODO: refactor Date since it is deprecated
         Date mockDate = new Date(99, Calendar.JANUARY, 1, 0, 0);
         Receipt receipt = new Receipt(mockOrder, mockDate);
@@ -165,7 +146,9 @@ public class ReceiptTest {
         Receipt receipt = new Receipt(mockOrder);
         receipt.printToFile();
 
-        assertThrows(IllegalStateException.class, () -> {receipt.printToFile();});
+        assertThrows(IllegalStateException.class, () -> {
+            receipt.printToFile();
+        });
 
         File file = new File("src\\test\\resources\\" + mockOrder.getNumber() + ".txt");
         assertTrue(file.delete());
@@ -190,6 +173,22 @@ public class ReceiptTest {
             System.out.println("IO error " + e.getMessage());
         }
         return readFile.toString();
+    }
+
+    // to be able to create receipt without random generated order number
+    static class MockOrder extends Order {
+
+        String mockNumber;
+
+        public MockOrder(Currency currency, String mockOrderNumber) {
+            super(currency);
+            mockNumber = mockOrderNumber;
+        }
+
+        @Override
+        public String getNumber() {
+            return mockNumber;
+        }
     }
 
 }

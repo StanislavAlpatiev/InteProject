@@ -29,7 +29,7 @@ public class Customer {
         this.mail = mail;
     }
 
-    private void argumentRegexFilter(String argument , String regex) throws IllegalArgumentException {
+    private void argumentRegexFilter(String argument, String regex) throws IllegalArgumentException {
         if (argument == null || argument.isEmpty() || !argument.matches(regex)) {
             throw new IllegalArgumentException(argument + " does not match regex!");
         }

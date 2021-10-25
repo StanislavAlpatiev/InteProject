@@ -6,8 +6,8 @@ import java.util.Objects;
 //TODO: comments for each method!
 public class Money implements Comparable<Money> {
 
-    private BigDecimal amount;
     private final Currency currency;
+    private BigDecimal amount;
 
     //sets amount and currency
     public Money(BigDecimal amount, Currency currency) {
@@ -62,7 +62,7 @@ public class Money implements Comparable<Money> {
             return false;
         }
         Money money = (Money) o;
-        return amount.compareTo(money.amount)==0 && Objects.equals(currency, money.currency);
+        return amount.compareTo(money.amount) == 0 && Objects.equals(currency, money.currency);
     }
 
     //generates hashcode

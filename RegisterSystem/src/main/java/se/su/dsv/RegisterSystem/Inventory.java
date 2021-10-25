@@ -1,15 +1,12 @@
 package se.su.dsv.RegisterSystem;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
-
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -85,19 +82,31 @@ public class Inventory {
             return false;
         }
         TreeMap<Item, BigDecimal> itemAndAmount = order.getItems();
+
         for (Map.Entry<Item, BigDecimal> entry : itemAndAmount.entrySet()) {
-
-            // Checks if there is any of the item at all in the inventory
-            if (!items.containsKey(entry.getKey())) {
-                return false;
-            }
-
-            // Checks if the object is available, is there enough of them to satisfy order
-            if (entry.getValue().compareTo(new BigDecimal(items.get(entry.getKey()))) > 0) {
+            if (!itemAmountNeededIsAvailable(entry)) {
                 return false;
             }
         }
         return true;
+    }
+
+    //Helper method for isAvailable(Order), determines if the number of items
+    //being bought in an order is equal or less than the amount of items of that
+    //type in inventory.
+    private boolean itemAmountNeededIsAvailable(Map.Entry<Item, BigDecimal> entry) {
+        boolean itemIsAvailable = true;
+        // Checks if there is any of the item at all in the inventory
+        if (!items.containsKey(entry.getKey())) {
+            itemIsAvailable = false;
+        }
+
+        // Checks if the object is available, is there enough of them to satisfy order
+        if (entry.getValue().compareTo(new BigDecimal(items.get(entry.getKey()))) > 0) {
+            itemIsAvailable = false;
+        }
+
+        return itemIsAvailable;
     }
 
     public void importInventory() throws FileNotFoundException {
@@ -119,12 +128,12 @@ public class Inventory {
             for (Map.Entry<String, Integer> entry : newItems.entrySet()) {
                 String stringEntry = entry.getKey();
                 String[] params = stringEntry.split("@");
-                if(params.length==7){
+                if (params.length == 7) {
                     Money money = new Money(new BigDecimal(params[4]), Currency.valueOf(params[5]));
                     add(new Item(params[0], params[1], params[2], money, new BigDecimal(params[6])));
                 } else {
                     add(new Item(params[0], params[1], params[2], ItemType.valueOf(params[3]),
-                    new Money(new BigDecimal(params[4]), Currency.valueOf(params[5]))));
+                            new Money(new BigDecimal(params[4]), Currency.valueOf(params[5]))));
                 }
 
 

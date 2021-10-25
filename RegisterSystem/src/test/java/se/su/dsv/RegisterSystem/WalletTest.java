@@ -8,7 +8,8 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class WalletTest {
     static final Customer DEFAULT_OWNER = new Customer("Erik Andersson", "Lingonvägen 17",

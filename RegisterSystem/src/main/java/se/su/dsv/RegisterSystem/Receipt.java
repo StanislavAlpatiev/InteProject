@@ -38,12 +38,15 @@ public class Receipt {
 
 
     public Receipt(Order order, Date date) { //Constructor is able to send in date as parameter to allow for testing
-        if (order == null)
+        if (order == null) {
             throw new IllegalArgumentException("Payment is null");
-        if (date == null)
+        }
+        if (date == null) {
             throw new IllegalArgumentException("Date is null");
-        if (order.getItems().isEmpty())
+        }
+        if (order.getItems().isEmpty()) {
             throw new IllegalArgumentException("Can not create receipt for empty order");
+        }
         this.order = order;
         this.date = new SimpleDateFormat("yyyy-MM-dd").format(date);
         this.time = new SimpleDateFormat("HH:mm").format(date);
@@ -62,8 +65,9 @@ public class Receipt {
         String fileName = order.getNumber();
         String pathName = "src\\test\\resources\\" + fileName + ".txt";
         File file = new File(pathName);
-        if (file.exists())
+        if (file.exists()) {
             throw new IllegalStateException("File already exists");
+        }
         try {
             FileWriter writer = new FileWriter(pathName);
             PrintWriter out = new PrintWriter(writer);
@@ -108,8 +112,9 @@ public class Receipt {
         //creates the rows accounting the VATs.
         // If a specific VAT is not represented by an item in the receipt it will not be included
         sb.append(formatRow("Moms %", "Moms", "Netto", "Brutto"));
-        for (VAT rate : VAT.values())
+        for (VAT rate : VAT.values()) {
             sb.append(createVATRow(rate.label));
+        }
 
         sb.append(ROW_DIVIDER);
 
@@ -123,8 +128,9 @@ public class Receipt {
      */
     private String formatRow(String column1, String column2, String column3, String column4) {
         String row = String.format("%-20s %20s %20s %20s", column1, column2, column3, column4);
-        if (row.length() > WIDTH)
+        if (row.length() > WIDTH) {
             throw new IllegalStateException("Out of characters for row");
+        }
         return row + "\n";
     }
 
@@ -155,12 +161,14 @@ public class Receipt {
 
         //if it is more than one of the item the row will include:
         // the price of the single item, the amount and the total price of all the same items
-        if (amount.intValue() > 1)
+        if (amount.intValue() > 1) {
             return formatRow(itemName, amount + "*" +
                     itemGrossPrice, pantColumn, totalItemGrossPrice);
-            //if it is only one of the item only the name and individual price will be stated
-        else
+        }
+        //if it is only one of the item only the name and individual price will be stated
+        else {
             return formatRow(itemName, EMPTY_COLUMN, pantColumn, itemGrossPrice);
+        }
 
     }
 
@@ -179,8 +187,9 @@ public class Receipt {
         String totalGrossVat = formatMoneyValue(order.getGrossVat(VAT));
 
         //returns empty string if the VAT is not represented in the order
-        if (totalGrossVat.equals("0.00"))
+        if (totalGrossVat.equals("0.00")) {
             return "";
+        }
 
         return formatRow(VAT * 100 + "0", totalAmountOfVAT, totalNetVAT, totalGrossVat);
     }

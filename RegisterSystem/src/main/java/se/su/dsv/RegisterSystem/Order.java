@@ -3,7 +3,9 @@ package se.su.dsv.RegisterSystem;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.TreeMap;
 
 /**
  * Holds the information for a specific order.
@@ -22,11 +24,13 @@ public class Order {
     private final Currency currency;
 
     private Money totalGrossPrice;
+    private boolean ageRestricted;
 
 
     public Order(Currency currency) {
-        if (currency == null)
+        if (currency == null) {
             throw new IllegalArgumentException("Null currency");
+        }
         this.currency = currency;
         number = generateOrderNumber();
         totalGrossPrice = new Money(BigDecimal.ZERO, currency);
@@ -34,8 +38,9 @@ public class Order {
 
     public Order(Currency currency, Item... items) {
         this(currency);
-        if (items == null)
+        if (items == null) {
             throw new IllegalArgumentException("Null item");
+        }
         addItem(items);
     }
 
@@ -43,19 +48,26 @@ public class Order {
      * Adds an item to the order
      */
     public void addItem(Item item) {
-        if (item == null)
+        if (item == null) {
             throw new IllegalArgumentException("Null item");
-        if (item.getPrice().getCurrency() != currency)
+        }
+        if (item.getPrice().getCurrency() != currency) {
             throw new IllegalArgumentException("Item price has wrong currency");
+        }
 
-        if (!items.containsKey(item))
+        if (!items.containsKey(item)) {
             items.put(item, BigDecimal.ONE);
+        }
 
-            // if the added item already is present the amount of it increments
-        else
+        // if the added item already is present the amount of it increments
+        else {
             items.put(item, items.get(item).add(BigDecimal.ONE));
+        }
         //the total price increases by the gross price of the item
         totalGrossPrice = totalGrossPrice.add(item.getPricePlusVatAndPant());
+        if (item.isAgeRestricted()) {
+            ageRestricted = item.isAgeRestricted();
+        }
 
     }
 
@@ -70,18 +82,21 @@ public class Order {
      * Returns true if item is removed or false if the item didn't get removed
      */
     public boolean removeItem(Item item) {
-        if (item == null)
+        if (item == null) {
             throw new IllegalArgumentException("Null item");
+        }
 
         //Order is unchanged if the item doesn't exist and method returns false
-        if (!items.containsKey(item))
+        if (!items.containsKey(item)) {
             return false;
+        }
 
         //if there exists multiples of the item the amount of it will decrease
-        if (items.get(item).doubleValue() > 1)
+        if (items.get(item).doubleValue() > 1) {
             items.put(item, items.get(item).subtract(BigDecimal.ONE));
-        else
+        } else {
             items.remove(item);
+        }
 
         //the total price decreases by the gross price of the item
         totalGrossPrice = totalGrossPrice.subtract(item.getPricePlusVatAndPant());
@@ -104,6 +119,9 @@ public class Order {
         totalGrossPrice = new Money(BigDecimal.ZERO, currency);
     }
 
+    public boolean isAgeRestricted() {
+        return ageRestricted;
+    }
 
     public Money getTotalGrossPrice() {
         return totalGrossPrice;
@@ -122,7 +140,9 @@ public class Order {
             if (i.getVat().doubleValue() == vatRate)
 
             //the value of the current item is also multiplied with the amount of it
+            {
                 result = result.add(i.getVATAmountOfPrice().getAmount().multiply(items.get(i)));
+            }
         }
 
         return new Money(result, currency);
@@ -140,8 +160,10 @@ public class Order {
         for (Item i : items.keySet()) {
             if (i.getVat().doubleValue() == vatRate)
 
-                //the value of the current item is also multiplied with the amount of it
+            //the value of the current item is also multiplied with the amount of it
+            {
                 result = result.add(i.getPrice().getAmount().multiply(items.get(i)));
+            }
         }
 
         return new Money(result, currency);
@@ -159,8 +181,10 @@ public class Order {
         for (Item i : items.keySet()) {
             if (i.getVat().doubleValue() == vatRate)
 
-                //the value of the current item is also multiplied with the amount of it
+            //the value of the current item is also multiplied with the amount of it
+            {
                 result = result.add(i.getPricePlusVatAndPant().getAmount().multiply(items.get(i)));
+            }
         }
 
         return new Money(result, currency);
@@ -210,8 +234,9 @@ public class Order {
      */
     //TODO: should check if order number already exists in database?
     private String generateOrderNumber() {
-        if (number != null)
+        if (number != null) {
             throw new IllegalStateException("Order number already generated");
+        }
         StringBuilder sb = new StringBuilder();
         generateDatePartOfOrderNr(sb);
         generateEndPartOfOrderNumber(sb);
@@ -235,8 +260,9 @@ public class Order {
     private void generateEndPartOfOrderNumber(StringBuilder sb) {
         Random r = new Random();
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++) {
             sb.append((char) (r.nextInt(26) + 'A'));
+        }
     }
 
 
@@ -245,8 +271,9 @@ public class Order {
      */
     private void verifyValidVat(double vatRate) {
         for (VAT validRate : VAT.values()) {
-            if (vatRate == validRate.label)
+            if (vatRate == validRate.label) {
                 return;
+            }
         }
         throw new IllegalArgumentException("Not a valid VAT rate");
     }
@@ -255,9 +282,11 @@ public class Order {
      * Verifies whether a item is valid by throwing an exception if it is null or not in the order
      */
     private void verifyValidItem(Item item) {
-        if (item == null)
+        if (item == null) {
             throw new IllegalArgumentException("Null item");
-        if (!items.containsKey(item))
+        }
+        if (!items.containsKey(item)) {
             throw new IllegalArgumentException("Item not found");
+        }
     }
 }
