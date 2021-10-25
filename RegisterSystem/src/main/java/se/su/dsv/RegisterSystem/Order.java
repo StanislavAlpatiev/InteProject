@@ -29,7 +29,7 @@ public class Order {
     private final Currency currency;
 
     private Money totalGrossPrice;
-    private HashSet<Item> restrictedItems;
+    private final HashSet<Item> restrictedItems;
 
 
     public Order(Currency currency) {
@@ -45,9 +45,8 @@ public class Order {
 
     public Order(Currency currency, Item... items) {
         this(currency);
-        if (items == null) {
+        if (items == null)
             throw new IllegalArgumentException("Null item");
-        }
         addItem(items);
     }
 
@@ -55,25 +54,20 @@ public class Order {
      * Adds an item to the order
      */
     public void addItem(Item item) {
-        if (item == null) {
-            throw new IllegalArgumentException("Null item");
-        }
-        if (item.getPrice().getCurrency() != currency) {
-            throw new IllegalArgumentException("Item price has wrong currency");
-        }
-
-        if (!items.containsKey(item)) {
+        if (!itemInOrder(item))
             items.put(item, BigDecimal.ONE);
-        }
 
         // if the added item already is present the amount of it increments
-        else {
+        else
             items.put(item, items.get(item).add(BigDecimal.ONE));
-        }
+
         //the total price increases by the gross price of the item
         totalGrossPrice = totalGrossPrice.add(item.getPricePlusVatAndPant());
+
         //the map for different VAT rate values gets updated
         addTotalPricePerVATRate(item);
+
+        //collection of age restricted items is updated if item is age restricted
         if (item.isAgeRestricted()) {
             restrictedItems.add(item);
         }
@@ -91,21 +85,18 @@ public class Order {
      * Returns true if item is removed or false if the item didn't get removed
      */
     public boolean removeItem(Item item) {
-        if (item == null) {
-            throw new IllegalArgumentException("Null item");
-        }
-
         //Order is unchanged if the item doesn't exist and method returns false
-        if (!items.containsKey(item)) {
+        if (!itemInOrder(item))
             return false;
-        }
 
         //if there exists multiples of the item the amount of it will decrease
         if (items.get(item).doubleValue() > 1) {
             items.put(item, items.get(item).subtract(BigDecimal.ONE));
         } else {
-            restrictedItems.remove(item);
             items.remove(item);
+
+            //collection of age restricted items is updated if item is age restricted
+            restrictedItems.remove(item);
         }
 
         //the total price decreases by the gross price of the item
@@ -126,12 +117,14 @@ public class Order {
      */
     public void clear() {
         items.clear();
+        restrictedItems.clear();
 
         //resets the total price to zero if all items are removed
         totalGrossPrice = new Money(BigDecimal.ZERO, currency);
 
         //resets the price per vat rate map to zero aswell
         setUpTotalPricePerVATRate();
+
     }
 
     public boolean isAgeRestricted() {
@@ -179,7 +172,8 @@ public class Order {
      * Returns the total gross price for a specific item
      */
     public Money getTotalPricePerItem(Item item) {
-        verifyValidItem(item);
+        if (!itemInOrder(item))
+            throw new IllegalArgumentException("Item not in order");
         BigDecimal moneyAmount = item.getPricePlusVatAndPant().getAmount();
         BigDecimal amount = items.get(item);
 
@@ -191,7 +185,8 @@ public class Order {
      * Returns the total pant for a specific item
      */
     public Money getTotalPantPerItem(Item item) {
-        verifyValidItem(item);
+        if (!itemInOrder(item))
+            throw new IllegalArgumentException("Item not in order");
         BigDecimal moneyAmount = item.getPant().getAmount();
         BigDecimal itemAmount = items.get(item);
 
@@ -264,15 +259,21 @@ public class Order {
     }
 
     /**
-     * Verifies whether a item is valid by throwing an exception if it is null or not in the order
+     * Checks whether a item is in the order
+     */
+    private boolean itemInOrder(Item item) {
+        verifyValidItem(item);
+        return items.containsKey(item);
+    }
+
+    /**
+     * Verifies whether a item is valid by throwing an exception if it is null or has the wromg currency
      */
     private void verifyValidItem(Item item) {
-        if (item == null) {
+        if (item == null)
             throw new IllegalArgumentException("Null item");
-        }
-        if (!items.containsKey(item)) {
-            throw new IllegalArgumentException("Item not found");
-        }
+        if (item.getPrice().getCurrency() != currency)
+            throw new IllegalArgumentException("Item price has wrong currency");
     }
 
 

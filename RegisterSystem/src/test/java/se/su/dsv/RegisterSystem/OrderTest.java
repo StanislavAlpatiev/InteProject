@@ -14,7 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class OrderTest {
 
     //TODO clean up and write comments for every method, better names for test
-    // test för kontroll av ordernummer!!!
+    // test för kontroll av ordernummer?
+    // age restricted test?
 
 
     static final Currency DEFAULT_CURRENCY = Currency.SEK;
