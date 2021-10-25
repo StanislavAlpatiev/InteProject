@@ -15,7 +15,6 @@ public class OrderTest {
 
     //TODO clean up and write comments for every method, better names for test
     // test för kontroll av ordernummer?
-    // age restricted test?
     // unvalid currency in more tests?
 
 
@@ -133,17 +132,17 @@ public class OrderTest {
     }
 
 
-    //dont know how to implement yet
     @Test
-    void constructorGeneratesOrderNumberRandomly() {
-        /*List<String> codes = new ArrayList<>();
-        for (int i = 0; i < 1000; i++) {
-            Order order = new Order();
-            codes.add(order.getNumber().substring(8));
-        }
-        Map<Object, Long> counts = codes.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));*/
+    void orderGetsAgeRestrictedForAgeRestrictedItem() {
+        defaultOrder.addItem(DEFAULT_TOBACCO);
+        assertTrue(defaultOrder.isAgeRestricted());
     }
 
+    @Test
+    void orderIsNotAgeRestrictedWhenNoAgeRestrictedItem() {
+        defaultOrder.addItem(DEFAULT_GROCERY);
+        assertFalse(defaultOrder.isAgeRestricted());
+    }
 
     /**
      * Trying to add a null Item parameter should throw an exception

@@ -160,6 +160,7 @@ public class ReceiptTest {
         for (int i = 0; i < noOfSameItemAdded; i++)
             mockOrder.addItem(DEFAULT_TOBACCO);
 
+
         Receipt receipt = new Receipt(mockOrder, MOCK_DATE);
         assertEquals(EXPECTED_RECEIPT_MULTIPLE_ITEMS, receipt.getReceipt());
 
@@ -174,7 +175,7 @@ public class ReceiptTest {
         String receiptStr = receipt.getReceipt();
         receipt.printToFile();
 
-        //if a file with the ordernumber exists and has the same content as the receipt string the test has succeeded
+        //if a file with the order number exists and has the same content as the receipt string the test has succeeded
         assertEquals(receiptStr + "\n", readTextFile("src\\test\\resources\\" + order.getNumber() + ".txt"));
 
         File file = new File("src\\test\\resources\\" + order.getNumber() + ".txt");
