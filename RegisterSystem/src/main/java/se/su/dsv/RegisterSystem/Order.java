@@ -12,8 +12,7 @@ import java.util.*;
 public class Order {
 
     //TODO clean up and write more comments
-    // göra så att man kan välja hur många av samma item som ska adderas, samma för remove
-    // kolla att ordernummer inte finns
+    // check att ordernummer inte redan finns
 
 
     //Map of the items in the order with the amount of every item mapped to it
@@ -73,9 +72,11 @@ public class Order {
     public boolean removeItem(Item item) {
         if (item == null)
             throw new IllegalArgumentException("Null item");
+
         //Order is unchanged if the item doesn't exist and method returns false
         if (!items.containsKey(item))
             return false;
+
         //if there exists multiples of the item the amount of it will decrease
         if (items.get(item).doubleValue() > 1)
             items.put(item, items.get(item).subtract(BigDecimal.ONE));
@@ -113,16 +114,18 @@ public class Order {
      */
     public Money getAmountOfVat(double vatRate) {
         verifyValidVat(vatRate);
-        BigDecimal[] result = {BigDecimal.ZERO};
+        BigDecimal result = BigDecimal.ZERO;
 
-        //goes through every item in the order and sums the amount of VAT for the items of the specified VAT rate
-        //if it is not found it will return a Money object with value zero
-        items.keySet().forEach(i -> {
+        //goes through every item in the order and sums the amount of VAT value for the items of the specified VAT rate
+        //if any item of the VAT rate is not found it will return a Money object with value zero
+        for (Item i : items.keySet()) {
             if (i.getVat().doubleValue() == vatRate)
-                result[0] = result[0].add(i.getVATAmountOfPrice().getAmount());
-        });
 
-        return new Money(result[0], currency);
+            //the value of the current item is also multiplied with the amount of it
+                result = result.add(i.getVATAmountOfPrice().getAmount().multiply(items.get(i)));
+        }
+
+        return new Money(result, currency);
     }
 
     /**
@@ -130,16 +133,18 @@ public class Order {
      */
     public Money getNetVat(double vatRate) {
         verifyValidVat(vatRate);
-        BigDecimal[] result = {BigDecimal.ZERO};
+        BigDecimal result = BigDecimal.ZERO;
 
         //goes through every item in the order and sums the net VAT value for the items of the specified VAT rate
-        //if it is not found it will return a Money object with value zero
-        items.keySet().forEach(i -> {
+        //if any item of the VAT rate is not found it will return a Money object with value zero
+        for (Item i : items.keySet()) {
             if (i.getVat().doubleValue() == vatRate)
-                result[0] = result[0].add(i.getPrice().getAmount());
-        });
 
-        return new Money(result[0], currency);
+                //the value of the current item is also multiplied with the amount of it
+                result = result.add(i.getPrice().getAmount().multiply(items.get(i)));
+        }
+
+        return new Money(result, currency);
     }
 
     /**
@@ -147,16 +152,18 @@ public class Order {
      */
     public Money getGrossVat(double vatRate) {
         verifyValidVat(vatRate);
-        BigDecimal[] result = {BigDecimal.ZERO};
+        BigDecimal result = BigDecimal.ZERO;
 
         //goes through every item in the order and sums the gross VAT value for the items of the specified VAT rate
-        //if it is not found it will return a Money object with value zero
-        items.keySet().forEach(i -> {
+        //if any item of the VAT rate is not found it will return a Money object with value zero
+        for (Item i : items.keySet()) {
             if (i.getVat().doubleValue() == vatRate)
-                result[0] = result[0].add(i.getPricePlusVatAndPant().getAmount());
-        });
 
-        return new Money(result[0], currency);
+                //the value of the current item is also multiplied with the amount of it
+                result = result.add(i.getPricePlusVatAndPant().getAmount().multiply(items.get(i)));
+        }
+
+        return new Money(result, currency);
     }
 
     /**
