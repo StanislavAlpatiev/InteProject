@@ -1,9 +1,11 @@
 package se.su.dsv.RegisterSystem;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -42,6 +44,14 @@ public class ReceiptTest {
     private static final Item DEFAULT_ITEM_3 = new Item("Watermelon bigpack", "12345678", "Dn", ItemType.GROCERY, new Money(new BigDecimal("9.7955"), Currency.SEK));
     private static final Item DEFAULT_ITEM_4 = new Item("Snus", "12345678", "Dn", ItemType.TOBACCO, new Money(new BigDecimal("999.99"), Currency.SEK));
     private static final String DEFAULT_ORDER_NUMBER = "19990101XXXX";
+    private static final LocalDateTime MOCK_DATE = LocalDateTime.of(1999, 1, 1, 0, 0);
+
+    ReceiptTest.MockOrder mockOrder;
+
+    @BeforeEach
+    void setUp(){
+         mockOrder = new ReceiptTest.MockOrder(Currency.SEK, DEFAULT_ORDER_NUMBER);
+    }
 
     @Test
     void constructorThrowsExceptionForNullArgument() {
@@ -73,13 +83,9 @@ public class ReceiptTest {
     @Test
     void receiptMatchesExpectedReceiptOneItem() {
 
-        ReceiptTest.MockOrder mockOrder = new ReceiptTest.MockOrder(Currency.SEK, DEFAULT_ORDER_NUMBER);
-
         mockOrder.addItem(DEFAULT_ITEM_1);
 
-        //TODO: refactor Date since it is deprecated
-        Date mockDate = new Date(99, Calendar.JANUARY, 1, 0, 0);
-        Receipt receipt = new Receipt(mockOrder, mockDate);
+        Receipt receipt = new Receipt(mockOrder, MOCK_DATE);
 
         assertEquals(EXPECTED_RECEIPT_ONE_ITEM, receipt.getReceipt());
 
@@ -96,9 +102,6 @@ public class ReceiptTest {
 
     @Test
     void receiptMatchesExpectedReceiptWithMultipleItems() {
-
-        ReceiptTest.MockOrder mockOrder = new ReceiptTest.MockOrder(Currency.SEK, DEFAULT_ORDER_NUMBER);
-
         mockOrder.addItem(DEFAULT_ITEM_1);
 
         int noOfSameItemAdded = 5;
@@ -116,9 +119,7 @@ public class ReceiptTest {
             mockOrder.addItem(DEFAULT_ITEM_4);
         }
 
-        //TODO: refactor Date since it is deprecated
-        Date mockDate = new Date(99, Calendar.JANUARY, 1, 0, 0);
-        Receipt receipt = new Receipt(mockOrder, mockDate);
+        Receipt receipt = new Receipt(mockOrder, MOCK_DATE);
 
         assertEquals(EXPECTED_RECEIPT_MULTIPLE_ITEMS, receipt.getReceipt());
 
@@ -139,7 +140,6 @@ public class ReceiptTest {
 
     @Test
     void printToFileThrowsExceptionWhenFileAlreadyExists() {
-        ReceiptTest.MockOrder mockOrder = new ReceiptTest.MockOrder(Currency.SEK, DEFAULT_ORDER_NUMBER);
 
         mockOrder.addItem(DEFAULT_ITEM_1);
         Receipt receipt = new Receipt(mockOrder);

@@ -4,6 +4,8 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Map;
 
@@ -32,12 +34,12 @@ public class Receipt {
 
 
     public Receipt(Order order) {
-        this(order, new Date());
+        this(order, LocalDateTime.now());
 
     }
 
 
-    public Receipt(Order order, Date date) { //Constructor is able to send in date as parameter to allow for testing
+    public Receipt(Order order, LocalDateTime date) { //Constructor is able to send in date as parameter to allow for testing
         if (order == null) {
             throw new IllegalArgumentException("Payment is null");
         }
@@ -47,9 +49,12 @@ public class Receipt {
         if (order.getItems().isEmpty()) {
             throw new IllegalArgumentException("Can not create receipt for empty order");
         }
+
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
         this.order = order;
-        this.date = new SimpleDateFormat("yyyy-MM-dd").format(date);
-        this.time = new SimpleDateFormat("HH:mm").format(date);
+        this.date = dateFormat.format(date);
+        this.time = timeFormat.format(date);
         receipt = createReceipt();
     }
 
