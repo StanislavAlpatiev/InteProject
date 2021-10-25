@@ -24,7 +24,7 @@ public class OrderTest {
             ItemType.NEWSPAPER, new Money(new BigDecimal("199.5"), DEFAULT_CURRENCY));
 
     //Item with pant (also VAT 12.00)
-    static final Item DEFAULT_BEVERAGE = new Item("Coca-cola", "12345678", "Dn",
+    static final Item DEFAULT_BEVERAGE = new Item("Coca cola", "12345678", "Dn",
             new Money(new BigDecimal("17.85"), DEFAULT_CURRENCY), new BigDecimal("5"));
 
     //Item with VAT 12.00
@@ -121,7 +121,7 @@ public class OrderTest {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDateTime now = LocalDateTime.now();
 
-        //expected string as todays date in YYYYMMDD
+        //expected string as today's date in YYYYMMDD
         String expected = dtf.format(now);
 
         //the first eight characters in the order number should be todays date in YYYYMMDD format
@@ -477,7 +477,7 @@ public class OrderTest {
 
             //since there are two of each item the value returned should be the doubled price of each item
             Money expected = item.getPricePlusVatAndPant().add(item.getPricePlusVatAndPant());
-            Money actual = defaultOrder.getTotalPricePerItem(item);
+            Money actual = DIFFERENT_VAT_RATES_ORDER.getTotalPricePerItem(item);
             assertEquals(expected, actual);
         }
     }
