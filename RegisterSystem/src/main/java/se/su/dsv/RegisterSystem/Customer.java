@@ -10,31 +10,29 @@ public class Customer {
     private final String mail;
 
     public Customer(String name, String address, LocalDate birthday, String phoneNumber, String mail) {
-        // Kollar så namnet inte är null eller tomt
-        if (name == null || name.equals("")) {
-            throw new IllegalArgumentException("name is null");
-        }
-        // Kollar så adressen inte är null eller tom
-        if (address == null || address.equals("")) {
-            throw new IllegalArgumentException("address is null");
-        }
-        // Kollar så att en kund inte kan vara förr före kalenderns datum
+        //Checks whether the birthday is ahead of calender
         if (!birthday.isBefore(LocalDate.now().plusDays(1))) {
             throw new IllegalArgumentException("Birthday is ahead of calender");
         }
-        // Kollar så att telefon nummret har rätt längd (Svenska telefon nummer)
-        if (!phoneNumber.matches("\\d{10}")) {
-            throw new IllegalArgumentException("phone number is in the wrong format");
-        }
-        // Simplifierad regex för att kolla mail formatet
-        if (!mail.matches("^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")) {
-            throw new IllegalArgumentException("mail is in the wrong format");
-        }
+
+        argumentRegexFilter(name, "^[\\p{L} .'-]+$"); //Checks whether the name is Null or empty
+        argumentRegexFilter(address, "[\\p{L} 0-9.'-]+$"); //Checks whether the address is Null or empty
+        argumentRegexFilter(phoneNumber, "\\d{10}"); //Checks that the string is of 10 digits
+        //Filters mail through regex so that it complies with permitted email standards from RFC 5322
+        argumentRegexFilter(mail,
+                "^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$");
+
         this.name = name;
         this.address = address;
         this.birthday = birthday;
         this.phoneNumber = phoneNumber;
         this.mail = mail;
+    }
+
+    private void argumentRegexFilter(String argument , String regex) throws IllegalArgumentException {
+        if (argument == null || argument.isEmpty() || !argument.matches(regex)) {
+            throw new IllegalArgumentException(argument + " does not match regex!");
+        }
     }
 
     public String getName() {
