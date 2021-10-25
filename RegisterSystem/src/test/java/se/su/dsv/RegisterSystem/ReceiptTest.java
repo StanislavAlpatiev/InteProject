@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 //TODO: Add comments to what every method does
+// fixa matchers
 public class ReceiptTest {
 
     static final String EXPECTED_RECEIPT_ONE_ITEM = "===================================================================================\n" +
@@ -91,15 +92,6 @@ public class ReceiptTest {
         assertEquals(EXPECTED_RECEIPT_ONE_ITEM, receipt.getReceipt());
 
     }
-
-  /*  @Test
-    void exceptionIsThrownWhenNumberOfCharactersOnRowIsExceeded() {
-        {
-            assertThrows(IllegalStateException.class, () -> {
-                new Receipt(new Order(LONG_STRING_ITEM), new Date());
-            });
-        }
-    }*/
 
     @Test
     void receiptMatchesExpectedReceiptWithMultipleItems() {

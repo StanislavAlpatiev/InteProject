@@ -16,7 +16,7 @@ import java.util.TreeMap;
 public class Order {
 
     //TODO clean up and write more comments
-    // check att ordernummer inte redan finns
+    // check att ordernummer inte redan finns?
 
 
     //Map of the items in the order with the amount of every item mapped to it
@@ -54,7 +54,8 @@ public class Order {
      * Adds an item to the order
      */
     public void addItem(Item item) {
-        if (!itemInOrder(item))
+        verifyValidItem(item);
+        if (itemNotInOrder(item))
             items.put(item, BigDecimal.ONE);
 
         // if the added item already is present the amount of it increments
@@ -85,8 +86,9 @@ public class Order {
      * Returns true if item is removed or false if the item didn't get removed
      */
     public boolean removeItem(Item item) {
+        verifyValidItem(item);
         //Order is unchanged if the item doesn't exist and method returns false
-        if (!itemInOrder(item))
+        if (itemNotInOrder(item))
             return false;
 
         //if there exists multiples of the item the amount of it will decrease
@@ -169,31 +171,23 @@ public class Order {
     }
 
     /**
-     * Returns the total gross price for a specific item
+     * Returns the total gross price for a specific item and its duplicates
      */
     public Money getTotalPricePerItem(Item item) {
-        if (!itemInOrder(item))
-            throw new IllegalArgumentException("Item not in order");
-        BigDecimal moneyAmount = item.getPricePlusVatAndPant().getAmount();
-        BigDecimal amount = items.get(item);
+        verifyValidItem(item);
 
         // returns the item gross price multiplied with the amount of the item
-        return new Money(moneyAmount.multiply(amount), currency);
+        return getValuePerItem(item, item.getPricePlusVatAndPant());
     }
 
     /**
-     * Returns the total pant for a specific item
+     * Returns the total pant for a specific item and its duplicates
      */
     public Money getTotalPantPerItem(Item item) {
-        if (!itemInOrder(item))
-            throw new IllegalArgumentException("Item not in order");
-        BigDecimal moneyAmount = item.getPant().getAmount();
-        BigDecimal itemAmount = items.get(item);
-
-        // returns the item pant multiplied with the amount of the item
-        return new Money(moneyAmount.multiply(itemAmount), currency);
+        verifyValidItem(item);
+        // returns the item pant value multiplied with the amount of the item
+        return getValuePerItem(item, item.getPant());
     }
-
 
     /**
      * Returns a sorted map of the items in the order
@@ -261,9 +255,8 @@ public class Order {
     /**
      * Checks whether a item is in the order
      */
-    private boolean itemInOrder(Item item) {
-        verifyValidItem(item);
-        return items.containsKey(item);
+    private boolean itemNotInOrder(Item item) {
+        return !items.containsKey(item);
     }
 
     /**
@@ -276,6 +269,18 @@ public class Order {
             throw new IllegalArgumentException("Item price has wrong currency");
     }
 
+    /**
+     * Helper method to get a specific value for one type of item and its duplicates in the order
+     */
+    private Money getValuePerItem(Item item, Money money) {
+        verifyValidItem(item);
+        if (itemNotInOrder(item))
+            throw new IllegalArgumentException("Item not in order");
+        BigDecimal moneyAmount = money.getAmount();
+        BigDecimal itemAmount = items.get(item);
+
+        return new Money(moneyAmount.multiply(itemAmount), currency);
+    }
 
     /**Initiates the total price per VAT rate map with the vat rates and value zero */
     private void setUpTotalPricePerVATRate(){

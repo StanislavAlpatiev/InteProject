@@ -2,11 +2,8 @@ package se.su.dsv.RegisterSystem;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Map;
 
 
@@ -17,7 +14,7 @@ import java.util.Map;
 
 public class Receipt {
 
-    //TODO: write more comments
+    //TODO: write more comments clean up
 
     static final int WIDTH = 83; // width of the receipt
 
