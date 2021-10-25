@@ -147,14 +147,23 @@ public class Item implements Comparable<Item> {
     }
 
     private BigDecimal determineVat() {
-        switch(type){
-            case NEWSPAPER:
-                return new BigDecimal("0.06");
-            case TOBACCO:
-                this.ageRestricted = true;
+        switch(price.getCurrency()){
+            case NOK:
+                if(type == ItemType.TOBACCO){
                 return new BigDecimal("0.25");
-            default:
-                return new BigDecimal("0.12");
+                }else if(type == ItemType.NEWSPAPER){
+                return new BigDecimal("0");
+                }else{
+                return new BigDecimal("0.15");
+                }
+            default:  //DEFAULT is the Vat for SEK, but its default because we havent implemented the other currencies yet
+                if(type == ItemType.TOBACCO){
+                    return new BigDecimal("0.25");
+                }else if(type == ItemType.NEWSPAPER){
+                    return new BigDecimal("0.06");
+                }else{
+                    return new BigDecimal("0.12");
+                }
         }
     }
 
