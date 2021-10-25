@@ -24,7 +24,7 @@ public class OrderTest {
             ItemType.NEWSPAPER, new Money(new BigDecimal("199.5"), DEFAULT_CURRENCY));
 
     //Item with pant (also VAT 12.00)
-    static final Item DEFAULT_BEVERAGE = new Item("Coca-cola", "12345678", "Dn",
+    static final Item DEFAULT_BEVERAGE = new Item("Coca cola", "12345678", "Dn",
             new Money(new BigDecimal("17.85"), DEFAULT_CURRENCY), new BigDecimal("5"));
 
     //Item with VAT 12.00

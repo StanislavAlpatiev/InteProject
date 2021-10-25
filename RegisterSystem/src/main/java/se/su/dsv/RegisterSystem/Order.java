@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.TreeMap;
 
@@ -24,7 +25,7 @@ public class Order {
     private final Currency currency;
 
     private Money totalGrossPrice;
-    private boolean ageRestricted;
+    private HashSet<Item> restrictedItems;
 
 
     public Order(Currency currency) {
@@ -34,6 +35,7 @@ public class Order {
         this.currency = currency;
         number = generateOrderNumber();
         totalGrossPrice = new Money(BigDecimal.ZERO, currency);
+        restrictedItems = new HashSet<>();
     }
 
     public Order(Currency currency, Item... items) {
@@ -66,7 +68,7 @@ public class Order {
         //the total price increases by the gross price of the item
         totalGrossPrice = totalGrossPrice.add(item.getPricePlusVatAndPant());
         if (item.isAgeRestricted()) {
-            ageRestricted = item.isAgeRestricted();
+            restrictedItems.add(item);
         }
 
     }
@@ -95,6 +97,7 @@ public class Order {
         if (items.get(item).doubleValue() > 1) {
             items.put(item, items.get(item).subtract(BigDecimal.ONE));
         } else {
+            restrictedItems.remove(item);
             items.remove(item);
         }
 
@@ -120,7 +123,7 @@ public class Order {
     }
 
     public boolean isAgeRestricted() {
-        return ageRestricted;
+        return !restrictedItems.isEmpty();
     }
 
     public Money getTotalGrossPrice() {
