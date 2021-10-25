@@ -121,7 +121,7 @@ public class OrderTest {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDateTime now = LocalDateTime.now();
 
-        //expected string as todays date in YYYYMMDD
+        //expected string as today's date in YYYYMMDD
         String expected = dtf.format(now);
 
         //the first eight characters in the order number should be todays date in YYYYMMDD format
@@ -477,7 +477,7 @@ public class OrderTest {
 
             //since there are two of each item the value returned should be the doubled price of each item
             Money expected = item.getPricePlusVatAndPant().add(item.getPricePlusVatAndPant());
-            Money actual = defaultOrder.getTotalPricePerItem(item);
+            Money actual = DIFFERENT_VAT_RATES_ORDER.getTotalPricePerItem(item);
             assertEquals(expected, actual);
         }
     }

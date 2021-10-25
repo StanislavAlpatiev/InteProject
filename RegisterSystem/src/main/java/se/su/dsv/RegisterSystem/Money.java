@@ -1,13 +1,14 @@
 package se.su.dsv.RegisterSystem;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 //TODO: comments for each method!
 public class Money implements Comparable<Money> {
 
     private final Currency currency;
-    private BigDecimal amount;
+    private final BigDecimal amount;
 
     //sets amount and currency
     public Money(BigDecimal amount, Currency currency) {
@@ -20,7 +21,7 @@ public class Money implements Comparable<Money> {
             throw new IllegalArgumentException("amount is negative");
         }
 
-        this.amount = amount;
+        this.amount = amount.setScale(2, RoundingMode.HALF_UP);;
         this.currency = currency;
     }
 
@@ -38,7 +39,7 @@ public class Money implements Comparable<Money> {
             throw new IllegalArgumentException("mismatching currencies!");
         }
 
-        BigDecimal newAmount = amount.add(money.getAmount());
+        BigDecimal newAmount = amount.add(money.getAmount()).setScale(2, RoundingMode.HALF_UP);
         return new Money(newAmount, this.currency);
     }
 
@@ -48,7 +49,7 @@ public class Money implements Comparable<Money> {
             throw new IllegalArgumentException("mismatching currencies!");
         }
 
-        BigDecimal newAmount = amount.subtract(money.getAmount());
+        BigDecimal newAmount = amount.subtract(money.getAmount()).setScale(2, RoundingMode.HALF_UP);
         return new Money(newAmount, this.currency);
     }
 
@@ -82,19 +83,15 @@ public class Money implements Comparable<Money> {
 
     //generates a string that is used in Item toString
     public String toExport() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(amount + "@" + currency);
-        return sb.toString();
+        return amount + "@" + currency;
     }
 
     //returns formatted string
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.getAmount());
-        sb.append(" ");
-        sb.append(this.getCurrency());
-        return sb.toString();
+        return this.getAmount() +
+                " " +
+                this.getCurrency();
     }
 
 }
