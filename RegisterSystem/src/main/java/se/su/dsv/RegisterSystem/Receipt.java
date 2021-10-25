@@ -198,7 +198,7 @@ public class Receipt {
      * formats a money value to round to two decimals as a string
      */
     private String formatMoneyValue(Money value) {
-        return value.getAmount().setScale(2, RoundingMode.HALF_UP).toString();
+        return value.getAmount().toString();
     }
 
 }

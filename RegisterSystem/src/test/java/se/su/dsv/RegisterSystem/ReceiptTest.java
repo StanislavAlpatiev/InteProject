@@ -26,22 +26,21 @@ public class ReceiptTest {
             "OrderNr:                     19990101XXXX                                          \n" +
             "Datum:                         1999-01-01                 Tid:                00:00\n" +
             "===================================================================================\n" +
-            "Coca-cola                         5*57.38     inkl. pant 10.00               286.92\n" +
+            "Coca cola                         5*57.38     inkl. pant 10.00               286.90\n" +
             "DN Newspaper                                                                 286.19\n" +
-            "Snus                            9*1249.99                                  11249.89\n" +
-            "Watermelon bigpack                7*10.97                                     76.80\n" +
+            "Snus                            9*1249.99                                  11249.91\n" +
+            "Watermelon bigpack                7*10.98                                     76.86\n" +
             "===================================================================================\n" +
-            "TOTAL                                                                      11899.80\n" +
+            "TOTAL                                                                      11899.86\n" +
             "Moms %                               Moms                Netto               Brutto\n" +
             "6.00                                16.20               269.99               286.19\n" +
-            "12.00                               37.90               315.82               363.72\n" +
-            "25.00                             2249.98              8999.91             11249.89\n" +
+            "12.00                               38.97               324.79               363.76\n" +
+            "25.00                             2249.98              8999.93             11249.91\n" +
             "===================================================================================";
     private static final Item DEFAULT_ITEM_1 = new Item("DN Newspaper", "12345678", "Dn", ItemType.NEWSPAPER, new Money(new BigDecimal("269.99"), Currency.SEK));
-    private static final Item DEFAULT_ITEM_2 = new Item("Coca-cola", "12345678", "Dn", new Money(new BigDecimal("49.45"), Currency.SEK), new BigDecimal("5"));
+    private static final Item DEFAULT_ITEM_2 = new Item("Coca cola", "12345678", "Dn", new Money(new BigDecimal("49.45"), Currency.SEK), new BigDecimal("5"));
     private static final Item DEFAULT_ITEM_3 = new Item("Watermelon bigpack", "12345678", "Dn", ItemType.GROCERY, new Money(new BigDecimal("9.7955"), Currency.SEK));
     private static final Item DEFAULT_ITEM_4 = new Item("Snus", "12345678", "Dn", ItemType.TOBACCO, new Money(new BigDecimal("999.99"), Currency.SEK));
-    //private static final Item LONG_STRING_ITEM = new Item("Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "12345678", "Dn", ItemType.TOBACCO, new Money(new BigDecimal(Integer.MAX_VALUE), Currency.SEK));
     private static final String DEFAULT_ORDER_NUMBER = "19990101XXXX";
 
     @Test
