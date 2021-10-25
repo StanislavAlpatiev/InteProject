@@ -2,10 +2,10 @@ package se.su.dsv.RegisterSystem;
 
 import org.junit.jupiter.api.Test;
 
-
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ItemTest {
 
@@ -26,7 +26,7 @@ class ItemTest {
 
     // testar konstruktorn med valida parametrar
     @Test
-    void constructorValidParameterTest(){
+    void constructorValidParameterTest() {
         assertEquals("mjöl", DEFAULT_GROCERY.getName());
         assertEquals("0104040", DEFAULT_GROCERY.getProductNo());
         assertEquals("ICA", DEFAULT_GROCERY.getProducer());
@@ -36,7 +36,7 @@ class ItemTest {
 
     // testar att ett undantag kastas när någon parameter är null
     @Test
-    void constructorNullParametersThrowIAETest(){
+    void constructorNullParametersThrowIAETest() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Item(null, "0202020", "coca-cola", ItemType.BEVERAGE, DEFAULT_MONEY);
         });
@@ -56,25 +56,25 @@ class ItemTest {
 
     // testar att VAT för tidningar är korrekt
     @Test
-    void constructorVatForNewsPaperIsCorrect(){
+    void constructorVatForNewsPaperIsCorrect() {
         assertEquals(new BigDecimal("0.06"), DEFAULT_NEWSPAPER.getVat());
     }
 
     // testar att VAT för tobak är korrekt
     @Test
-    void constructorVatForTobaccoIsCorrect(){
+    void constructorVatForTobaccoIsCorrect() {
         assertEquals(new BigDecimal("0.25"), DEFAULT_TOBACCO.getVat());
     }
 
     // testar att VAT för matvaror är korrekt
     @Test
-    void constructorVatForGroceryIsCorrect(){
+    void constructorVatForGroceryIsCorrect() {
         assertEquals(new BigDecimal("0.12"), DEFAULT_GROCERY.getVat());
     }
 
     // testar att tobak sätts som age restricted
     @Test
-    void constructorSetsTobaccoAsAgeRestricted(){
+    void constructorSetsTobaccoAsAgeRestricted() {
         assertEquals(true, DEFAULT_TOBACCO.isAgeRestricted());
     }
 
@@ -98,7 +98,7 @@ class ItemTest {
 
     // testar att ett undantag kastas om storleken på en dryck är negativt
     @Test
-    void constructorThrowsIAEForNegativeCl(){
+    void constructorThrowsIAEForNegativeCl() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("10"), Currency.SEK), new BigDecimal("-1"));
         });
@@ -106,7 +106,7 @@ class ItemTest {
 
     // testar att ett undantag kastas om ett varunamn är för långt
     @Test
-    void constructorTooLongItemNameTest(){
+    void constructorTooLongItemNameTest() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Item("really long name test OOOO", "0515102", "testproducer", ItemType.GROCERY, DEFAULT_MONEY);
         });
@@ -114,14 +114,14 @@ class ItemTest {
 
     //If currency is not set to SEK, pant should be 0
     @Test
-    void constructorPantCurrencyNotSEKIsZeroTest(){
+    void constructorPantCurrencyNotSEKIsZeroTest() {
         Item notInSEK = new Item("coca cola", "0404040", "coca cola", new Money(new BigDecimal("10"), Currency.USD), new BigDecimal("2"));
         assertEquals(new Money(BigDecimal.ZERO, Currency.USD), notInSEK.getPant());
     }
 
     // testar att setPrice() metoden ändrar priset korrekt
     @Test
-    void setPriceChangesPriceCorrectlyTest(){
+    void setPriceChangesPriceCorrectlyTest() {
         Item item = new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, new Money(new BigDecimal("10"), Currency.SEK));
         Money money = new Money(new BigDecimal("20"), Currency.SEK);
         item.setPrice(money);
@@ -130,7 +130,7 @@ class ItemTest {
 
     //tests that setPrice changes pant for switching between currencies
     @Test
-    void pantChangesWithSetPriceToOtherCurrencyTest(){
+    void pantChangesWithSetPriceToOtherCurrencyTest() {
         Item beverageSmall = new Item("coca cola", "0404040", "coca cola", DEFAULT_MONEY, new BigDecimal("0.33"));
         Item beverage1L = new Item("coca cola", "0404040", "coca cola", DEFAULT_MONEY, new BigDecimal("1"));
         Item beverageLarge = new Item("coca cola", "0404040", "coca cola", DEFAULT_MONEY, new BigDecimal("2"));
@@ -145,25 +145,25 @@ class ItemTest {
 
     // testar att priset plus VAT beräknas korrekt
     @Test
-    void PricePlusVatCorrectTest(){
+    void PricePlusVatCorrectTest() {
         assertEquals(DEFAULT_GROCERY_PRICE_PLUS_VAT, DEFAULT_GROCERY.getPricePlusVatAndPant());
     }
 
     // testar att VAT delen av priset beräknas korrekt
     @Test
-    void VatPriceOfItemTest(){
+    void VatPriceOfItemTest() {
         assertEquals(DEFAULT_GROCERY_VAT_OF_ITEM, DEFAULT_GROCERY.getVATAmountOfPrice());
     }
 
     // testar att priset plus VAT och pant beräknas korrekt
     @Test
-    void pricePlusVatAndPantCorrectTest(){
-        assertEquals(new Money(new BigDecimal("13.20"), Currency.SEK),DEFAULT_BIG_BEVERAGE.getPricePlusVatAndPant());
+    void pricePlusVatAndPantCorrectTest() {
+        assertEquals(new Money(new BigDecimal("13.20"), Currency.SEK), DEFAULT_BIG_BEVERAGE.getPricePlusVatAndPant());
     }
 
     // testar att toString metoden fungerar som den ska
     @Test
-    void toStringTest(){
+    void toStringTest() {
         assertEquals("mjöl@0104040@ICA@GROCERY@10@SEK", DEFAULT_GROCERY.toString());
     }
 

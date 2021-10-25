@@ -1,19 +1,20 @@
 package se.su.dsv.RegisterSystem;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RegisterTest {
 
     //Default customer who is 20 years old.
     final Customer DEFAULT_CUSTOMER = new Customer("Mr Customer", "Street Road", LocalDate.now().minusYears(20), "0707070700",
-    "customer@test.com");
+            "customer@test.com");
 
     //Customer 0 years old.
     final Customer YOUNG_CUSTOMER = new Customer("Young Customer", "Street street", LocalDate.now(), "0707070700", "young@test.com");
@@ -28,7 +29,7 @@ public class RegisterTest {
     final Item DEFAULT_ITEM2 = new Item("Tryffel", "9876543210", "FancyProducts", ItemType.GROCERY,
             DEFAULT_MONEY.add(DEFAULT_MONEY));
 
-    final Item[] ITEMS = { DEFAULT_ITEM, DEFAULT_ITEM2 };
+    final Item[] ITEMS = {DEFAULT_ITEM, DEFAULT_ITEM2};
     final Order DEFAULT_ORDER = new Order(DEFAULT_CURRENCY, ITEMS);
 
     Register defaultRegister;
@@ -36,7 +37,7 @@ public class RegisterTest {
 
     @BeforeAll
     static void setUp() {
-        
+
     }
 
     @BeforeEach
@@ -195,7 +196,6 @@ public class RegisterTest {
         assertThrows(IllegalArgumentException.class, () -> {
             defaultRegister.checkOut(order, wallet);
         });
-
 
 
     }

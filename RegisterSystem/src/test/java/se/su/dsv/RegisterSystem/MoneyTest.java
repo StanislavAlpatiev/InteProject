@@ -1,13 +1,12 @@
 package se.su.dsv.RegisterSystem;
 
-import java.math.BigDecimal;
-
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class MoneyTest {
 

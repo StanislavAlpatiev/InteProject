@@ -15,8 +15,9 @@ public enum VAT {
 
     public static double valueOfLabel(double label) {
         for (VAT vat : values()) {
-            if (vat.label == label)
+            if (vat.label == label) {
                 return label;
+            }
         }
         return 0;
     }
