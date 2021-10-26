@@ -138,9 +138,9 @@ class MoneyTest {
     //Tests if two equal even if they have .0 or not at the end
     @Test
     void differentScaleIsEqualTest() {
-        Money money = new Money(new BigDecimal("0.0000"), Currency.USD);
+        Money money1 = new Money(new BigDecimal("0.0000"), Currency.USD);
         Money money2 = new Money(new BigDecimal(0), Currency.USD);
-        assertEquals(money, money2);
+        assertThat(money1, is(money2));
     }
 
     //Test that if equals() is fed with null, the result is false.
