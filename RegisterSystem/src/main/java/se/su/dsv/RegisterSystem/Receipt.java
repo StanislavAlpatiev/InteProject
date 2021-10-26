@@ -1,5 +1,4 @@
 package se.su.dsv.RegisterSystem;
-
 import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,10 +15,10 @@ public class Receipt {
 
     //TODO: write more comments clean up
 
-    static final int WIDTH = 83; // width of the receipt
+    static final int ROW_LENGTH = 83; // width of the receipt
 
     static final String ROW_DIVIDER =
-            new String(new char[WIDTH]).replace("\0", "="); //splits up rows of the receipt
+            new String(new char[ROW_LENGTH]).replace("\0", "="); //splits up rows of the receipt
 
     //the receipt is structured into four columns so this constant is used to fill in empty columns
     static final String EMPTY_COLUMN = "    ";
@@ -32,21 +31,11 @@ public class Receipt {
 
     public Receipt(Order order) {
         this(order, LocalDateTime.now());
-
     }
 
 
     public Receipt(Order order, LocalDateTime date) { //Constructor is able to send in date as parameter to allow for testing
-        if (order == null) {
-            throw new IllegalArgumentException("Payment is null");
-        }
-        if (date == null) {
-            throw new IllegalArgumentException("Date is null");
-        }
-        if (order.getItems().isEmpty()) {
-            throw new IllegalArgumentException("Can not create receipt for empty order");
-        }
-
+        checkValidParameters(order, date);
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
         this.order = order;
@@ -63,24 +52,18 @@ public class Receipt {
     /**
      * Prints the receipt to a textfile
      */
-    public void printToFile() {
-        String fileName = order.getNumber();
-
-        //creates a new textfile with the ordernumber as name
-        String pathName = "src\\test\\resources\\" + fileName + ".txt";
-        File file = new File(pathName);
-
-        //throws exception if a file with the receipt already exists
-        if (file.exists()) {
+    public void printReceiptToFile(){
+        String fileName = "src\\test\\resources\\" + order.getNumber() + ".txt";
+        File file = new File(fileName);
+        if (file.exists())
             throw new IllegalStateException("File already exists");
-        }
         try {
-            FileWriter writer = new FileWriter(pathName);
+            FileWriter writer = new FileWriter(fileName);
             PrintWriter out = new PrintWriter(writer);
             out.print(getReceipt());
             writer.close();
             out.close();
-        } catch (FileNotFoundException e) {
+        }catch (FileNotFoundException e) {
             System.err.println("Cant open file");
         } catch (IOException e) {
             System.err.print(e.getMessage());
@@ -93,7 +76,6 @@ public class Receipt {
      */
     private String createReceipt() {
         StringBuilder sb = new StringBuilder();
-
 
         sb.append(ROW_DIVIDER).append("\n");
 
@@ -114,16 +96,13 @@ public class Receipt {
         String totalPricePlusVat = formatMoneyValue(order.getTotalGrossPrice());
         sb.append(formatRow("TOTAL", EMPTY_COLUMN, EMPTY_COLUMN, totalPricePlusVat));
 
-
         //creates the rows accounting the VATs.
         // If a specific VAT is not represented by an item in the receipt it will not be included
         sb.append(formatRow("Moms %", "Moms", "Netto", "Brutto"));
         for (VAT rate : VAT.values()) {
             sb.append(createVATRow(rate.label));
         }
-
         sb.append(ROW_DIVIDER);
-
 
         return sb.toString();
     }
@@ -134,7 +113,7 @@ public class Receipt {
      */
     private String formatRow(String column1, String column2, String column3, String column4) {
         String row = String.format("%-20s %20s %20s %20s", column1, column2, column3, column4);
-        if (row.length() > WIDTH) {
+        if (row.length() > ROW_LENGTH) {
             throw new IllegalStateException("Out of characters for row");
         }
         return row + "\n";
@@ -200,11 +179,22 @@ public class Receipt {
         return formatRow(VAT * 100 + "0", totalAmountOfVAT, totalNetVAT, totalGrossVat);
     }
 
+    private void checkValidParameters(Order order, LocalDateTime date) {
+        if (order == null) {
+            throw new IllegalArgumentException("Payment is null");
+        }
+        if (date == null) {
+            throw new IllegalArgumentException("Date is null");
+        }
+        if (order.getItems().isEmpty()) {
+            throw new IllegalArgumentException("Can not create receipt for empty order");
+        }
+    }
+
     /**
      * formats a money value to round to two decimals as a string
      */
     private String formatMoneyValue(Money value) {
         return value.getAmount().toString();
     }
-
 }
