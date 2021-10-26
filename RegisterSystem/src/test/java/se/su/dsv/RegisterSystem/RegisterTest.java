@@ -175,11 +175,11 @@ public class RegisterTest {
 
         defaultRegister.checkOut(DEFAULT_ORDER, defaultWallet);
 
+        BigDecimal amountLeft = defaultWallet.totalValueInCurrency(DEFAULT_CURRENCY).getAmount();
+
         //Since wallet content is equals to cost of order, after checkout there should be 0 left in wallet.
-        assertEquals(BigDecimal.valueOf(0), defaultWallet.totalValueInCurrency(DEFAULT_CURRENCY).getAmount());
-        //assertEquals(BigDecimal.ZERO, defaultWallet.getTotalAmount(DEFAULT_CURRENCY));
-        //Since wallet content is equals to cost of order, after checkout there should be 0 left in wallet. 
-        assertEquals(BigDecimal.valueOf(0), defaultWallet.totalValueInCurrency(DEFAULT_CURRENCY).getAmount());
+        //Using compareTo because bigdecimal equals differentiates between 0 and 0.00
+        assertEquals(0, amountLeft.compareTo(BigDecimal.ZERO));
     }
 
     @Test
@@ -190,7 +190,9 @@ public class RegisterTest {
         wallet.add(new Money(new BigDecimal(100000), DEFAULT_CURRENCY));
         //Agerestricted item
         Item item = new Item("test", "012", "test", ItemType.TOBACCO, DEFAULT_MONEY);
-        //Creates order containing agerestricted item
+        //Putting that item into the inventory
+        defaultRegister.getInventory().add(item); 
+        //Creates order containing agerestricted item in inventory
         Order order = new Order(DEFAULT_CURRENCY, item);
 
         assertThrows(IllegalArgumentException.class, () -> {

@@ -195,7 +195,7 @@ class InventoryTest {
     @Test
     void itemIsNotAvailableTest() throws IOException {
         defaultInventory.add(DEFAULT_ITEM);
-        Item item = new Item("Test", "123", "dasd", ItemType.BEVERAGE, new Money(BigDecimal.TEN, Currency.AED));
+        Item item = new Item("Test", "012", "null", ItemType.BEVERAGE, new Money(BigDecimal.TEN, Currency.AED));
         assertFalse(defaultInventory.isAvailable(item));
     }
 }

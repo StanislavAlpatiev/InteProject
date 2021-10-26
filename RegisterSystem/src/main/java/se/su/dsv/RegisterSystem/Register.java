@@ -49,6 +49,8 @@ public class Register {
             throw new IllegalArgumentException("Item not available!");
         }
 
+        
+
         //If order contains an item which is agerestricted... 
         if (order.isAgeRestricted()) {
             //... then the age of the customer is calculated...

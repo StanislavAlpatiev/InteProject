@@ -14,7 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class OrderTest {
 
     //TODO clean up and write comments for every method, better names for test
-    // test för kontroll av ordernummer!!!
+    // test för kontroll av ordernummer?
+    // unvalid currency in more tests?
 
 
     static final Currency DEFAULT_CURRENCY = Currency.SEK;
@@ -24,7 +25,7 @@ public class OrderTest {
             ItemType.NEWSPAPER, new Money(new BigDecimal("199.5"), DEFAULT_CURRENCY));
 
     //Item with pant (also VAT 12.00)
-    static final Item DEFAULT_BEVERAGE = new Item("Coca-cola", "12345678", "Dn",
+    static final Item DEFAULT_BEVERAGE = new Item("Coca cola", "12345678", "Dn",
             new Money(new BigDecimal("17.85"), DEFAULT_CURRENCY), new BigDecimal("5"));
 
     //Item with VAT 12.00
@@ -121,7 +122,7 @@ public class OrderTest {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDateTime now = LocalDateTime.now();
 
-        //expected string as todays date in YYYYMMDD
+        //expected string as today's date in YYYYMMDD
         String expected = dtf.format(now);
 
         //the first eight characters in the order number should be todays date in YYYYMMDD format
@@ -131,17 +132,17 @@ public class OrderTest {
     }
 
 
-    //dont know how to implement yet
     @Test
-    void constructorGeneratesOrderNumberRandomly() {
-        /*List<String> codes = new ArrayList<>();
-        for (int i = 0; i < 1000; i++) {
-            Order order = new Order();
-            codes.add(order.getNumber().substring(8));
-        }
-        Map<Object, Long> counts = codes.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));*/
+    void orderGetsAgeRestrictedForAgeRestrictedItem() {
+        defaultOrder.addItem(DEFAULT_TOBACCO);
+        assertTrue(defaultOrder.isAgeRestricted());
     }
 
+    @Test
+    void orderIsNotAgeRestrictedWhenNoAgeRestrictedItem() {
+        defaultOrder.addItem(DEFAULT_GROCERY);
+        assertFalse(defaultOrder.isAgeRestricted());
+    }
 
     /**
      * Trying to add a null Item parameter should throw an exception
@@ -477,7 +478,7 @@ public class OrderTest {
 
             //since there are two of each item the value returned should be the doubled price of each item
             Money expected = item.getPricePlusVatAndPant().add(item.getPricePlusVatAndPant());
-            Money actual = defaultOrder.getTotalPricePerItem(item);
+            Money actual = DIFFERENT_VAT_RATES_ORDER.getTotalPricePerItem(item);
             assertEquals(expected, actual);
         }
     }

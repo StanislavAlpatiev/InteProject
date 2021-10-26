@@ -122,7 +122,7 @@ class WalletTest {
         Wallet wallet = new Wallet(DEFAULT_OWNER, DEFAULT_BANK, new Money(new BigDecimal("100"), Currency.SEK), new Money(new BigDecimal("10"), Currency.USD));
         System.out.println(wallet.getWalletContent());
         Money money = wallet.totalValueInCurrency(DEFAULT_MONEY_USD.getCurrency());
-        assertEquals(new BigDecimal("20.0"), money.getAmount());
+        assertEquals(new BigDecimal("20.00"), money.getAmount());
     }
 
 }

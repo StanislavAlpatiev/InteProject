@@ -2,9 +2,8 @@ package se.su.dsv.RegisterSystem;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 
@@ -15,7 +14,7 @@ import java.util.Map;
 
 public class Receipt {
 
-    //TODO: write more comments
+    //TODO: write more comments clean up
 
     static final int WIDTH = 83; // width of the receipt
 
@@ -32,12 +31,12 @@ public class Receipt {
 
 
     public Receipt(Order order) {
-        this(order, new Date());
+        this(order, LocalDateTime.now());
 
     }
 
 
-    public Receipt(Order order, Date date) { //Constructor is able to send in date as parameter to allow for testing
+    public Receipt(Order order, LocalDateTime date) { //Constructor is able to send in date as parameter to allow for testing
         if (order == null) {
             throw new IllegalArgumentException("Payment is null");
         }
@@ -47,9 +46,12 @@ public class Receipt {
         if (order.getItems().isEmpty()) {
             throw new IllegalArgumentException("Can not create receipt for empty order");
         }
+
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
         this.order = order;
-        this.date = new SimpleDateFormat("yyyy-MM-dd").format(date);
-        this.time = new SimpleDateFormat("HH:mm").format(date);
+        this.date = dateFormat.format(date);
+        this.time = timeFormat.format(date);
         receipt = createReceipt();
     }
 
@@ -63,8 +65,12 @@ public class Receipt {
      */
     public void printToFile() {
         String fileName = order.getNumber();
+
+        //creates a new textfile with the ordernumber as name
         String pathName = "src\\test\\resources\\" + fileName + ".txt";
         File file = new File(pathName);
+
+        //throws exception if a file with the receipt already exists
         if (file.exists()) {
             throw new IllegalStateException("File already exists");
         }
@@ -198,7 +204,7 @@ public class Receipt {
      * formats a money value to round to two decimals as a string
      */
     private String formatMoneyValue(Money value) {
-        return value.getAmount().setScale(2, RoundingMode.HALF_UP).toString();
+        return value.getAmount().toString();
     }
 
 }

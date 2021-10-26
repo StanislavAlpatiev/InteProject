@@ -9,20 +9,50 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ItemTest {
 
+    //Vat rates
+    private static final BigDecimal SIX_PERCENT = new BigDecimal("0.06");
+    private static final BigDecimal TWELVE_PERCENT = new BigDecimal("0.12");
+    private static final BigDecimal FIFTEEN_PERCENT = new BigDecimal("0.15");
+    private static final BigDecimal TWENTYFIVE_PERCENT = new BigDecimal("0.25");
+    
     private static final Money DEFAULT_GROCERY_PRICE_PLUS_VAT = new Money(new BigDecimal("11.20"), Currency.SEK);
     private static final Money DEFAULT_GROCERY_VAT_OF_ITEM = new Money(new BigDecimal("1.20"), Currency.SEK);
-    private static final Money DEFAULT_MONEY = new Money(new BigDecimal("10"), Currency.SEK);
 
+    //Money in different currencies, DEFAULT is SEK
+    private static final Money DEFAULT_MONEY = new Money(new BigDecimal("10"), Currency.SEK);
+    private static final Money NOK_MONEY = new Money(new BigDecimal("10"), Currency.NOK);
+    private static final Money DKK_MONEY = new Money(new BigDecimal("10"), Currency.DKK);
+
+    //Beverage in different currencies, DEFAULT is SEK
     private static final Item DEFAULT_SMALL_BEVERAGE = new Item("coca cola", "0404040", "coca cola", DEFAULT_MONEY, new BigDecimal("0.33"));
     private static final Item DEFAULT_ONE_LITER_BEVERAGE = new Item("coca cola", "0404040", "coca cola", DEFAULT_MONEY, new BigDecimal("1"));
     private static final Item DEFAULT_BIG_BEVERAGE = new Item("coca cola", "0404040", "coca cola", DEFAULT_MONEY, new BigDecimal("2"));
+    private static Item NOK_SMALL_BEVERAGE = new Item("coca cola", "0404040", "coca cola", NOK_MONEY, new BigDecimal("0.33"));
+    private static Item NOK_BIG_BEVERAGE = new Item("coca cola", "0404040", "coca cola", NOK_MONEY, new BigDecimal("2"));
+    private static Item DKK_SMALL_BEVERAGE = new Item("coca cola", "0404040", "coca cola", DKK_MONEY, new BigDecimal("0.33"));
+    private static Item DKK_BIG_BEVERAGE = new Item("coca cola", "0404040", "coca cola", DKK_MONEY, new BigDecimal("2"));
 
+    //Items in different currencies, DEFAULT is SEK
     private static final Item DEFAULT_GROCERY = new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, DEFAULT_MONEY);
     private static final Item DEFAULT_TOBACCO = new Item("snus", "0204040", "Knox", ItemType.TOBACCO, DEFAULT_MONEY);
     private static final Item DEFAULT_NEWSPAPER = new Item("Aftonbladet", "0304040", "Aftonbladet", ItemType.NEWSPAPER, DEFAULT_MONEY);
+    private static final Item NOK_GROCERY = new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, NOK_MONEY);
+    private static final Item NOK_TOBACCO = new Item("snus", "0204040", "Knox", ItemType.TOBACCO, NOK_MONEY);
+    private static final Item NOK_NEWSPAPER = new Item("Aftonbladet", "0304040", "Aftonbladet", ItemType.NEWSPAPER, NOK_MONEY);
+    private static final Item DKK_GROCERY = new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, DKK_MONEY);
+    private static final Item DKK_TOBACCO = new Item("snus", "0204040", "Knox", ItemType.TOBACCO, DKK_MONEY);
+    private static final Item DKK_NEWSPAPER = new Item("Aftonbladet", "0304040", "Aftonbladet", ItemType.NEWSPAPER, DKK_MONEY);
 
-    private static final Money PANT_ONE = new Money(BigDecimal.ONE, Currency.SEK);
-    private static final Money PANT_TWO = new Money(new BigDecimal("2"), Currency.SEK);
+    //Pant in different currencies, DEFAULT is SEK
+    private static final Money DEFAULT_PANT_SMALL = new Money(BigDecimal.ONE, Currency.SEK);
+    private static final Money DEFAULT_PANT_BIG = new Money(new BigDecimal("2"), Currency.SEK);
+    private static final Money NOK_PANT_SMALL = new Money(new BigDecimal("2"), Currency.NOK);
+    private static final Money NOK_PANT_BIG = new Money(new BigDecimal("3"), Currency.NOK);
+    private static final Money DKK_PANT_SMALL = new Money(new BigDecimal("1.5"), Currency.DKK);
+    private static final Money DKK_PANT_BIG = new Money(new BigDecimal("3"), Currency.DKK);
+
+
+
 
     // testar konstruktorn med valida parametrar
     @Test
@@ -57,43 +87,55 @@ class ItemTest {
     // testar att VAT för tidningar är korrekt
     @Test
     void constructorVatForNewsPaperIsCorrect() {
-        assertEquals(new BigDecimal("0.06"), DEFAULT_NEWSPAPER.getVat());
+        assertEquals(SIX_PERCENT, DEFAULT_NEWSPAPER.getVat());
+        assertEquals(BigDecimal.ZERO, NOK_NEWSPAPER.getVat());
+        assertEquals(BigDecimal.ZERO, DKK_NEWSPAPER.getVat());
     }
 
     // testar att VAT för tobak är korrekt
     @Test
     void constructorVatForTobaccoIsCorrect() {
-        assertEquals(new BigDecimal("0.25"), DEFAULT_TOBACCO.getVat());
+        assertEquals(TWENTYFIVE_PERCENT, DEFAULT_TOBACCO.getVat());
+        assertEquals(TWENTYFIVE_PERCENT, NOK_TOBACCO.getVat());
+        assertEquals(TWENTYFIVE_PERCENT, DKK_TOBACCO.getVat());
     }
 
     // testar att VAT för matvaror är korrekt
     @Test
     void constructorVatForGroceryIsCorrect() {
-        assertEquals(new BigDecimal("0.12"), DEFAULT_GROCERY.getVat());
+        assertEquals(TWELVE_PERCENT, DEFAULT_GROCERY.getVat());
+        assertEquals(FIFTEEN_PERCENT, NOK_GROCERY.getVat());
+        assertEquals(TWENTYFIVE_PERCENT, DKK_GROCERY.getVat());
     }
 
     // testar att tobak sätts som age restricted
     @Test
     void constructorSetsTobaccoAsAgeRestricted() {
         assertEquals(true, DEFAULT_TOBACCO.isAgeRestricted());
+        assertEquals(true, NOK_TOBACCO.isAgeRestricted());
+        assertEquals(true, DKK_TOBACCO.isAgeRestricted());
     }
 
     // testar att panten för 33 cl sätts korrekt
     @Test
     void constructorSetsPantCorrectFor33Cl() {
-        assertEquals(PANT_ONE, DEFAULT_SMALL_BEVERAGE.getPant());
+        assertEquals(DEFAULT_PANT_SMALL, DEFAULT_SMALL_BEVERAGE.getPant());
+        assertEquals(NOK_PANT_SMALL, NOK_SMALL_BEVERAGE.getPant());
+        assertEquals(DKK_PANT_SMALL, DKK_SMALL_BEVERAGE.getPant());
     }
 
     // testar att panten för 100 cl sätts korrekt
     @Test
     void constructorSetsPantCorrectFor100Cl() {
-        assertEquals(PANT_TWO, DEFAULT_ONE_LITER_BEVERAGE.getPant());
+        assertEquals(DEFAULT_PANT_BIG, DEFAULT_ONE_LITER_BEVERAGE.getPant());
     }
 
     // testar att panten för 200 cl sätts korrekt
     @Test
     void constructorSetsPantCorrectFor200Cl() {
-        assertEquals(PANT_TWO, DEFAULT_BIG_BEVERAGE.getPant());
+        assertEquals(DEFAULT_PANT_BIG, DEFAULT_BIG_BEVERAGE.getPant());
+        assertEquals(NOK_PANT_BIG, NOK_BIG_BEVERAGE.getPant());
+        assertEquals(DKK_PANT_BIG, DKK_BIG_BEVERAGE.getPant());
     }
 
     // testar att ett undantag kastas om storleken på en dryck är negativt
