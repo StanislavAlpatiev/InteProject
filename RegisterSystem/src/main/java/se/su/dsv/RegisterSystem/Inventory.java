@@ -51,7 +51,7 @@ public class Inventory {
         }
     }
 
-    public HashMap<Item, Integer> getItems() {
+    public Map<Item, Integer> getItems() {
         return new HashMap<>(items);
     }
 
@@ -115,15 +115,14 @@ public class Inventory {
 
     public void importInventory(String fileName) throws FileNotFoundException {
 
-        try {
-            HashMap<String, Integer> newItems = new HashMap<>();
+        try(
+            Reader reader = Files.newBufferedReader(Paths.get(fileName));
+        ) {
+            HashMap<String, Integer> newItems;
             // create Gson instance
             Gson gson = new Gson();
 
-            // create a reader
-            Reader reader = Files.newBufferedReader(Paths.get(fileName));
-
-            newItems = new Gson().fromJson(new FileReader(fileName), HashMap.class);
+            newItems = gson.fromJson(new FileReader(fileName), HashMap.class);
             items.clear();
             for (Map.Entry<String, Integer> entry : newItems.entrySet()) {
                 String stringEntry = entry.getKey();
@@ -138,8 +137,6 @@ public class Inventory {
 
 
             }
-            // close reader
-            reader.close();
 
         } catch (Exception ex) {
             throw new FileNotFoundException();
@@ -151,16 +148,15 @@ public class Inventory {
     }
 
     public void exportInventory(String fileName) throws FileNotFoundException {
-        try {
-            // create a writer
+        try(
             Writer writer = new FileWriter(fileName);
+        ) {
+            // create a writer
+
             writer.flush();
 
             // convert map to JSON File
             new Gson().toJson(items, writer);
-
-            // close the writer
-            writer.close();
 
         } catch (Exception ex) {
             throw new FileNotFoundException();

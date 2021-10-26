@@ -31,8 +31,8 @@ class InventoryTest {
 
     @BeforeAll
     static void setUp() {
-        DEFAULT_ITEM = new Item("Test", "Test", "Test", ItemType.GROCERY, new Money(new BigDecimal(5), Currency.USD));
-        ITEM_WITH_SEK_CURRENCY = new Item("Test", "Test", "Test", ItemType.GROCERY, new Money(new BigDecimal(5), Currency.SEK));
+        DEFAULT_ITEM = new Item("Test", "012", "Test", ItemType.GROCERY, new Money(new BigDecimal(5), Currency.USD));
+        ITEM_WITH_SEK_CURRENCY = new Item("Test", "012", "Test", ItemType.GROCERY, new Money(new BigDecimal(5), Currency.SEK));
     }
 
     @BeforeEach
@@ -195,7 +195,7 @@ class InventoryTest {
     @Test
     void itemIsNotAvailableTest() throws IOException {
         defaultInventory.add(DEFAULT_ITEM);
-        Item item = new Item("Test2", "null", "null", ItemType.BEVERAGE, new Money(BigDecimal.TEN, Currency.AED));
+        Item item = new Item("Test", "012", "null", ItemType.BEVERAGE, new Money(BigDecimal.TEN, Currency.AED));
         assertFalse(defaultInventory.isAvailable(item));
     }
 }
