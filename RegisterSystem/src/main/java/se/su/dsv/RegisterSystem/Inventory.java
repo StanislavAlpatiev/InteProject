@@ -51,7 +51,7 @@ public class Inventory {
         }
     }
 
-    public Map<Item, Integer> getItems() {
+    public HashMap<Item, Integer> getItems() {
         return new HashMap<>(items);
     }
 
