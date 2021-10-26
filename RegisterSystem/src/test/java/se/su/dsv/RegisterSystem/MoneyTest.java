@@ -1,5 +1,8 @@
 package se.su.dsv.RegisterSystem;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -18,32 +21,36 @@ class MoneyTest {
     @Test
     void constructorValidParameterTest() {
         Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
-        assertEquals(DEFAULT_AMOUNT, money.getAmount());
-        assertEquals(Currency.USD, money.getCurrency());
+        assertThat(money, allOf(hasProperty("amount", is(DEFAULT_AMOUNT)),
+                hasProperty("currency", is(Currency.USD))));
+
     }
 
     //Test whether null currency in constructor throws
     @Test
     void constructorThrowsIAEWhenCurrencyIsNullTest() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> {
             new Money(DEFAULT_AMOUNT, null);
         });
+        assertThat(e.getMessage(), is("currency is null"));
     }
 
     //Test whether negatives amount in constructor throws
     @Test
     void constructorNegativeAmountTest() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> {
             new Money(NEGATIVE_AMOUNT, Currency.USD);
         });
+        assertThat(e.getMessage(), is("amount is negative"));
     }
 
     //Test if null amount in constructor throws
     @Test
     void constructorNullAmountParameterTest() {
-        assertThrows(NullPointerException.class, () -> {
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> {
             new Money(null, Currency.USD);
         });
+        assertThat(e.getMessage(), is("amount is null"));
     }
 
     //Test whether all accepted currencies are accepted
@@ -51,26 +58,27 @@ class MoneyTest {
     @EnumSource(Currency.class)
     void constructorValidCurrenciesTest(Currency currency) {
         Money money = new Money(DEFAULT_AMOUNT, currency);
-        //assertSame(DEFAULT_AMOUNT, money.getAmount());
-        assertEquals(currency, money.getCurrency());
+        assertThat(money, hasProperty("currency", is(currency)));
     }
 
     //Test adding valid parameter
     @Test
     void addValidParameterTest() {
         Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
-        Money money2 = money.add(new Money(DEFAULT_AMOUNT, Currency.USD));
-        assertEquals(money.getAmount().add(DEFAULT_AMOUNT), money2.getAmount());
+        Money doubledMoney = money.add(money);
+        BigDecimal expectedAmount = new BigDecimal("20.00");
+        assertThat(doubledMoney, hasProperty("amount", is(expectedAmount)));
     }
 
     //Test whether adding another currency throws.
     @Test
     void addOtherCurrencyTest() {
-        Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
-        Money money2 = new Money(DEFAULT_AMOUNT, Currency.SEK);
-        assertThrows(IllegalArgumentException.class, () -> {
-            money.add(money2);
+        Money moneyUSD = new Money(DEFAULT_AMOUNT, Currency.USD);
+        Money moneySEK = new Money(DEFAULT_AMOUNT, Currency.SEK);
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> {
+            moneyUSD.add(moneySEK);
         });
+        assertThat(e.getMessage(), is("mismatching currencies!"));
     }
 
     //Test whether adding null gives a null pointer exception
@@ -86,18 +94,20 @@ class MoneyTest {
     @Test
     void subtractValidParameterTest() {
         Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
-        Money money2 = money.subtract(new Money(DEFAULT_AMOUNT, Currency.USD));
-        assertSame(money2.getAmount(), money.getAmount().subtract(DEFAULT_AMOUNT));
+        Money subtractedMoney = money.subtract(money);
+        BigDecimal expectedAmount = new BigDecimal("0.00");
+        assertThat(subtractedMoney, hasProperty("amount", is(expectedAmount)));
     }
 
     //Test whether subtracting another currency throws
     @Test
     void subtractOtherCurrencyTest() {
-        Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
-        Money money2 = new Money(DEFAULT_AMOUNT, Currency.SEK);
-        assertThrows(IllegalArgumentException.class, () -> {
-            money.subtract(money2);
+        Money moneyUSD = new Money(DEFAULT_AMOUNT, Currency.USD);
+        Money moneySEK = new Money(DEFAULT_AMOUNT, Currency.SEK);
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> {
+            moneyUSD.subtract(moneySEK);
         });
+        assertThat(e.getMessage(), is("mismatching currencies!"));
     }
 
     //Test whether subtracting null gives a null pointer exception
@@ -112,8 +122,9 @@ class MoneyTest {
     //Test whether differing currencies leads to a false result from equals()
     @Test
     void equalsNotSameCurrencyTest() {
-        Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
-        assertNotEquals(Currency.class, money);
+        Money moneyUSD = new Money(DEFAULT_AMOUNT, Currency.USD);
+        Money moneySEK = new Money(DEFAULT_AMOUNT, Currency.SEK);
+        assertThat(moneyUSD, not(moneySEK));
     }
 
     //Test if equal money objects are equal
@@ -121,13 +132,13 @@ class MoneyTest {
     void isEqualTest() {
         Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
         Money money2 = new Money(DEFAULT_AMOUNT, Currency.USD);
-        assertEquals(money2, money);
+        assertThat(money, is(money2));
     }
 
     //Tests if two equal even if they have .0 or not at the end
     @Test
     void differentScaleIsEqualTest() {
-        Money money = new Money(new BigDecimal(0.0000), Currency.USD);
+        Money money = new Money(new BigDecimal("0.0000"), Currency.USD);
         Money money2 = new Money(new BigDecimal(0), Currency.USD);
         assertEquals(money, money2);
     }
@@ -135,15 +146,15 @@ class MoneyTest {
     //Test that if equals() is fed with null, the result is false.
     @Test
     void equalsNullIsFalseTest() {
-        assertNotEquals(null, new Money(DEFAULT_AMOUNT, Currency.USD));
+        assertThat(new Money(DEFAULT_AMOUNT, Currency.USD), notNullValue());
     }
 
     //Test that make sure that if values are different in Money objects, equals() gives false.
     @Test
     void equalsNotSameAmountTest() {
-        Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
-        Money money2 = new Money(ZERO_AMOUNT, Currency.USD);
-        assertNotEquals(money2, money);
+        Money moneyValueTen = new Money(DEFAULT_AMOUNT, Currency.USD);
+        Money moneyValueZero = new Money(ZERO_AMOUNT, Currency.USD);
+        assertThat(moneyValueTen, not(moneyValueZero));
     }
 
     //Test that compareTo() return 0 when compared to Object with same attribute values
@@ -151,31 +162,31 @@ class MoneyTest {
     void compareToObjectWithSameAttributeValuesTest() {
         Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
         Money otherMoney = new Money(DEFAULT_AMOUNT, Currency.USD);
-        assertEquals(0, money.compareTo(otherMoney));
+        assertThat(money.compareTo(otherMoney), is(0));
     }
 
-    //Test that compareTo() return 1 when this.amount is greater then other.amount
+    //Test that compareTo() returns positive when this.amount is greater then other.amount
     @Test
     void compareToReturnsPositiveTest() {
         Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
         Money otherMoney = new Money(BigDecimal.ZERO, Currency.USD);
-        assertEquals(1, money.compareTo(otherMoney));
+        assertThat(money.compareTo(otherMoney), is(greaterThan(0)));
     }
 
-    //Test that compareTo() return -1 when this.amount is less then other.amount
+    //Test that compareTo() return negative when this.amount is less then other.amount
     @Test
     void compareToReturnsNegativeTest() {
         Money money = new Money(BigDecimal.ZERO, Currency.USD);
         Money otherMoney = new Money(BigDecimal.TEN, Currency.USD);
-        assertEquals(-1, money.compareTo(otherMoney));
+        assertThat(money.compareTo(otherMoney), is(lessThan(0)));
     }
 
-    //Test that compareTo() return 1 when this.currency is greater then other.currency
+    //Test that compareTo() return positive when this.currency is greater then other.currency
     @Test
     void compareToThisCurrencyGreaterThenOtherCurrencyTest() {
         Money money = new Money(DEFAULT_AMOUNT, Currency.EUR);
         Money otherMoney = new Money(DEFAULT_AMOUNT, Currency.USD);
-        assertTrue((money.compareTo(otherMoney) < 0));
+        assertThat(money.compareTo(otherMoney), is(lessThan(0)));
     }
 
     //Test that compareTo() return -1 when this.currency is less then other.currency
@@ -183,13 +194,13 @@ class MoneyTest {
     void compareToThisCurrencyLessThenOtherCurrencyTest() {
         Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
         Money otherMoney = new Money(DEFAULT_AMOUNT, Currency.EUR);
-        assertTrue(money.compareTo(otherMoney) > 0);
+        assertThat(money.compareTo(otherMoney), is(greaterThan(0)));
     }
 
     @Test
     void moneyToStringFormatTest() {
         Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
-        assertEquals("10 USD", money.toString());
+        assertThat(money, hasToString(equalTo("10.00 USD")));
     }
 
 }

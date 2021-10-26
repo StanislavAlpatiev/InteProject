@@ -13,6 +13,10 @@ public class Money implements Comparable<Money> {
     //sets amount and currency
     public Money(BigDecimal amount, Currency currency) {
 
+        if (amount == null) {
+            throw new IllegalArgumentException("amount is null");
+        }
+
         if (currency == null) {
             throw new IllegalArgumentException("currency is null");
         }
