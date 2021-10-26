@@ -14,15 +14,16 @@ class ItemTest {
     private static final BigDecimal TWELVE_PERCENT = new BigDecimal("0.12");
     private static final BigDecimal FIFTEEN_PERCENT = new BigDecimal("0.15");
     private static final BigDecimal TWENTYFIVE_PERCENT = new BigDecimal("0.25");
-
+    
     private static final Money DEFAULT_GROCERY_PRICE_PLUS_VAT = new Money(new BigDecimal("11.20"), Currency.SEK);
     private static final Money DEFAULT_GROCERY_VAT_OF_ITEM = new Money(new BigDecimal("1.20"), Currency.SEK);
 
-    //Money in different currencies, Default is SEK
+    //Money in different currencies, DEFAULT is SEK
     private static final Money DEFAULT_MONEY = new Money(new BigDecimal("10"), Currency.SEK);
     private static final Money NOK_MONEY = new Money(new BigDecimal("10"), Currency.NOK);
     private static final Money DKK_MONEY = new Money(new BigDecimal("10"), Currency.DKK);
 
+    //Beverage in different currencies, DEFAULT is SEK
     private static final Item DEFAULT_SMALL_BEVERAGE = new Item("coca cola", "0404040", "coca cola", DEFAULT_MONEY, new BigDecimal("0.33"));
     private static final Item DEFAULT_ONE_LITER_BEVERAGE = new Item("coca cola", "0404040", "coca cola", DEFAULT_MONEY, new BigDecimal("1"));
     private static final Item DEFAULT_BIG_BEVERAGE = new Item("coca cola", "0404040", "coca cola", DEFAULT_MONEY, new BigDecimal("2"));
@@ -31,6 +32,7 @@ class ItemTest {
     private static Item DKK_SMALL_BEVERAGE = new Item("coca cola", "0404040", "coca cola", DKK_MONEY, new BigDecimal("0.33"));
     private static Item DKK_BIG_BEVERAGE = new Item("coca cola", "0404040", "coca cola", DKK_MONEY, new BigDecimal("2"));
 
+    //Items in different currencies, DEFAULT is SEK
     private static final Item DEFAULT_GROCERY = new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, DEFAULT_MONEY);
     private static final Item DEFAULT_TOBACCO = new Item("snus", "0204040", "Knox", ItemType.TOBACCO, DEFAULT_MONEY);
     private static final Item DEFAULT_NEWSPAPER = new Item("Aftonbladet", "0304040", "Aftonbladet", ItemType.NEWSPAPER, DEFAULT_MONEY);
@@ -41,6 +43,7 @@ class ItemTest {
     private static final Item DKK_TOBACCO = new Item("snus", "0204040", "Knox", ItemType.TOBACCO, DKK_MONEY);
     private static final Item DKK_NEWSPAPER = new Item("Aftonbladet", "0304040", "Aftonbladet", ItemType.NEWSPAPER, DKK_MONEY);
 
+    //Pant in different currencies, DEFAULT is SEK
     private static final Money DEFAULT_PANT_SMALL = new Money(BigDecimal.ONE, Currency.SEK);
     private static final Money DEFAULT_PANT_BIG = new Money(new BigDecimal("2"), Currency.SEK);
     private static final Money NOK_PANT_SMALL = new Money(new BigDecimal("2"), Currency.NOK);
@@ -109,6 +112,8 @@ class ItemTest {
     @Test
     void constructorSetsTobaccoAsAgeRestricted() {
         assertEquals(true, DEFAULT_TOBACCO.isAgeRestricted());
+        assertEquals(true, NOK_TOBACCO.isAgeRestricted());
+        assertEquals(true, DKK_TOBACCO.isAgeRestricted());
     }
 
     // testar att panten för 33 cl sätts korrekt
