@@ -30,6 +30,10 @@ public class Item implements Comparable<Item> {
             throw new IllegalArgumentException("null parameter in Item constructor");
         }
 
+        if(type == ItemType.TOBACCO){
+            ageRestricted = true;
+        }
+
         this.name = name;
         this.productNo = productNo;
         this.producer = producer;
@@ -88,6 +92,7 @@ public class Item implements Comparable<Item> {
     public Money getPrice() {
         return price;
     }
+
 
     //sets price and changes pant, only changes the price if its not the same
     public void setPrice(Money newPrice) {

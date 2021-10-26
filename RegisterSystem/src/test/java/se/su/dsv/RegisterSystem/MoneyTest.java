@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MoneyTest {
 
-    private static final BigDecimal DEFAULT_AMOUNT = new BigDecimal(10);
+    private static final BigDecimal DEFAULT_AMOUNT = new BigDecimal("10.00");
     private static final BigDecimal NEGATIVE_AMOUNT = new BigDecimal(-1);
     private static final BigDecimal ZERO_AMOUNT = new BigDecimal(0);
 
