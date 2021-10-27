@@ -33,6 +33,7 @@ public class Inventory {
         add(item);
     }
 
+    //Adds item(s) into inventory
     public void add(Item... item) throws IOException {
         for (Item i : item) {
             if (i.getPrice().getCurrency() != this.currency) {
@@ -42,9 +43,14 @@ public class Inventory {
         }
     }
 
+    //removes one item from the inventory
     public void remove(Item item) {
+        //if the item is not available, do nothing.
         if (isAvailable(item)) {
+            //if there is more than 0 of that item, remove 1.
             items.put(item, items.get(item) - 1);
+
+            //if there is 0 of that item, remove entry in map.
             if (items.get(item) == 0) {
                 items.remove(item);
             }
@@ -59,12 +65,18 @@ public class Inventory {
         return currency;
     }
 
+    //Changes currency of the inventory, and all of the items in it.
     public void setCurrency(Currency currency) throws IOException {
+
+        //if the currency is the same as the current one, do nothing.
         if (this.currency != currency) {
+
+            //get the exchange rate from the bank
             BigDecimal rate = bank.getRate(this.currency, currency);
             if (rate == null) {
                 return;
             }
+            //goes through every item in inventory, and gives them their new price
             for (Map.Entry<Item, Integer> entry : this.items.entrySet()) {
                 Money price = bank.exchange(entry.getKey().getPrice(), currency, rate);
                 entry.getKey().setPrice(price);
@@ -73,10 +85,12 @@ public class Inventory {
         }
     }
 
+    //checks whether there is any of the item in the inventory
     public boolean isAvailable(Item item) {
         return items.containsKey(item);
     }
 
+    //checks whether all items in an order is available
     public boolean isAvailable(Order order) {
         if (order == null) {
             return false;
@@ -84,6 +98,7 @@ public class Inventory {
         TreeMap<Item, BigDecimal> itemAndAmount = order.getItems();
 
         for (Map.Entry<Item, BigDecimal> entry : itemAndAmount.entrySet()) {
+            //makes sure there are enough of each item available
             if (!itemAmountNeededIsAvailable(entry)) {
                 return false;
             }
@@ -109,27 +124,36 @@ public class Inventory {
         return itemIsAvailable;
     }
 
-    public void importInventory() throws FileNotFoundException {
-        importInventory("default");
-    }
-
+    //Imports inventory map of items and how many of each in an integer from file
     public void importInventory(String fileName) throws FileNotFoundException {
 
         try(
             Reader reader = Files.newBufferedReader(Paths.get(fileName));
         ) {
             HashMap<String, Integer> newItems;
-            // create Gson instance
             Gson gson = new Gson();
 
+            //Uses gson to convert the string containing the string-ified hashmap
+            //of items and integers into an actual hashmap
+            //However, this hashmap will not be items/integers
+            //but rather the toString of the item/integer
             newItems = gson.fromJson(new FileReader(fileName), HashMap.class);
+
+            //Emptying out old items before importing the new ones
             items.clear();
+
             for (Map.Entry<String, Integer> entry : newItems.entrySet()) {
                 String stringEntry = entry.getKey();
+
+                //we have constructed the toString of items to contain @ as a "splitter" 
                 String[] params = stringEntry.split("@");
+                //if the parameters of this split is 7, that means it is a beverage - because
+                //it also has a parameter for volume that is needed to reconstruct the object
                 if (params.length == 7) {
                     Money money = new Money(new BigDecimal(params[4]), Currency.valueOf(params[5]));
                     add(new Item(params[0], params[1], params[2], money, new BigDecimal(params[6])));
+                
+                //All other items share the same constructor, so they all go under else:
                 } else {
                     add(new Item(params[0], params[1], params[2], ItemType.valueOf(params[3]),
                             new Money(new BigDecimal(params[4]), Currency.valueOf(params[5]))));
@@ -141,19 +165,16 @@ public class Inventory {
         }
     }
 
-    public void exportInventory() throws FileNotFoundException {
-        exportInventory("default");
-    }
-
+    //Exports items currently in the hashmap of items as key and amounts of each item as value.
     public void exportInventory(String fileName) throws FileNotFoundException {
         try(
             Writer writer = new FileWriter(fileName);
         ) {
-            // create a writer
-
+            //makes sure there are no leftovers from prior import.
             writer.flush();
 
-            // convert map to JSON File
+            // convert the hashmap of items into a gson string which is 
+            //exported as a json with help of the writer. 
             new Gson().toJson(items, writer);
 
         } catch (Exception ex) {

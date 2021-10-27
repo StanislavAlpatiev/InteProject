@@ -121,6 +121,18 @@ class InventoryTest {
         assertEquals(defaultInventory.getItems(), testOracle.getItems());
     }
 
+    //Seeing if an export with an invalid filename throws. 
+    @Test
+    void brokenExportThrowsTest() throws IOException{
+        Inventory testOracle = new Inventory(DEFAULT_MOCK_BANK, DEFAULT_CURRENCY);
+        testOracle.add(NEWSPAPER, GROCERY, GROCERY_2, TOBACCO, BIG_BEVERAGE, ONE_LITER_BEVERAGE, SMALL_BEVERAGE);
+
+        //Using ///// as the filename since that is an illegal file name.
+        assertThrows(FileNotFoundException.class, () -> {
+            testOracle.exportInventory("src\\test\\resources\\///////");
+        });
+    }
+
     //Adds item with a SEK money object to Inventory with USD currency, and makes sure the Item is converted into USD as its added.
     @Test
     void addedItemHasSameCurrency() throws IOException {
@@ -197,5 +209,13 @@ class InventoryTest {
         defaultInventory.add(DEFAULT_ITEM);
         Item item = new Item("Test", "012", "null", ItemType.BEVERAGE, new Money(BigDecimal.TEN, Currency.AED));
         assertFalse(defaultInventory.isAvailable(item));
+    }
+
+    //Tries to send in an order of two Default Items, while there is only one Default Item in the inventory.
+    @Test
+    void itemIsAvailableButNotEnoughOfThemTest() throws IOException{
+        Order order = new Order(DEFAULT_CURRENCY, DEFAULT_ITEM, DEFAULT_ITEM);
+        defaultInventory.add(DEFAULT_ITEM);
+        assertFalse(defaultInventory.isAvailable(order));
     }
 }
