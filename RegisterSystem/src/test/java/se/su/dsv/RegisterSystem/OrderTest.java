@@ -429,7 +429,6 @@ public class OrderTest {
     }
 
 
-<<<<<<< HEAD
     /**
      * Tests if getAmountOfVAT method throws an exception if the inserted VAT rate is not valid
      */
@@ -461,39 +460,7 @@ public class OrderTest {
             defaultOrder.getNetVat(-1); //could be any unvalid VAT rate
         });
     }
-=======
-//    /**
-//     * Tests if getAmountOfVAT method throws an exception if the inserted VAT rate is not valid
-//     */
-//    @Test
-//    void getAmountOfVatThrowExceptionForInvalidVATRate() {
-//        assertThrows(IllegalArgumentException.class, () -> {
-//            defaultOrder.getAmountOfVat(0); //could be any unvalid VAT rate
-//        });
-//
-//    }
-//
-//    /**
-//     * Tests if getNetVAT method throws an exception if the inserted VAT rate is not valid
-//     */
-//    @Test
-//    void getNetVatThrowExceptionForInvalidVATRate() {
-//        assertThrows(IllegalArgumentException.class, () -> {
-//            defaultOrder.getNetVat(0); //could be any unvalid VAT rate
-//        });
-//
-//    }
-//
-//    /**
-//     * Tests if getGrossVAT method throws an exception if the inserted VAT rate is not valid
-//     */
-//    @Test
-//    void getGrossVatThrowExceptionForInvalidVATRate() {
-//        assertThrows(IllegalArgumentException.class, () -> {
-//            defaultOrder.getNetVat(0); //could be any unvalid VAT rate
-//        });
-//    }
->>>>>>> 343dd44c48890a94631c7707b8dae34b606a7e73
+
 
 
     /**
