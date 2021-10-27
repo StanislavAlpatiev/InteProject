@@ -208,9 +208,6 @@ public class Order {
      */
     //TODO: should check if order number already exists in database?
     private String generateOrderNumber() {
-        if (number != null) {
-            throw new IllegalStateException("Order number already generated");
-        }
         StringBuilder sb = new StringBuilder();
         generateDatePartOfOrderNr(sb);
         generateEndPartOfOrderNumber(sb);
