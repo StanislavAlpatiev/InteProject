@@ -1,6 +1,7 @@
 package se.su.dsv.RegisterSystem;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 //Holds all information for a specific item
@@ -106,7 +107,7 @@ public class Item implements Comparable<Item> {
     }
 
     public BigDecimal getVat() {
-        return new BigDecimal(vat.label);
+        return new BigDecimal(vat.label).setScale(2, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getVolumeLiter() {

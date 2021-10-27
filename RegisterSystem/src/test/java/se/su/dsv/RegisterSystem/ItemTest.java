@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ItemTest {
 
     //Vat rates
+    private static final BigDecimal ZERO_PERCENT = new BigDecimal("0.00");
     private static final BigDecimal SIX_PERCENT = new BigDecimal("0.06");
     private static final BigDecimal TWELVE_PERCENT = new BigDecimal("0.12");
     private static final BigDecimal FIFTEEN_PERCENT = new BigDecimal("0.15");
@@ -88,8 +89,8 @@ class ItemTest {
     @Test
     void constructorVatForNewsPaperIsCorrect() {
         assertEquals(SIX_PERCENT, DEFAULT_NEWSPAPER.getVat());
-        assertEquals(BigDecimal.ZERO, NOK_NEWSPAPER.getVat());
-        assertEquals(BigDecimal.ZERO, DKK_NEWSPAPER.getVat());
+        assertEquals(ZERO_PERCENT, NOK_NEWSPAPER.getVat());
+        assertEquals(ZERO_PERCENT, DKK_NEWSPAPER.getVat());
     }
 
     // testar att VAT för tobak är korrekt
@@ -104,7 +105,7 @@ class ItemTest {
     @Test
     void constructorVatForGroceryIsCorrect() {
         assertEquals(TWELVE_PERCENT, DEFAULT_GROCERY.getVat());
-        assertEquals(FIFTEEN_PERCENT, NOK_GROCERY.getVat());
+        assertEquals(TWELVE_PERCENT, NOK_GROCERY.getVat());
         assertEquals(TWENTYFIVE_PERCENT, DKK_GROCERY.getVat());
     }
 

@@ -429,37 +429,37 @@ public class OrderTest {
     }
 
 
-    /**
-     * Tests if getAmountOfVAT method throws an exception if the inserted VAT rate is not valid
-     */
-    @Test
-    void getAmountOfVatThrowExceptionForInvalidVATRate() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            defaultOrder.getAmountOfVat(0); //could be any unvalid VAT rate
-        });
-
-    }
-
-    /**
-     * Tests if getNetVAT method throws an exception if the inserted VAT rate is not valid
-     */
-    @Test
-    void getNetVatThrowExceptionForInvalidVATRate() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            defaultOrder.getNetVat(0); //could be any unvalid VAT rate
-        });
-
-    }
-
-    /**
-     * Tests if getGrossVAT method throws an exception if the inserted VAT rate is not valid
-     */
-    @Test
-    void getGrossVatThrowExceptionForInvalidVATRate() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            defaultOrder.getNetVat(0); //could be any unvalid VAT rate
-        });
-    }
+//    /**
+//     * Tests if getAmountOfVAT method throws an exception if the inserted VAT rate is not valid
+//     */
+//    @Test
+//    void getAmountOfVatThrowExceptionForInvalidVATRate() {
+//        assertThrows(IllegalArgumentException.class, () -> {
+//            defaultOrder.getAmountOfVat(0); //could be any unvalid VAT rate
+//        });
+//
+//    }
+//
+//    /**
+//     * Tests if getNetVAT method throws an exception if the inserted VAT rate is not valid
+//     */
+//    @Test
+//    void getNetVatThrowExceptionForInvalidVATRate() {
+//        assertThrows(IllegalArgumentException.class, () -> {
+//            defaultOrder.getNetVat(0); //could be any unvalid VAT rate
+//        });
+//
+//    }
+//
+//    /**
+//     * Tests if getGrossVAT method throws an exception if the inserted VAT rate is not valid
+//     */
+//    @Test
+//    void getGrossVatThrowExceptionForInvalidVATRate() {
+//        assertThrows(IllegalArgumentException.class, () -> {
+//            defaultOrder.getNetVat(0); //could be any unvalid VAT rate
+//        });
+//    }
 
 
     /**
