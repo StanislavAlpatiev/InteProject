@@ -191,8 +191,6 @@ public class ReceiptTest {
 
         File file = new File(pathName);
         assertTrue(file.delete());
-
-
     }
 
 
@@ -215,12 +213,12 @@ public class ReceiptTest {
     @Test
     void printToFileThrowsIOException() {
 
-        Order order = new Order(Currency.SEK, DEFAULT_NEWSPAPER, DEFAULT_BEVERAGE, DEFAULT_GROCERY);
+        Order order = new Order(Currency.SEK, DEFAULT_NEWSPAPER);
         Receipt receipt = new Receipt(order);
-        String mockFileName = "no\\such\\path\\noFile.txt";
+        String nonExistingFile = "no\\such\\path\\noFile.txt";
 
         assertThrows(IOException.class, () -> {
-            receipt.printToFile(mockFileName);
+            receipt.printReceiptToFile(nonExistingFile);
         });
 
 

@@ -53,19 +53,15 @@ public class Receipt {
      * Prints the receipt to a textfile
      */
     public void printReceiptToFile(String pathName) throws IOException {
-
         File file = new File(pathName);
-
         //throws exception if a file with the receipt already exists
         if (file.exists()) {
             throw new IllegalStateException("File already exists");
         }
-        printToFile(pathName);
+        writeToFile(pathName);
     }
 
-
-
-    protected int printToFile(String pathName) throws IOException {
+    private void writeToFile(String pathName) throws IOException {
         try {
             FileWriter writer = new FileWriter(pathName);
             PrintWriter out = new PrintWriter(writer);
@@ -75,7 +71,6 @@ public class Receipt {
         } catch (IOException e) {
             throw new FileNotFoundException();
         }
-        return -1;
     }
 
 
@@ -84,20 +79,16 @@ public class Receipt {
      */
     private String createReceipt() {
         StringBuilder sb = new StringBuilder();
-
         sb.append(ROW_DIVIDER).append("\n");
 
         //creating rows for order number and date/time
         sb.append(formatRow("OrderNr:", order.getNumber(), EMPTY_COLUMN, EMPTY_COLUMN));
         sb.append(formatRow("Datum:", date, "Tid:", time));
-
         sb.append(ROW_DIVIDER).append("\n");
 
         //loops through every item in the order to create row for each item
         order.getItems().entrySet().forEach(e -> {
-            sb.append(createItemRow(e));
-        });
-
+            sb.append(createItemRow(e)); });
         sb.append(ROW_DIVIDER).append("\n");
 
         //creates row for the total price
@@ -111,7 +102,6 @@ public class Receipt {
             sb.append(createVATRow(rate.label));
         }
         sb.append(ROW_DIVIDER);
-
         return sb.toString();
     }
 
