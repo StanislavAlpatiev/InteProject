@@ -5,6 +5,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.when;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -55,13 +60,15 @@ public class ReceiptTest {
     private static final LocalDateTime DEFAULT_DATE = LocalDateTime.of(1999, 1, 1, 0, 0);
 
     @Mock Order mockOrder;
+    @Mock FileWriter mockWriter;
+
 
 
     /**
      * Sets up a mock order to allow for non random order number
      */
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
         mockOrder = org.mockito.Mockito.spy(new Order(Currency.SEK));
         Mockito.lenient().when(mockOrder.getNumber()).thenReturn(DEFAULT_ORDER_NUMBER);
     }
@@ -175,19 +182,20 @@ public class ReceiptTest {
      * Testing the print to file method
      */
     @Test
-    void printToFileTest() {
+    void printToFileTest() throws IOException {
         Order order = new Order(Currency.SEK, DEFAULT_NEWSPAPER, DEFAULT_BEVERAGE, DEFAULT_GROCERY);
         Receipt receipt = new Receipt(order);
+        String pathName = "src\\test\\resources\\" + order.getNumber() + ".txt";
 
-        receipt.printReceiptToFile();
+        receipt.printReceiptToFile(pathName);
 
         String expected = receipt.getReceipt() + "\n";
-        String actual = readTextFile("src\\test\\resources\\" + order.getNumber() + ".txt");
+        String actual = readTextFile(pathName);
 
         //if a file with the order number exists and has the same content as the receipt string the test has succeeded
         assertEquals(expected, actual);
 
-        File file = new File("src\\test\\resources\\" + order.getNumber() + ".txt");
+        File file = new File(pathName);
         assertTrue(file.delete());
 
 
@@ -197,32 +205,38 @@ public class ReceiptTest {
     @Test
     void printToFileThrowsExceptionWhenFileAlreadyExists() throws IOException {
 
-        mockOrder.addItem(DEFAULT_NEWSPAPER);
-        Receipt receipt = new Receipt(mockOrder);
-        receipt.printReceiptToFile();
+        Order order = new Order(Currency.SEK, DEFAULT_NEWSPAPER, DEFAULT_BEVERAGE, DEFAULT_GROCERY);
+        Receipt receipt = new Receipt(order);
+        String pathName = "src\\test\\resources\\" + order.getNumber() + ".txt";
+        receipt.printReceiptToFile(pathName);
 
         assertThrows(IllegalStateException.class, () -> {
-            receipt.printReceiptToFile();
+            receipt.printReceiptToFile(pathName);
         });
 
-        File file = new File("src\\test\\resources\\" + mockOrder.getNumber() + ".txt");
+        File file = new File(pathName);
         assertTrue(file.delete());
     }
 
     @Test
     void printToFileThrowsIOException() {
 
-    }
+        Order order = new Order(Currency.SEK, DEFAULT_NEWSPAPER, DEFAULT_BEVERAGE, DEFAULT_GROCERY);
+        Receipt receipt = new Receipt(order);
+        String mockFileName = "no\\such\\path\\noFile.txt";
 
-    @Test
-    void printToFileThrowsFileNotFoundException() {
+        assertThrows(IOException.class, () -> {
+            receipt.printToFile(mockFileName);
+        });
+
+
     }
 
     // helper method to read text file
-    String readTextFile(String fileName) {
+    String readTextFile(String pathName) {
         StringBuilder readFile = new StringBuilder();
         try {
-            FileReader reader = new FileReader(fileName);
+            FileReader reader = new FileReader(pathName);
             BufferedReader in = new BufferedReader(reader);
             String line;
             while ((line = in.readLine()) != null) {
@@ -230,9 +244,6 @@ public class ReceiptTest {
             }
             in.close();
             reader.close();
-
-        } catch (FileNotFoundException e) {
-            System.err.println("Cant open file");
         } catch (IOException e) {
             System.out.println("IO error " + e.getMessage());
         }
