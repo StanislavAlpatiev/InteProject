@@ -87,8 +87,7 @@ public class Receipt {
         sb.append(ROW_DIVIDER).append("\n");
 
         //loops through every item in the order to create row for each item
-        order.getItems().entrySet().forEach(e -> {
-            sb.append(createItemRow(e)); });
+        order.getItems().entrySet().forEach(e -> sb.append(createItemRow(e)));
         sb.append(ROW_DIVIDER).append("\n");
 
         //creates row for the total price

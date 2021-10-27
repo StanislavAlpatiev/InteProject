@@ -109,7 +109,7 @@ public class OrderTest {
     @Test
     void constructorTrowsIAEForNullItem() {
         assertThrows(IllegalArgumentException.class, () -> {
-            Order order = new Order(DEFAULT_CURRENCY,  null);
+            new Order(DEFAULT_CURRENCY,  null);
         });
     }
 

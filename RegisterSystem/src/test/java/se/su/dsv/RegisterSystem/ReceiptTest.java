@@ -223,7 +223,7 @@ public class ReceiptTest {
     }
 
     // helper method to read text file
-    String readTextFile(String pathName) {
+    String readTextFile(String pathName) throws FileNotFoundException {
         StringBuilder readFile = new StringBuilder();
         try {
             FileReader reader = new FileReader(pathName);
@@ -235,7 +235,7 @@ public class ReceiptTest {
             in.close();
             reader.close();
         } catch (IOException e) {
-            System.out.println("IO error " + e.getMessage());
+            throw new FileNotFoundException("File not found");
         }
         return readFile.toString();
     }
