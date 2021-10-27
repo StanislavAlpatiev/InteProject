@@ -62,6 +62,15 @@ public class OrderTest {
         }
     }
 
+    @Test
+    void constructorThrowsExceptionForNullItemArray() {
+        {
+            assertThrows(IllegalArgumentException.class, () -> {
+                new Order(DEFAULT_CURRENCY, (Item[]) null);
+            });
+        }
+    }
+
     /**
      * Trying to create an order with null Currency parameter should throw an exception
      */

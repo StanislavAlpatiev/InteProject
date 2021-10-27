@@ -9,17 +9,8 @@ public enum VAT {
 
     public double label;
 
-    private VAT(double label) {
+    VAT(double label) {
         this.label = label;
-    }
-
-    public static double valueOfLabel(double label) {
-        for (VAT vat : values()) {
-            if (vat.label == label) {
-                return label;
-            }
-        }
-        return 0;
     }
 
     public String toString() {
