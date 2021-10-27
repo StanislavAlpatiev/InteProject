@@ -435,7 +435,7 @@ public class OrderTest {
     @Test
     void getAmountOfVatThrowExceptionForInvalidVATRate() {
         assertThrows(IllegalArgumentException.class, () -> {
-            defaultOrder.getAmountOfVat(0); //could be any unvalid VAT rate
+            defaultOrder.getAmountOfVat(-1); //could be any unvalid VAT rate
         });
 
     }
@@ -446,7 +446,7 @@ public class OrderTest {
     @Test
     void getNetVatThrowExceptionForInvalidVATRate() {
         assertThrows(IllegalArgumentException.class, () -> {
-            defaultOrder.getNetVat(0); //could be any unvalid VAT rate
+            defaultOrder.getNetVat(-1); //could be any unvalid VAT rate
         });
 
     }
@@ -457,7 +457,7 @@ public class OrderTest {
     @Test
     void getGrossVatThrowExceptionForInvalidVATRate() {
         assertThrows(IllegalArgumentException.class, () -> {
-            defaultOrder.getNetVat(0); //could be any unvalid VAT rate
+            defaultOrder.getNetVat(-1); //could be any unvalid VAT rate
         });
     }
 

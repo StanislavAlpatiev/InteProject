@@ -241,11 +241,9 @@ public class Order {
      * Verifies whether a VAT rate is valid by throwing an exception if it is not
      */
     private void verifyValidVat(double vatRate) {
-        for (VAT validRate : VAT.values()) {
-            if (vatRate == validRate.label) {
-                return;
-            }
-        }
+        if(!totalPricePerVATRate.containsKey(vatRate))
+            throw new IllegalArgumentException("VAT not represented in order");
+
     }
 
     /**
