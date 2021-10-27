@@ -2,6 +2,7 @@ package se.su.dsv.RegisterSystem;
 
 public enum VAT {
 
+    ZERO(0.00),
     SIX(0.06),
     TWELVE(0.12),
     TWENTY_FIVE(0.25);

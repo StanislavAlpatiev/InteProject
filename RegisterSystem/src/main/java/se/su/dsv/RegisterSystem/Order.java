@@ -246,7 +246,6 @@ public class Order {
                 return;
             }
         }
-        throw new IllegalArgumentException("Not a valid VAT rate");
     }
 
     /**

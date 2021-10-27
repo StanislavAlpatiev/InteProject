@@ -103,6 +103,16 @@ public class OrderTest {
         orderContainItems(order, DEFAULT_NEWSPAPER);
     }
 
+    /**
+     *Test that IllegalArgumentException is thrown when when item argument is null in constructor
+     */
+    @Test
+    void constructorTrowsIAEForNullItem() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            Order order = new Order(DEFAULT_CURRENCY,  null);
+        });
+    }
+
 
     /**
      * Tests if the constructor with multiple Item parameters adds the items to the order

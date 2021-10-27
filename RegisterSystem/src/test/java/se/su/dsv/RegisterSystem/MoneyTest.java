@@ -135,6 +135,14 @@ class MoneyTest {
         assertThat(money, is(money2));
     }
 
+    //Test if equal money objects are equal
+    @Test
+    void notEqualWhenComparedToNonMoney() {
+        Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
+        BankService bank = new MockBank();
+        assertThat(money, is(bank));
+    }
+
     //Tests if two equal even if they have .0 or not at the end
     @Test
     void differentScaleIsEqualTest() {

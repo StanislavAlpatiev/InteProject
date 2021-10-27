@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BankTest {
     static final BigDecimal DEFAULT_VALUE = new BigDecimal(10);
@@ -44,7 +45,7 @@ class BankTest {
 
         BigDecimal newAmount = DEFAULT_VALUE.multiply(rate);
 
-        assertEquals(newAmount, money.getAmount());
+        assertEquals(newAmount.doubleValue(), money.getAmount().doubleValue());
     }
 
     //Test that the exchange with supplied rate converts the amount correctly
@@ -53,6 +54,6 @@ class BankTest {
         BigDecimal rate = new BigDecimal(2);
         Money money = new Money(DEFAULT_VALUE, Currency.USD);
         money = bank.exchange(money, Currency.SEK, rate);
-        assertEquals(DEFAULT_VALUE.multiply(rate), money.getAmount());
+        assertEquals(DEFAULT_VALUE.multiply(rate).doubleValue(), money.getAmount().doubleValue());
     }
 }

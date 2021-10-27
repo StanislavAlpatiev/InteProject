@@ -17,7 +17,7 @@ public class Bank implements BankService {
     /*GetRate communicates with an API that and returns the exchange rate between two currencies
     The exchange rate is one sided meaning that it is only from currency 'A' to currency 'B'*/
     @Override
-    public BigDecimal getRate(Currency from, Currency to) {
+    public BigDecimal getRate(Currency from, Currency to) throws IOException {
         // Setting URL
         String urlStr = ("https://v6.exchangerate-api.com/v6/3f192049848a3da4ed3985ce/pair/" + from + "/" + to);
 
@@ -40,8 +40,7 @@ public class Bank implements BankService {
             return jsonobj.get("conversion_rate").getAsBigDecimal();
 
         } catch (IOException e) {
-            System.err.print(e.getMessage());
-            return null;
+            throw new IOException();
         }
     }
 
@@ -49,7 +48,7 @@ public class Bank implements BankService {
     /*Example: Exchange rate from SEK to USD is 10 SEK for every USD, Passing SEKMoney with value 10
     will return USDMoney with value 1*/
     @Override
-    public Money exchange(Money money, Currency currency) {
+    public Money exchange(Money money, Currency currency) throws IOException {
         BigDecimal rate = getRate(money.getCurrency(), currency);
         return exchange(money, currency, rate);
     }
