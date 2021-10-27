@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ItemTest {
 
@@ -52,8 +51,6 @@ class ItemTest {
     private static final Money DKK_PANT_BIG = new Money(new BigDecimal("3"), Currency.DKK);
 
 
-
-
     // testar konstruktorn med valida parametrar
     @Test
     void constructorValidParameterTest() {
@@ -78,6 +75,9 @@ class ItemTest {
         });
         assertThrows(IllegalArgumentException.class, () -> {
             new Item("coca-cola", "0202020", "coca-cola", ItemType.BEVERAGE, null);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Item("mjöl", "0104040", "ICA", ItemType.GROCERY, null);
         });
         assertThrows(IllegalArgumentException.class, () -> {
             new Item("coca-cola", "0202020", "coca-cola", DEFAULT_MONEY, null);
@@ -161,6 +161,14 @@ class ItemTest {
         assertEquals(new Money(BigDecimal.ZERO, Currency.USD), notInSEK.getPant());
     }
 
+    //If currency is not set to SEK, pant should be 0
+    @Test
+    void constructorSetsCorrectLiter() {
+        Item beverage = new Item("coca cola", "0404040", "coca cola", DEFAULT_MONEY, new BigDecimal("9.55"));
+        double expected = 9.55;
+        assertEquals(expected, beverage.getVolumeLiter().doubleValue());
+    }
+
     // testar att setPrice() metoden ändrar priset korrekt
     @Test
     void setPriceChangesPriceCorrectlyTest() {
@@ -168,6 +176,12 @@ class ItemTest {
         Money money = new Money(new BigDecimal("20"), Currency.SEK);
         item.setPrice(money);
         assertEquals(new Money(new BigDecimal("20"), Currency.SEK), item.getPrice());
+    }
+
+    // testar att setPrice() metoden ändrar priset korrekt
+    @Test
+    void setPriceThrowsExceptionForNullMoney() {
+        assertThrows(IllegalArgumentException.class, () -> DEFAULT_GROCERY.setPrice(null));
     }
 
     //tests that setPrice changes pant for switching between currencies
@@ -207,6 +221,12 @@ class ItemTest {
     @Test
     void toStringTest() {
         assertEquals("mjöl@0104040@ICA@GROCERY@10.00@SEK", DEFAULT_GROCERY.toString());
+    }
+
+    @Test
+    void equalsTest() {
+        assertEquals(DEFAULT_GROCERY, DEFAULT_GROCERY);
+        assertNotEquals(DEFAULT_GROCERY, null);
     }
 
 

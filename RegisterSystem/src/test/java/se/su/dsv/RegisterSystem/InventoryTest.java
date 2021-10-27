@@ -170,6 +170,7 @@ class InventoryTest {
         assertFalse(defaultInventory.getItems().containsKey(DEFAULT_ITEM));
     }
 
+
     @Test
     void setCurrencyChangesCurrency() throws IOException {
         defaultInventory.importInventory("src\\test\\resources\\TestInventory.json");
@@ -217,5 +218,11 @@ class InventoryTest {
         Order order = new Order(DEFAULT_CURRENCY, DEFAULT_ITEM, DEFAULT_ITEM);
         defaultInventory.add(DEFAULT_ITEM);
         assertFalse(defaultInventory.isAvailable(order));
+    }
+
+    //Tests whether item is flagged as available when it is
+    @Test
+    void orderIsNotAvailableWhenNull() {
+        assertFalse(defaultInventory.isAvailable((Order)null));
     }
 }
