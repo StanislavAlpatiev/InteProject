@@ -52,22 +52,30 @@ public class Receipt {
     /**
      * Prints the receipt to a textfile
      */
-    public void printReceiptToFile(){
-        String fileName = "src\\test\\resources\\" + order.getNumber() + ".txt";
-        File file = new File(fileName);
-        if (file.exists())
+    public void printReceiptToFile(String pathName) throws IOException {
+
+        File file = new File(pathName);
+
+        //throws exception if a file with the receipt already exists
+        if (file.exists()) {
             throw new IllegalStateException("File already exists");
+        }
+        printToFile(pathName);
+    }
+
+
+
+    protected int printToFile(String pathName) throws IOException {
         try {
-            FileWriter writer = new FileWriter(fileName);
+            FileWriter writer = new FileWriter(pathName);
             PrintWriter out = new PrintWriter(writer);
             out.print(getReceipt());
             writer.close();
             out.close();
-        }catch (FileNotFoundException e) {
-            System.err.println("Cant open file");
         } catch (IOException e) {
-            System.err.print(e.getMessage());
+            throw new FileNotFoundException();
         }
+        return -1;
     }
 
 
