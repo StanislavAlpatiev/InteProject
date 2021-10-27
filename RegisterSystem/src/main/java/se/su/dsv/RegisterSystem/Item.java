@@ -30,9 +30,6 @@ public class Item implements Comparable<Item> {
             throw new IllegalArgumentException("null parameter in Item constructor");
         }
 
-        if(type == ItemType.TOBACCO){
-            ageRestricted = true;
-        }
 
         this.name = name;
         this.productNo = productNo;
@@ -41,11 +38,11 @@ public class Item implements Comparable<Item> {
         this.price = price;
         this.pant = new Money(BigDecimal.ZERO, price.getCurrency());
 
-        if(type == ItemType.TOBACCO){
-            this.ageRestricted = true;
-        }
-
+        setAgeRestricted();
         setVat();
+        if(type == ItemType.BEVERAGE){
+            setPant();
+        }
     }
 
     //second Item constructor that takes volumeCl as parameter and passes BEVERAGE into the first constructor, then sets pant for the volume of the beverage
@@ -103,6 +100,7 @@ public class Item implements Comparable<Item> {
             this.price = newPrice;
             setVat();
             setPant();
+            setAgeRestricted();
         }
     }
 
@@ -154,6 +152,29 @@ public class Item implements Comparable<Item> {
                 return new Money(BigDecimal.ZERO, price.getCurrency());
         }
 
+    }
+
+    public void setAgeRestricted(){
+        ageRestricted = determineAgeRestricted();
+    }
+
+    //determines if the Item is agerestricted, could be different in different countries, but here its obviously the same
+    private boolean determineAgeRestricted() {
+        switch (price.getCurrency()) {
+            case NOK:
+                if (type == ItemType.TOBACCO) {
+                    return true;
+                }
+            case DKK:
+                if (type == ItemType.NEWSPAPER) {
+                    return true;
+                }
+            default:  //DEFAULT is the Vat for SEK, but its default because we havent implemented the other currencies yet
+                if (type == ItemType.TOBACCO) {
+                    return true;
+                }
+        }
+        return false;
     }
 
     //sets vat, is only implemented for swedish tax laws, could be expanded

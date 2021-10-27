@@ -14,14 +14,14 @@ class ItemTest {
     private static final BigDecimal TWELVE_PERCENT = new BigDecimal("0.12");
     private static final BigDecimal FIFTEEN_PERCENT = new BigDecimal("0.15");
     private static final BigDecimal TWENTYFIVE_PERCENT = new BigDecimal("0.25");
-    
+
     private static final Money DEFAULT_GROCERY_PRICE_PLUS_VAT = new Money(new BigDecimal("11.20"), Currency.SEK);
     private static final Money DEFAULT_GROCERY_VAT_OF_ITEM = new Money(new BigDecimal("1.20"), Currency.SEK);
 
     //Money in different currencies, DEFAULT is SEK
-    private static final Money DEFAULT_MONEY = new Money(new BigDecimal("10"), Currency.SEK);
-    private static final Money NOK_MONEY = new Money(new BigDecimal("10"), Currency.NOK);
-    private static final Money DKK_MONEY = new Money(new BigDecimal("10"), Currency.DKK);
+    private static final Money DEFAULT_MONEY = new Money(new BigDecimal("10.00"), Currency.SEK);
+    private static final Money NOK_MONEY = new Money(new BigDecimal("10.00"), Currency.NOK);
+    private static final Money DKK_MONEY = new Money(new BigDecimal("10.00"), Currency.DKK);
 
     //Beverage in different currencies, DEFAULT is SEK
     private static final Item DEFAULT_SMALL_BEVERAGE = new Item("coca cola", "0404040", "coca cola", DEFAULT_MONEY, new BigDecimal("0.33"));
@@ -206,7 +206,7 @@ class ItemTest {
     // testar att toString metoden fungerar som den ska
     @Test
     void toStringTest() {
-        assertEquals("mjöl@0104040@ICA@GROCERY@10@SEK", DEFAULT_GROCERY.toString());
+        assertEquals("mjöl@0104040@ICA@GROCERY@10.00@SEK", DEFAULT_GROCERY.toString());
     }
 
 
