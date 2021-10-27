@@ -5,11 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.only;
-import static org.mockito.Mockito.when;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -60,7 +55,6 @@ public class ReceiptTest {
     private static final LocalDateTime DEFAULT_DATE = LocalDateTime.of(1999, 1, 1, 0, 0);
 
     @Mock Order mockOrder;
-    @Mock FileWriter mockWriter;
 
 
 
@@ -68,7 +62,7 @@ public class ReceiptTest {
      * Sets up a mock order to allow for non random order number
      */
     @BeforeEach
-    void setUp() throws IOException {
+    void setUp() {
         mockOrder = org.mockito.Mockito.spy(new Order(Currency.SEK));
         Mockito.lenient().when(mockOrder.getNumber()).thenReturn(DEFAULT_ORDER_NUMBER);
     }
