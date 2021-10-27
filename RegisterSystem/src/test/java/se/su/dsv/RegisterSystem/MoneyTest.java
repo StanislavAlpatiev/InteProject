@@ -140,7 +140,7 @@ class MoneyTest {
     void notEqualWhenComparedToNonMoney() {
         Money money = new Money(DEFAULT_AMOUNT, Currency.USD);
         BankService bank = new MockBank();
-        assertThat(money, is(bank));
+        assertNotEquals(money, bank);
     }
 
     //Tests if two equal even if they have .0 or not at the end
