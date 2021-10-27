@@ -43,12 +43,6 @@ public class Wallet {
         }
     }
 
-    public void add(Money... money) {
-        for (Money m : money) {
-            add(m);
-        }
-    }
-
     // Remove method subtracts money from entry in walletContent
     public void remove(Money money) throws IOException {
 
@@ -87,24 +81,6 @@ public class Wallet {
             moneyOfCurrency = moneyOfCurrency.add(bank.exchange(entry.getValue(), currency));
         }
         return moneyOfCurrency;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this) {
-            return true;
-        }
-        if (!(o instanceof Wallet)) {
-            return false;
-        }
-        Wallet otherWallet = (Wallet) o;
-        return Objects.equals(owner, otherWallet.getOwner())
-                && Objects.equals(walletContent, otherWallet.getWalletContent());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(owner);
     }
 
 }

@@ -13,7 +13,7 @@ public class Item implements Comparable<Item> {
     private boolean ageRestricted = false;
     private Money price;
     private BigDecimal volumeLiter;
-    private BigDecimal vat;
+    private VAT vat;
     private Money pant;
 
 
@@ -106,7 +106,7 @@ public class Item implements Comparable<Item> {
     }
 
     public BigDecimal getVat() {
-        return vat;
+        return new BigDecimal(vat.label);
     }
 
     public BigDecimal getVolumeLiter() {
@@ -175,31 +175,31 @@ public class Item implements Comparable<Item> {
         vat = determineVat();
     }
 
-    private BigDecimal determineVat() {
+    private VAT determineVat() {
         switch (price.getCurrency()) {
             case NOK:
                 if(type == ItemType.TOBACCO){
-                return new BigDecimal("0.25");
+                return VAT.TWENTY_FIVE;
                 }else if(type == ItemType.NEWSPAPER){
-                return BigDecimal.ZERO;
+                return VAT.ZERO;
                 }else{
-                return new BigDecimal("0.15");
+                return VAT.TWELVE;
                 }
 
             case DKK:
                 if(type == ItemType.NEWSPAPER){
-                    return BigDecimal.ZERO;
+                    return VAT.ZERO;
                 }else{
-                    return new BigDecimal("0.25");
+                    return VAT.TWENTY_FIVE;
                 }
 
             default:  //DEFAULT is the Vat for SEK, but its default because we havent implemented the other currencies yet
                 if (type == ItemType.TOBACCO) {
-                    return new BigDecimal("0.25");
+                    return VAT.TWENTY_FIVE;
                 } else if (type == ItemType.NEWSPAPER) {
-                    return new BigDecimal("0.06");
+                    return VAT.SIX;
                 } else {
-                    return new BigDecimal("0.12");
+                    return VAT.TWELVE;
                 }
         }
     }
@@ -212,7 +212,7 @@ public class Item implements Comparable<Item> {
 
     //returns only the vat amount
     public Money getVATAmountOfPrice() {
-        return new Money(price.getAmount().multiply(vat), price.getCurrency());
+        return new Money(price.getAmount().multiply(getVat()), price.getCurrency());
     }
 
     //compares Items by name
