@@ -38,10 +38,7 @@ public class Item implements Comparable<Item> {
         this.price = price;
         this.pant = new Money(BigDecimal.ZERO, price.getCurrency());
 
-//        setAgeRestricted();
-        if(type == ItemType.TOBACCO){
-            ageRestricted = true;
-        }
+        setAgeRestricted();
         setVat();
     }
 
@@ -100,7 +97,7 @@ public class Item implements Comparable<Item> {
             this.price = newPrice;
             setVat();
             setPant();
-//            setAgeRestricted();
+            setAgeRestricted();
         }
     }
 
@@ -154,34 +151,22 @@ public class Item implements Comparable<Item> {
 
     }
 
-//    public void setAgeRestricted(){
-//        ageRestricted = determineAgeRestricted();
-//    }
+    public void setAgeRestricted(){
+        ageRestricted = determineAgeRestricted();
+    }
 
-//    //determines if the Item is agerestricted, could be different in different countries, but here its obviously the same
-//    private boolean determineAgeRestricted() {
-//        switch (price.getCurrency()) {
-//            case NOK:
-//                if (type == ItemType.TOBACCO) {
-//                    return true;
-//                } else {
-//                    return false;
-//                }
-//            case DKK:
-//                if (type == ItemType.NEWSPAPER) {
-//                    return true;
-//                } else {
-//                    return false;
-//                }
-//            default:  //DEFAULT is the Vat for SEK, but its default because we havent implemented the other currencies yet
-//                if (type == ItemType.TOBACCO) {
-//                    return true;
-//                } else {
-//                    return false;
-//                }
-//
-//        }
-//    }
+    //determines if the Item is agerestricted, could be different in different countries, but here its obviously the same for all
+    //if you want to add other currencies you could have more cases
+    private boolean determineAgeRestricted() {
+        switch (price.getCurrency()) {
+            default:  //DEFAULT is the Vat for SEK, but its default because we havent implemented the other currencies yet
+                if (type == ItemType.TOBACCO) {
+                    return true;
+                } else {
+                    return false;
+                }
+        }
+    }
 
 
     //sets vat, is only implemented for swedish tax laws, could be expanded
