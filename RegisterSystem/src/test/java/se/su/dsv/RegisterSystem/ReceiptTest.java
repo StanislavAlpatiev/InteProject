@@ -50,6 +50,7 @@ public class ReceiptTest {
     private static final Item DEFAULT_BEVERAGE = new Item("Coca cola", "12345678", "Dn", new Money(new BigDecimal("49.45"), Currency.SEK), new BigDecimal("5"));
     private static final Item DEFAULT_GROCERY = new Item("Watermelon bigpack", "12345678", "Dn", ItemType.GROCERY, new Money(new BigDecimal("9.80"), Currency.SEK));
     private static final Item DEFAULT_TOBACCO = new Item("Snus", "12345678", "Dn", ItemType.TOBACCO, new Money(new BigDecimal("999.99"), Currency.SEK));
+    private static final Order DEFAULT_ORDER = new Order(Currency.SEK, DEFAULT_NEWSPAPER, DEFAULT_BEVERAGE, DEFAULT_GROCERY, DEFAULT_TOBACCO);
     private static final Item LONG_ITEM = new Item("Snus", "12345678", "Dn", ItemType.TOBACCO, new Money(new BigDecimal("10000000000000000000.00"), Currency.SEK));
     private static final String DEFAULT_ORDER_NUMBER = "19990101XXXX";
     private static final LocalDateTime DEFAULT_DATE = LocalDateTime.of(1999, 1, 1, 0, 0);
@@ -177,9 +178,8 @@ public class ReceiptTest {
      */
     @Test
     void printToFileTest() throws IOException {
-        Order order = new Order(Currency.SEK, DEFAULT_NEWSPAPER, DEFAULT_BEVERAGE, DEFAULT_GROCERY);
-        Receipt receipt = new Receipt(order);
-        String pathName = "src\\test\\resources\\" + order.getNumber() + ".txt";
+        Receipt receipt = new Receipt(DEFAULT_ORDER);
+        String pathName = "src\\test\\resources\\" + DEFAULT_ORDER.getNumber() + ".txt";
 
         receipt.printReceiptToFile(pathName);
 
@@ -197,9 +197,8 @@ public class ReceiptTest {
     @Test
     void printToFileThrowsExceptionWhenFileAlreadyExists() throws IOException {
 
-        Order order = new Order(Currency.SEK, DEFAULT_NEWSPAPER, DEFAULT_BEVERAGE, DEFAULT_GROCERY);
-        Receipt receipt = new Receipt(order);
-        String pathName = "src\\test\\resources\\" + order.getNumber() + ".txt";
+        Receipt receipt = new Receipt(DEFAULT_ORDER);
+        String pathName = "src\\test\\resources\\" + DEFAULT_ORDER.getNumber() + ".txt";
         receipt.printReceiptToFile(pathName);
 
         assertThrows(IllegalStateException.class, () -> {
@@ -213,8 +212,7 @@ public class ReceiptTest {
     @Test
     void printToFileThrowsIOException() {
 
-        Order order = new Order(Currency.SEK, DEFAULT_NEWSPAPER);
-        Receipt receipt = new Receipt(order);
+        Receipt receipt = new Receipt(DEFAULT_ORDER);
         String nonExistingFile = "no\\such\\path\\noFile.txt";
 
         assertThrows(IOException.class, () -> {
