@@ -5,22 +5,19 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Wallet {
     private final Customer owner;
-    private Map<Currency, Money> walletContent = new HashMap<Currency, Money>();
-    private BankService bank;
+    private final Map<Currency, Money> walletContent = new HashMap<>();
+    private final BankService bank;
 
     // Constructor takes owner bank and money as arguments
     public Wallet(Customer owner, BankService bank, Money... money) {
         this.owner = owner;
         this.bank = bank;
-        if (Arrays.stream(money).count() > 0) {
-            Arrays.stream(money).forEach(e -> {
-                walletContent.put(e.getCurrency(), e);
-            });
+        if (Arrays.stream(money).findAny().isPresent()) {
+            Arrays.stream(money).forEach(e -> walletContent.put(e.getCurrency(), e));
         }
     }
 

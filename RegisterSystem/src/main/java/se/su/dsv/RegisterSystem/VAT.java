@@ -8,7 +8,7 @@ public enum VAT {
     TWENTY_FIVE(0.25);
 
 
-    public double label;
+    public final double label;
 
     VAT(double label) {
         this.label = label;

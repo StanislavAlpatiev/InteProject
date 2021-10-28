@@ -25,7 +25,7 @@ public class Money implements Comparable<Money> {
             throw new IllegalArgumentException("amount is negative");
         }
 
-        this.amount = amount.setScale(2, RoundingMode.HALF_UP);;
+        this.amount = amount.setScale(2, RoundingMode.HALF_UP);
         this.currency = currency;
     }
 

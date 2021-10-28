@@ -13,8 +13,8 @@ import java.util.TreeMap;
 //Add comments to each method!
 public class Inventory {
 
-    private HashMap<Item, Integer> items;
-    private BankService bank;
+    private final HashMap<Item, Integer> items;
+    private final BankService bank;
     private Currency currency;
 
     public Inventory(BankService bank, Currency currency) {
@@ -127,7 +127,7 @@ public class Inventory {
     //Imports inventory map of items and how many of each in an integer from file
     public void importInventory(String fileName) throws FileNotFoundException {
 
-        try(Reader reader = Files.newBufferedReader(Paths.get(fileName));) {
+        try(Reader reader = Files.newBufferedReader(Paths.get(fileName))) {
             HashMap<String, Integer> newItems;
             Gson gson = new Gson();
 
@@ -165,7 +165,7 @@ public class Inventory {
 
     //Exports items currently in the hashmap of items as key and amounts of each item as value.
     public void exportInventory(String fileName) throws FileNotFoundException {
-        try(Writer writer = new FileWriter(fileName);) {
+        try(Writer writer = new FileWriter(fileName)) {
             //makes sure there are no leftovers from prior import.
             writer.flush();
 

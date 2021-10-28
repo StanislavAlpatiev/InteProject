@@ -159,13 +159,11 @@ public class Item implements Comparable<Item> {
     //determines if the Item is agerestricted, could be different in different countries, but here its obviously the same for all
     //if you want to add other currencies you could have more cases
     private boolean determineAgeRestricted() {
-        switch (price.getCurrency()) {
-            default:  //DEFAULT is the Vat for SEK, but its default because we havent implemented the other currencies yet
-                if (type == ItemType.TOBACCO) {
-                    return true;
-                } else {
-                    return false;
-                }
+        //DEFAULT is the Vat for SEK, but its default because we havent implemented the other currencies yet
+        if (type == ItemType.TOBACCO) {
+            return true;
+        } else {
+            return false;
         }
     }
 
