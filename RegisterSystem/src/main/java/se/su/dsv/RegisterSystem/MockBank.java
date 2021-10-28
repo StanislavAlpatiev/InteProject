@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class MockBank implements BankService {
 
-    HashMap<Currency, EnumMap<Currency, BigDecimal>> exchangeRates;
+    private HashMap<Currency, EnumMap<Currency, BigDecimal>> exchangeRates;
 
     @Override
     public BigDecimal getRate(Currency from, Currency to) throws IOException {
