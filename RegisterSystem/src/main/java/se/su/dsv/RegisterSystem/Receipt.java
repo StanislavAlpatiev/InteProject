@@ -15,13 +15,13 @@ public class Receipt {
 
     //TODO: write more comments clean up
 
-    static final int ROW_LENGTH = 83; // width of the receipt
+    static private final int ROW_LENGTH = 83; // width of the receipt
 
-    static final String ROW_DIVIDER =
+    static private final String ROW_DIVIDER =
             new String(new char[ROW_LENGTH]).replace("\0", "="); //splits up rows of the receipt
 
     //the receipt is structured into four columns so this constant is used to fill in empty columns
-    static final String EMPTY_COLUMN = "    ";
+    static private final String EMPTY_COLUMN = "    ";
 
     private final Order order;
     private final String date;
